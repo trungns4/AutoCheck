@@ -1,0 +1,182 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Binarysharp.MemoryManagement;
+using WindowsInput;
+
+namespace AutoCheck
+{
+  internal class AutoQWEThread
+  {
+    private bool _QEnable = true;
+    private bool _WEnable = false;
+    private bool _EEnable = false;
+
+    private Thread _thread;
+    private bool _isRunning = false;
+
+    private int _keyDelay = 10;
+    private int _threadDelay = 20;
+    private int _threadOptTime = 50;
+
+    private MemorySharp _sharp;
+    private System.Windows.Forms.Label _label;
+
+    private long _count = 0;
+    private InputSimulator _is = new InputSimulator();
+
+    public AutoQWEThread(System.Windows.Forms.Label label)
+    {
+      _label = label;
+    }
+
+    public bool IsRunning()
+    {
+      return _isRunning;
+    }
+
+    public int Delay
+    {
+      get { return _keyDelay; }
+      set { _keyDelay = value; }
+    }
+
+    public int ThreadDelay
+    {
+      get { return _threadDelay; }
+      set { _threadDelay = value; }
+    }
+    
+    public int ThreadOptTime
+    {
+      get
+      {
+        return _threadOptTime;
+      }
+      set
+      {
+        _threadOptTime = value;
+      }
+    }
+
+    public bool QEnable
+    {
+      get { return _QEnable; }
+      set
+      {
+        _QEnable = value;
+      }
+    }
+
+    public bool WEnable
+    {
+      get { return _WEnable; }
+      set
+      {
+        _WEnable = value;
+      }
+    }
+
+    public bool EEnable
+    {
+      get { return _EEnable; }
+      set
+      {
+        _EEnable = value;
+      }
+    }
+
+    public bool Start(MemorySharp sharp)
+    {
+      _sharp = sharp;
+
+      _isRunning = true;
+      _thread = new Thread(Run);
+      _thread.IsBackground = true;
+      _thread.Priority = ThreadPriority.Highest;
+      _count = 0;
+      _thread.Start();
+
+      return true;
+    }
+
+    public void Stop()
+    {
+      _isRunning = false;
+
+      var sw = Stopwatch.StartNew();
+      while (sw.ElapsedMilliseconds < 1000)
+      {
+        Thread.Sleep(20);
+      }
+      _thread?.Join();
+      _thread = null;
+      _count = 0;
+    }
+
+    public void Run()
+    {
+      while (_isRunning)
+      {
+        try
+        {
+          if (Utils.IsWindowActive(_sharp.Pid) == false)
+          {
+            continue;
+          }
+
+          var sw = Stopwatch.StartNew();
+
+          if (_QEnable)
+          {
+            _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
+            Thread.Sleep(_keyDelay);
+            _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
+          }
+
+          if (_WEnable)
+          {
+            _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_W);
+            Thread.Sleep(_keyDelay);
+            _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_W);
+          }
+
+          if (_EEnable)
+          {
+            _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_E);
+            Thread.Sleep(_keyDelay);
+            _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_E);
+          }
+
+          _count++;
+
+          if (_label.InvokeRequired)
+          {
+            _label.BeginInvoke(new Action(() => _label.Text = _count.ToString()));
+          }
+          else
+          {
+            _label.Text = _count.ToString();
+          }
+
+          while (sw.ElapsedMilliseconds < _threadOptTime)
+          {
+            Thread.Sleep(10);
+          }
+        }
+        catch
+        {
+        }
+        finally
+        {
+          Thread.Sleep(_threadDelay);
+        }
+      }
+    }
+  }
+}
