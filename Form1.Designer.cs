@@ -31,15 +31,15 @@
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
       this.m_ScanButton = new System.Windows.Forms.Button();
-      this._HPBox = new System.Windows.Forms.TextBox();
       this.m_StartButton = new System.Windows.Forms.Button();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.m_QPBar = new System.Windows.Forms.ProgressBar();
       this.label1 = new System.Windows.Forms.Label();
       this.m_VolumeCtrl = new System.Windows.Forms.TrackBar();
       this.m_AutoQ = new System.Windows.Forms.CheckBox();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.m_WPBar = new System.Windows.Forms.ProgressBar();
       this.m_AutoW = new System.Windows.Forms.CheckBox();
-      this.m_ManaBox = new System.Windows.Forms.TextBox();
       this.m_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_StartMenu = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -74,14 +74,6 @@
       this.m_ScanButton.UseVisualStyleBackColor = true;
       this.m_ScanButton.Click += new System.EventHandler(this.OnScanClicked);
       // 
-      // _HPBox
-      // 
-      this._HPBox.Location = new System.Drawing.Point(6, 19);
-      this._HPBox.Name = "_HPBox";
-      this._HPBox.ReadOnly = true;
-      this._HPBox.Size = new System.Drawing.Size(78, 20);
-      this._HPBox.TabIndex = 2;
-      // 
       // m_StartButton
       // 
       this.m_StartButton.Location = new System.Drawing.Point(5, 355);
@@ -94,16 +86,23 @@
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.m_QPBar);
       this.groupBox1.Controls.Add(this.label1);
       this.groupBox1.Controls.Add(this.m_VolumeCtrl);
       this.groupBox1.Controls.Add(this.m_AutoQ);
-      this.groupBox1.Controls.Add(this._HPBox);
       this.groupBox1.Location = new System.Drawing.Point(4, 13);
       this.groupBox1.Name = "groupBox1";
       this.groupBox1.Size = new System.Drawing.Size(234, 121);
       this.groupBox1.TabIndex = 6;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "HP";
+      // 
+      // m_QPBar
+      // 
+      this.m_QPBar.Location = new System.Drawing.Point(7, 24);
+      this.m_QPBar.Name = "m_QPBar";
+      this.m_QPBar.Size = new System.Drawing.Size(147, 12);
+      this.m_QPBar.TabIndex = 9;
       // 
       // label1
       // 
@@ -128,7 +127,7 @@
       this.m_AutoQ.AutoSize = true;
       this.m_AutoQ.Checked = true;
       this.m_AutoQ.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoQ.Location = new System.Drawing.Point(93, 21);
+      this.m_AutoQ.Location = new System.Drawing.Point(168, 22);
       this.m_AutoQ.Name = "m_AutoQ";
       this.m_AutoQ.Size = new System.Drawing.Size(59, 17);
       this.m_AutoQ.TabIndex = 6;
@@ -138,8 +137,8 @@
       // 
       // groupBox2
       // 
+      this.groupBox2.Controls.Add(this.m_WPBar);
       this.groupBox2.Controls.Add(this.m_AutoW);
-      this.groupBox2.Controls.Add(this.m_ManaBox);
       this.groupBox2.Location = new System.Drawing.Point(5, 140);
       this.groupBox2.Name = "groupBox2";
       this.groupBox2.Size = new System.Drawing.Size(234, 57);
@@ -147,26 +146,25 @@
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Mana";
       // 
+      // m_WPBar
+      // 
+      this.m_WPBar.Location = new System.Drawing.Point(6, 24);
+      this.m_WPBar.Name = "m_WPBar";
+      this.m_WPBar.Size = new System.Drawing.Size(147, 12);
+      this.m_WPBar.TabIndex = 9;
+      // 
       // m_AutoW
       // 
       this.m_AutoW.AutoSize = true;
       this.m_AutoW.Checked = true;
       this.m_AutoW.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoW.Location = new System.Drawing.Point(90, 21);
+      this.m_AutoW.Location = new System.Drawing.Point(167, 22);
       this.m_AutoW.Name = "m_AutoW";
       this.m_AutoW.Size = new System.Drawing.Size(62, 17);
       this.m_AutoW.TabIndex = 6;
       this.m_AutoW.Text = "Auto W";
       this.m_AutoW.UseVisualStyleBackColor = true;
       this.m_AutoW.CheckedChanged += new System.EventHandler(this.OnAutoWCheckedChanged);
-      // 
-      // m_ManaBox
-      // 
-      this.m_ManaBox.Location = new System.Drawing.Point(6, 19);
-      this.m_ManaBox.Name = "m_ManaBox";
-      this.m_ManaBox.ReadOnly = true;
-      this.m_ManaBox.Size = new System.Drawing.Size(78, 20);
-      this.m_ManaBox.TabIndex = 2;
       // 
       // m_ContextMenu
       // 
@@ -279,6 +277,7 @@
       this.m_EChk.TabIndex = 1;
       this.m_EChk.Text = "E";
       this.m_EChk.UseVisualStyleBackColor = true;
+      this.m_EChk.CheckStateChanged += new System.EventHandler(this.OnEChkChanged);
       // 
       // m_WChk
       // 
@@ -289,6 +288,7 @@
       this.m_WChk.TabIndex = 1;
       this.m_WChk.Text = "W";
       this.m_WChk.UseVisualStyleBackColor = true;
+      this.m_WChk.CheckedChanged += new System.EventHandler(this.OnWChkChanged);
       // 
       // m_QChk
       // 
@@ -301,12 +301,13 @@
       this.m_QChk.TabIndex = 1;
       this.m_QChk.Text = "Q";
       this.m_QChk.UseVisualStyleBackColor = true;
+      this.m_QChk.CheckedChanged += new System.EventHandler(this.OnQChkChanged);
       // 
       // _About
       // 
       this._About.AutoSize = true;
       this._About.ForeColor = System.Drawing.SystemColors.ControlDark;
-      this._About.Location = new System.Drawing.Point(10, 531);
+      this._About.Location = new System.Drawing.Point(12, 392);
       this._About.Name = "_About";
       this._About.Size = new System.Drawing.Size(13, 13);
       this._About.TabIndex = 8;
@@ -316,7 +317,7 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(243, 387);
+      this.ClientSize = new System.Drawing.Size(243, 414);
       this.Controls.Add(this._About);
       this.Controls.Add(this.m_ScanButton);
       this.Controls.Add(this.groupBox3);
@@ -350,13 +351,11 @@
     #endregion
 
     private System.Windows.Forms.Button m_ScanButton;
-    private System.Windows.Forms.TextBox _HPBox;
     private System.Windows.Forms.Button m_StartButton;
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.CheckBox m_AutoQ;
     private System.Windows.Forms.GroupBox groupBox2;
     private System.Windows.Forms.CheckBox m_AutoW;
-    private System.Windows.Forms.TextBox m_ManaBox;
     private System.Windows.Forms.TrackBar m_VolumeCtrl;
     private System.Windows.Forms.ContextMenuStrip m_ContextMenu;
     private System.Windows.Forms.ToolStripMenuItem m_AutoHideMenu;
@@ -376,6 +375,8 @@
     private System.Windows.Forms.Label m_KeyCount;
     private System.Windows.Forms.Label _About;
     private System.Windows.Forms.Label label1;
+    private System.Windows.Forms.ProgressBar m_QPBar;
+    private System.Windows.Forms.ProgressBar m_WPBar;
   }
 }
 

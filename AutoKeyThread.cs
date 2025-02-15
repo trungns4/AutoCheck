@@ -5,19 +5,24 @@ using NAudio.Wave;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using WindowsInput;
 using WindowsInput.Native;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AutoCheck
 {
-  interface ITextDisplay
+  interface IValuesDisplay
   {
-    string Text { get; set; }
+    int MaxValue { get; set; }
+    int CurValue { get; set; }
+
     IAsyncResult BeginInvoke(Delegate method, params object[] args);
     bool InvokeRequired { get; }
   }
@@ -26,7 +31,7 @@ namespace AutoCheck
   {
     private ManualResetEvent _flag = new ManualResetEvent(false);
 
-    private ITextDisplay _textDisplay;
+    private IValuesDisplay _ValuesDisplay;
 
     private Thread _thread;
     private Thread _keyThread;
@@ -67,11 +72,11 @@ namespace AutoCheck
     private InputSimulator _is = new InputSimulator();
     VirtualKeyCode _keyCode;
 
-    public AutoKeyThread(char key, ITextDisplay displayBox)
+    public AutoKeyThread(char key, IValuesDisplay displayBox)
     {
       _auto = false;
       _sharp = null;
-      _textDisplay = displayBox;
+      _ValuesDisplay = displayBox;
       _key = key;
       _keyCode = Utils.KeyCode(_key);
     }
@@ -137,21 +142,28 @@ namespace AutoCheck
     public bool Stop()
     {
       _isRunning = false;
-      _thread?.Join();
-      _thread = null;
+
+      if (_thread != null && _thread.IsAlive)
+      {
+        _thread.Join();
+      }
 
       //to stop the key thread
       _flag.Set();
 
       Thread.Sleep(10);
 
-      _keyThread?.Join();
-      _keyThread = null;
+      if (_keyThread != null && _keyThread.IsAlive)
+      {
+        _keyThread.Join();
+      }
 
       Thread.Sleep(10);
 
-      _warnThread?.Join();
-      _warnThread = null;
+      if (_warnThread != null && _warnThread.IsAlive)
+      {
+        _warnThread.Join();
+      }
 
       if (m_outputDevice != null)
       {
@@ -311,6 +323,7 @@ namespace AutoCheck
       {
         try
         {
+          AutoFlags.IsTargetWindowActive = Utils.IsWindowActive(_sharp.Pid);
           if (_curAdr != 0 && _maxAdr != 0 && _auto)
           {
             _curVal = _sharp.Read<int>((IntPtr)_curAdr, false);
@@ -336,7 +349,7 @@ namespace AutoCheck
         {
           _curVal = 0;
           _maxVal = 0;
-          UpdateTexts(0, 0);
+          DisplayValues(0, 0);
         }
         finally
         {
@@ -352,7 +365,7 @@ namespace AutoCheck
         try
         {
           _flag.WaitOne();
-          while (_auto == true && _isRunning == true && _full == false && Utils.IsWindowActive(_sharp.Pid) == true)
+          while (_auto == true && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
           {
             var sw = Stopwatch.StartNew();
             _is.Keyboard.KeyDown(_keyCode);
@@ -381,7 +394,7 @@ namespace AutoCheck
         try
         {
           CheckWarning();
-          UpdateTexts(_curVal, _maxVal);
+          DisplayValues(_curVal, _maxVal);
         }
         finally
         {
@@ -390,26 +403,20 @@ namespace AutoCheck
       }
     }
     //---------------------------------------------------------------------------------------
-    private void UpdateTexts(int current, int max)
+    private void DisplayValues(int current, int max)
     {
-      string text;
-      if (max != 0 || current != 0)
+      if (_ValuesDisplay.InvokeRequired)
       {
-        double percel = (double)current / max * 100.0;
-        text = string.Format($"{percel:00.0}%");
+        _ValuesDisplay.BeginInvoke(new Action(() =>
+        {
+          _ValuesDisplay.MaxValue = max;
+          _ValuesDisplay.CurValue = current;
+        }));
       }
       else
       {
-        text = "";
-      }
-
-      if (_textDisplay.InvokeRequired)
-      {
-        _textDisplay.BeginInvoke(new Action(() => _textDisplay.Text = text));
-      }
-      else
-      {
-        _textDisplay.Text = text;
+        _ValuesDisplay.MaxValue = max;
+        _ValuesDisplay.CurValue = current;
       }
     }
   }

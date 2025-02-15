@@ -115,8 +115,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoFlags.cs" />
     <Compile Include="AutoKeyThread.cs" />
     <Compile Include="AutoQWEThread.cs" />
+    <Compile Include="ProgressBarAdapter.cs" />
     <Compile Include="ScanHPForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,7 +133,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextBoxWrapper.cs" />
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="ScanHPForm.resx">
       <DependentUpon>ScanHPForm.cs</DependentUpon>

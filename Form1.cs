@@ -44,8 +44,8 @@ namespace AutoCheck
     private void OnFormLoad(object sender, EventArgs e)
     {
       _About.Text = this.GetType().Assembly.GetName().Version.ToString();
-      _threadQ = new AutoKeyThread('q', new TextBoxAdapter(_HPBox));
-      _threadW = new AutoKeyThread('w', new TextBoxAdapter(m_ManaBox));
+      _threadQ = new AutoKeyThread('q', new ProgressBarAdapter(m_QPBar));
+      _threadW = new AutoKeyThread('w', new ProgressBarAdapter(m_WPBar));
 
       _qweThread = new AutoQWEThread(m_KeyCount);
 
@@ -395,6 +395,21 @@ namespace AutoCheck
     private void m_NotifyIcon_Click(object sender, EventArgs e)
     {
       ShowMe(true);
+    }
+    //----------------------------------------------------------------------------------
+    private void OnQChkChanged(object sender, EventArgs e)
+    {
+      _qweThread.QEnable = m_QChk.Checked;
+    }
+    //----------------------------------------------------------------------------------
+    private void OnEChkChanged(object sender, EventArgs e)
+    {
+      _qweThread.EEnable = m_EChk.Checked;
+    }
+    //----------------------------------------------------------------------------------
+    private void OnWChkChanged(object sender, EventArgs e)
+    {
+      _qweThread.WEnable = m_WChk.Checked;
     }
   }
 }

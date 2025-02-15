@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Binarysharp.MemoryManagement;
 using log4net;
 using WindowsInput;
@@ -19,7 +20,10 @@ namespace AutoCheck
     private bool _WEnable = false;
     private bool _EEnable = false;
 
-    private Thread _thread;
+    private Thread _qThread;
+    private Thread _wThread;
+    private Thread _eThread;
+
     private bool _isRunning = false;
 
     private int _keyDelay = 10;
@@ -91,14 +95,24 @@ namespace AutoCheck
       _sharp = sharp;
 
       _isRunning = true;
-      _thread = new Thread(Run);
-      _thread.IsBackground = true;
-      _thread.Priority = ThreadPriority.Highest;
+      _qThread = new Thread(() => Run('q'));
+      _qThread.IsBackground = true;
+      _qThread.Priority = ThreadPriority.Normal;
       _count = 0;
-      _thread.Start();
+      _qThread.Start();
+
+      _wThread = new Thread(() => Run('w'));
+      _wThread.IsBackground = true;
+      _wThread.Priority = ThreadPriority.Normal;
+      _wThread.Start();
+
+      _eThread = new Thread(() => Run('e'));
+      _eThread.IsBackground = true;
+      _eThread.Priority = ThreadPriority.Normal;
+      _eThread.Start();
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.DebugFormat("Auto Key Thread started");
+      log.DebugFormat("Auto Key Threads started");
 
       log.InfoFormat($"Q: {_QEnable} W: {_WEnable} E: {_EEnable}");
       log.InfoFormat($"Key Delay: {_keyDelay}");
@@ -116,28 +130,50 @@ namespace AutoCheck
       {
         Thread.Sleep(20);
       }
-      _thread?.Join();
-      _thread = null;
+
+      if (_qThread != null && _qThread.IsAlive)
+      {
+        _qThread.Join();
+      }
+
       _count = 0;
+
+      if (_wThread != null && _wThread.IsAlive)
+      {
+        _wThread.Join();
+      }
+
+      if (_eThread != null && _eThread.IsAlive)
+      {
+        _eThread.Join();
+      }
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       log.DebugFormat("Auto Key Thread stopped");
     }
 
-    public void Run()
+    private void UpdateLabel()
+    {
+      if (_label.InvokeRequired)
+        _label.BeginInvoke((MethodInvoker)(() => _label.Text = _count.ToString())); // ✅ Non-blocking update
+      else
+        _label.Text = _count.ToString();
+    }
+
+    public void Run(char key)
     {
       while (_isRunning)
       {
         try
         {
-          if (Utils.IsWindowActive(_sharp.Pid) == false)
+          if (AutoFlags.IsTargetWindowActive == false)
           {
+            Thread.Sleep(10);
             continue;
           }
 
           var sw = Stopwatch.StartNew();
-
-          if (_QEnable)
+          if (key == 'q' && _QEnable)
           {
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
             Thread.Sleep(_keyDelay);
@@ -145,7 +181,7 @@ namespace AutoCheck
             Thread.Sleep(_keyDelay);
           }
 
-          if (_WEnable)
+          if (key == 'w' && _WEnable)
           {
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_W);
             Thread.Sleep(_keyDelay);
@@ -153,7 +189,7 @@ namespace AutoCheck
             Thread.Sleep(_keyDelay);
           }
 
-          if (_EEnable)
+          if (key == 'e' && _EEnable)
           {
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_E);
             Thread.Sleep(_keyDelay);
@@ -161,16 +197,9 @@ namespace AutoCheck
             Thread.Sleep(_keyDelay);
           }
 
-          _count++;
+          Interlocked.Increment(ref _count);
 
-          if (_label.InvokeRequired)
-          {
-            _label.BeginInvoke(new Action(() => _label.Text = _count.ToString()));
-          }
-          else
-          {
-            _label.Text = _count.ToString();
-          }
+          UpdateLabel();
 
           int sleepTime = _threadOptTime - (int)sw.ElapsedMilliseconds;
           if (sleepTime <= 0)

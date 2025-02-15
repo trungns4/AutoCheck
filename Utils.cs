@@ -57,10 +57,7 @@ namespace AutoCheck
 
     public static bool IsWindowActive(int id)
     {
-      IntPtr foregroundWindow = GetForegroundWindow();
-      uint processId;
-      GetWindowThreadProcessId(foregroundWindow, out processId);
-      return processId == id;
+      return (GetWindowThreadProcessId(GetForegroundWindow(), out uint pid), pid == id).Item2;
     }
 
     public static VirtualKeyCode KeyCode(char ch)
