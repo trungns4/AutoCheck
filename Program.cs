@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using log4net;
+using log4net.Config;
 
 namespace AutoCheck
 {
@@ -16,6 +19,12 @@ namespace AutoCheck
     {
       if (mutex.WaitOne(TimeSpan.Zero, true))
       {
+        // Initialize log4net from App.config
+        XmlConfigurator.Configure();
+
+        ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        log.Debug("Application started");
+
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(new Form1());

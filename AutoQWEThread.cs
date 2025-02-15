@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Binarysharp.MemoryManagement;
+using log4net;
 using WindowsInput;
 
 namespace AutoCheck
@@ -51,7 +53,7 @@ namespace AutoCheck
       get { return _threadDelay; }
       set { _threadDelay = value; }
     }
-    
+
     public int ThreadOptTime
     {
       get
@@ -102,6 +104,14 @@ namespace AutoCheck
       _count = 0;
       _thread.Start();
 
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+      log.DebugFormat("Auto Key Thread started");
+
+      log.InfoFormat($"Q: {_QEnable} W: {_WEnable} E: {_EEnable}");
+      log.InfoFormat($"Key Delay: {_keyDelay}");
+      log.InfoFormat($"Thread Delay: {_threadDelay}");
+      log.InfoFormat($"Operation Time: {_threadOptTime}");
+
       return true;
     }
 
@@ -110,13 +120,16 @@ namespace AutoCheck
       _isRunning = false;
 
       var sw = Stopwatch.StartNew();
-      while (sw.ElapsedMilliseconds < 1000)
+      while (sw.ElapsedMilliseconds < 5 * _threadOptTime)
       {
         Thread.Sleep(20);
       }
       _thread?.Join();
       _thread = null;
       _count = 0;
+
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+      log.DebugFormat("Auto Key Thread stopped");
     }
 
     public void Run()

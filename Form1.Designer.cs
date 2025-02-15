@@ -65,8 +65,6 @@
       this.m_EChk = new System.Windows.Forms.CheckBox();
       this.m_WChk = new System.Windows.Forms.CheckBox();
       this.m_QChk = new System.Windows.Forms.CheckBox();
-      this.m_KeyThreadDelay = new System.Windows.Forms.TextBox();
-      this.m_KeyDelay = new System.Windows.Forms.TextBox();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.m_VolumeCtrl)).BeginInit();
       this.groupBox2.SuspendLayout();
@@ -74,10 +72,10 @@
       this.groupBox3.SuspendLayout();
       this.SuspendLayout();
       // 
-      // m_ScanButtonQ
+      // m_ScanButton
       // 
       this.m_ScanButton.Location = new System.Drawing.Point(148, 122);
-      this.m_ScanButton.Name = "m_ScanButtonQ";
+      this.m_ScanButton.Name = "m_ScanButton";
       this.m_ScanButton.Size = new System.Drawing.Size(75, 23);
       this.m_ScanButton.TabIndex = 0;
       this.m_ScanButton.Text = "Scan...";
@@ -120,7 +118,7 @@
       // 
       // m_StartButton
       // 
-      this.m_StartButton.Location = new System.Drawing.Point(13, 530);
+      this.m_StartButton.Location = new System.Drawing.Point(13, 497);
       this.m_StartButton.Name = "m_StartButton";
       this.m_StartButton.Size = new System.Drawing.Size(75, 23);
       this.m_StartButton.TabIndex = 3;
@@ -334,7 +332,7 @@
       // 
       // m_CloseButton
       // 
-      this.m_CloseButton.Location = new System.Drawing.Point(152, 530);
+      this.m_CloseButton.Location = new System.Drawing.Point(152, 497);
       this.m_CloseButton.Name = "m_CloseButton";
       this.m_CloseButton.Size = new System.Drawing.Size(75, 23);
       this.m_CloseButton.TabIndex = 3;
@@ -348,11 +346,9 @@
       this.groupBox3.Controls.Add(this.m_EChk);
       this.groupBox3.Controls.Add(this.m_WChk);
       this.groupBox3.Controls.Add(this.m_QChk);
-      this.groupBox3.Controls.Add(this.m_KeyThreadDelay);
-      this.groupBox3.Controls.Add(this.m_KeyDelay);
       this.groupBox3.Location = new System.Drawing.Point(4, 379);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(234, 144);
+      this.groupBox3.Size = new System.Drawing.Size(234, 112);
       this.groupBox3.TabIndex = 7;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Auto QWE";
@@ -360,12 +356,12 @@
       // m_KeyCount
       // 
       this.m_KeyCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.m_KeyCount.Location = new System.Drawing.Point(62, 92);
+      this.m_KeyCount.Location = new System.Drawing.Point(2, 60);
       this.m_KeyCount.Name = "m_KeyCount";
-      this.m_KeyCount.Size = new System.Drawing.Size(86, 44);
+      this.m_KeyCount.Size = new System.Drawing.Size(221, 44);
       this.m_KeyCount.TabIndex = 3;
       this.m_KeyCount.Text = "...";
-      this.m_KeyCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.m_KeyCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // m_EChk
       // 
@@ -399,29 +395,11 @@
       this.m_QChk.Text = "Q";
       this.m_QChk.UseVisualStyleBackColor = true;
       // 
-      // m_KeyThreadDelay
-      // 
-      this.m_KeyThreadDelay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-      this.m_KeyThreadDelay.Location = new System.Drawing.Point(125, 64);
-      this.m_KeyThreadDelay.Name = "m_KeyThreadDelay";
-      this.m_KeyThreadDelay.Size = new System.Drawing.Size(100, 20);
-      this.m_KeyThreadDelay.TabIndex = 0;
-      // 
-      // m_KeyDelay
-      // 
-      this.m_KeyDelay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-      this.m_KeyDelay.Location = new System.Drawing.Point(6, 64);
-      this.m_KeyDelay.Name = "m_KeyDelay";
-      this.m_KeyDelay.Size = new System.Drawing.Size(100, 20);
-      this.m_KeyDelay.TabIndex = 0;
-      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(244, 565);
+      this.ClientSize = new System.Drawing.Size(244, 533);
       this.Controls.Add(this.groupBox3);
       this.Controls.Add(this.groupBox2);
       this.Controls.Add(this.groupBox1);
@@ -485,9 +463,7 @@
     private System.Windows.Forms.CheckBox m_EChk;
     private System.Windows.Forms.CheckBox m_WChk;
     private System.Windows.Forms.CheckBox m_QChk;
-    private System.Windows.Forms.TextBox m_KeyDelay;
     private System.Windows.Forms.Label m_KeyCount;
-    private System.Windows.Forms.TextBox m_KeyThreadDelay;
   }
 }
 

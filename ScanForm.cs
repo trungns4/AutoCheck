@@ -1,7 +1,9 @@
 ﻿using Binarysharp.MemoryManagement;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace AutoCheck
@@ -72,6 +74,7 @@ namespace AutoCheck
           MessageBox.Show("Please enter a number");
           return;
         }
+
 
         using (MemorySharp sharp = Utils.CreateMemorySharp())
         {

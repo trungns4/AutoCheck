@@ -1,5 +1,6 @@
 ﻿using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
+using log4net;
 using NAudio.Wave;
 using System;
 using System.Diagnostics;
@@ -131,6 +132,20 @@ namespace AutoCheck
       _warnThread.IsBackground = true;
       _warnThread.Start();
 
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+      log.Info("Monitoring Thread started");
+
+      log.InfoFormat($"Key: {_key}");
+      log.InfoFormat($"Key Delay: {_keyDelay}");
+      log.InfoFormat($"Key Thread Delay: {_keyThreadDelay}");
+      log.InfoFormat($"Mem Thread Delay: {_memThreadDelay}");
+      log.InfoFormat($"Warn Thread Delay: {_warnThreadDelay}");
+      log.InfoFormat($"Operation Time: {_keyThreadOptTime}");
+
+
+      log.InfoFormat($"Scale: {_scale}");
+      log.InfoFormat($"Warn Scale: {_warnScale}");
+
       return true;
     }
     //---------------------------------------------------------------------------------------
@@ -161,6 +176,9 @@ namespace AutoCheck
         m_outputDevice = null;
         m_audioFile = null;
       }
+
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+      log.Info($"Thread {_key} stopped");
 
       return true;
     }

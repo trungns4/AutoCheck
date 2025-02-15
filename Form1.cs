@@ -104,18 +104,19 @@ namespace AutoCheck
 
       _threadW.WarnScale = 0;
 
-      _threadQ.KeyDelay = Utils.GetConfigInt("QKeyThreadDelay", 16);
+      _threadQ.KeyDelay = Utils.GetConfigInt("QKeyDelay", 16);
       _threadQ.KeyThreadDelay = Utils.GetConfigInt("QKeyThreadDelay", 16);
       _threadQ.KeyThreadOptTime = Utils.GetConfigInt("QThreadOptTime", 100);
-      _threadQ.MemThreadDelay = Utils.GetConfigInt("QKeyThreadDelay", 10);
-      _threadQ.WarnThreadDelay = Utils.GetConfigInt("QKeyThreadDelay", 10);
+      _threadQ.MemThreadDelay = Utils.GetConfigInt("QMemThreadDelay", 10);
+      _threadQ.WarnThreadDelay = Utils.GetConfigInt("QWarnThreadDelay", 10);
 
-      _threadW.KeyDelay = Utils.GetConfigInt("WKeyThreadDelay", 16);
+      _threadW.KeyDelay = Utils.GetConfigInt("WKeyDelay", 16);
       _threadW.KeyThreadDelay = Utils.GetConfigInt("WKeyThreadDelay", 16);
-      _threadW.KeyThreadOptTime = Utils.GetConfigInt("WThreadOptTime", 100);
-      _threadW.MemThreadDelay = Utils.GetConfigInt("WKeyThreadDelay", 16);
-      _threadW.WarnThreadDelay = Utils.GetConfigInt("WKeyThreadDelay", 16);
+      _threadW.KeyThreadOptTime = Utils.GetConfigInt("WKeyThreadOptTime", 100);
+      _threadW.MemThreadDelay = Utils.GetConfigInt("WMemThreadDelay", 16);
+      _threadW.WarnThreadDelay = Utils.GetConfigInt("WWarnThreadDelay", 16);
 
+      _qweThread.Delay = Utils.GetConfigInt("QWEDelay", 16);
       _qweThread.ThreadOptTime = Utils.GetConfigInt("QWEThreadOptTime", 16);
     }
 
@@ -270,26 +271,6 @@ namespace AutoCheck
         }
         else
         {
-          if (int.TryParse(m_KeyDelay.Text, out int delay) == false || delay < 0)
-          {
-            MessageBox.Show("Enter a delay time in ms");
-            return;
-          }
-          else
-          {
-            _qweThread.Delay = delay;
-          }
-
-          if (int.TryParse(m_KeyThreadDelay.Text, out int tdelay) == false || tdelay < 0)
-          {
-            MessageBox.Show("Enter a delay time in ms");
-            return;
-          }
-          else
-          {
-            _qweThread.ThreadDelay = tdelay;
-          }
-
           _threadQ.Auto = m_AutoQ.Checked;
           _threadW.Auto = m_AutoW.Checked;
 
@@ -334,8 +315,6 @@ namespace AutoCheck
       data.Add("MaxAdrW", m_MaxAddrBoxW.Text);
       data.Add("AutoQ", m_AutoQ.Checked ? "True" : "False");
       data.Add("AutoW", m_AutoW.Checked ? "True" : "False");
-      data.Add("KeyDelay", m_KeyDelay.Text);
-      data.Add("KeyThreadDelay", m_KeyThreadDelay.Text);
 
       data.Add("Q", m_QChk.Checked ? "True" : "False");
       data.Add("W", m_WChk.Checked ? "True" : "False");
@@ -359,12 +338,6 @@ namespace AutoCheck
 
         m_AutoQ.Checked = (data["AutoQ"].ToUpper() == "TRUE");
         m_AutoW.Checked = (data["AutoW"].ToUpper() == "TRUE");
-
-        if (data.ContainsKey("KeyDelay"))
-          m_KeyDelay.Text = data["KeyDelay"];
-
-        if (data.ContainsKey("KeyThreadDelay"))
-          m_KeyThreadDelay.Text = data["KeyThreadDelay"];
 
         if (data.ContainsKey("Q"))
           m_QChk.Checked = (data["Q"].ToUpper() == "TRUE");
