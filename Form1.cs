@@ -25,14 +25,14 @@ namespace AutoCheck
 
     private AutoKeyThread _threadQ;
     private AutoKeyThread _threadW;
+    private AutoQWEThread _qweThread = null;
+    private bool _starting = false;
+    private long _addr = 0;
 
     private System.Windows.Forms.Timer m_Timer;
     private bool m_bForcingClose = false;
     private bool m_bAutoHide = false;
     private string m_window = "";
-
-    private bool _starting = false;
-    private AutoQWEThread _qweThread = null;
 
     private IKeyboardMouseEvents m_GlobalHook;
 
@@ -44,8 +44,8 @@ namespace AutoCheck
     private void OnFormLoad(object sender, EventArgs e)
     {
       _About.Text = this.GetType().Assembly.GetName().Version.ToString();
-      _threadQ = new AutoKeyThread('q', m_CurrentAddrBoxQ, m_CurrentValueBoxQ, m_MaxAddrBoxQ, m_MaxValueBoxQ);
-      _threadW = new AutoKeyThread('w', m_CurrentAddrBoxW, m_CurrentValueBoxW, m_MaxAddrBoxW, m_MaxValueBoxW);
+      _threadQ = new AutoKeyThread('q', new TextBoxAdapter(_HPBox));
+      _threadW = new AutoKeyThread('w', new TextBoxAdapter(m_ManaBox));
 
       _qweThread = new AutoQWEThread(m_KeyCount);
 
@@ -72,7 +72,7 @@ namespace AutoCheck
       m_Timer.Tick += OnTimer_Tick;
       m_Timer.Start();
     }
-
+    //----------------------------------------------------------------------------------
     private void OnKeyUp(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == System.Windows.Forms.Keys.ControlKey)
@@ -80,7 +80,7 @@ namespace AutoCheck
         e.Handled = false;
       }
     }
-
+    //----------------------------------------------------------------------------------
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == System.Windows.Forms.Keys.D0 && e.Control)
@@ -89,7 +89,7 @@ namespace AutoCheck
         e.Handled = true;
       }
     }
-
+    //----------------------------------------------------------------------------------
     private void LoadConfig()
     {
       _threadW.Scale = Utils.GetConfigDouble("scaleW", 0.99);
@@ -118,44 +118,44 @@ namespace AutoCheck
       _qweThread.Delay = Utils.GetConfigInt("QWEDelay", 16);
       _qweThread.ThreadOptTime = Utils.GetConfigInt("QWEThreadOptTime", 16);
     }
-
+    //----------------------------------------------------------------------------------
     private void OnStartMenuClick(object sender, EventArgs e)
     {
       ToggleStartStop();
     }
-
+    //----------------------------------------------------------------------------------
     private void OnAutoHideMenu_Click(object sender, EventArgs e)
     {
       m_bAutoHide = !m_bAutoHide;
       m_AutoHideMenu.Checked = m_bAutoHide;
     }
-
+    //----------------------------------------------------------------------------------
     private void OnTimer_Tick(object sender, EventArgs e)
     {
       CheckWindows();
     }
-
+    //----------------------------------------------------------------------------------
     private void OnShowMenu_Click(object sender, EventArgs e)
     {
       ShowMe(true);
     }
-
+    //----------------------------------------------------------------------------------
     private void OnHideMenu_Click(object sender, EventArgs e)
     {
       ShowMe(false);
     }
-
+    //----------------------------------------------------------------------------------
     private void OnCloseMenu_Click(object sender, EventArgs e)
     {
       m_bForcingClose = true;
       Close();
     }
-
+    //----------------------------------------------------------------------------------
     private void m_ContextMenu_Opened(object sender, EventArgs e)
     {
       m_AutoHideMenu.Checked = m_bAutoHide;
     }
-
+    //----------------------------------------------------------------------------------
     private void OnFormClosing(object sender, FormClosingEventArgs e)
     {
       if (m_bForcingClose == false && e.CloseReason == CloseReason.UserClosing)
@@ -165,7 +165,7 @@ namespace AutoCheck
         e.Cancel = true;
       }
     }
-
+    //----------------------------------------------------------------------------------
     private void OnFormClosed(object sender, FormClosedEventArgs e)
     {
       m_GlobalHook.KeyUp -= OnKeyUp;
@@ -180,43 +180,26 @@ namespace AutoCheck
       m_Timer.Tick -= OnTimer_Tick;
       m_Timer.Stop();
     }
-
-    private void OnScanQClicked(object sender, EventArgs e)
+    //----------------------------------------------------------------------------------
+    private void OnScanClicked(object sender, EventArgs e)
     {
       ScanHPForm f = new ScanHPForm();
       if (f.ShowDialog() == DialogResult.OK)
       {
-        var adr = f.GetAddress();
-        if (adr > 0)
-        {
-          m_CurrentAddrBoxQ.Text = adr.ToString("X");
-          m_CurrentAddrBoxW.Text = (adr + 8).ToString("X");
-          m_MaxAddrBoxQ.Text = (adr + 16).ToString("X");
-          m_MaxAddrBoxW.Text = (adr + 24).ToString("X");
-        }
+        _addr = f.GetAddress();
       }
     }
-
-    private void OnScanWClicked(object sender, EventArgs e)
-    {
-      ScanForm form = new ScanForm();
-      if (form.ShowDialog() == DialogResult.OK)
-      {
-        m_CurrentAddrBoxW.Text = form.CurAddr.ToString("X");
-        m_MaxAddrBoxW.Text = form.MaxAddr.ToString("X");
-      }
-    }
-
+    //----------------------------------------------------------------------------------
     private void OnAutoWCheckedChanged(object sender, EventArgs e)
     {
       _threadW.Auto = m_AutoW.Checked;
     }
-
+    //----------------------------------------------------------------------------------
     private void OnAutoQCheckedChanged(object sender, EventArgs e)
     {
       _threadQ.Auto = m_AutoQ.Checked;
     }
-
+    //----------------------------------------------------------------------------------
     private bool Start()
     {
       _sharp = Utils.CreateMemorySharp();
@@ -235,7 +218,7 @@ namespace AutoCheck
       while (stopwatch.ElapsedMilliseconds < 10) { /* Do nothing */ }
       return true;
     }
-
+    //----------------------------------------------------------------------------------
     private bool Stop()
     {
       _threadQ.Stop();
@@ -249,7 +232,7 @@ namespace AutoCheck
       _sharp?.Dispose();
       return true;
     }
-
+    //----------------------------------------------------------------------------------
     private void ToggleStartStop()
     {
       try
@@ -279,8 +262,8 @@ namespace AutoCheck
 
           if (Start())
           {
-            _threadQ.Start(_sharp);
-            _threadW.Start(_sharp);
+            _threadQ.Start(_sharp, _addr, _addr + 16);
+            _threadW.Start(_sharp, _addr + 8, _addr + 24);
             _qweThread.Start(_sharp);
           }
         }
@@ -291,30 +274,26 @@ namespace AutoCheck
         m_StartButton.Enabled = true;
       }
     }
-
+    //----------------------------------------------------------------------------------
     private void OnStartButtonClicked(object sender, EventArgs e)
     {
       ToggleStartStop();
     }
-
+    //----------------------------------------------------------------------------------
     private string GetDataFile()
     {
       string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
       return Path.Combine(exeDirectory, "data.json");
     }
-
+    //----------------------------------------------------------------------------------
     private void SaveData()
     {
       string file = GetDataFile();
       var data = new Dictionary<string, string>();
 
-      data.Add("CurAdrQ", m_CurrentAddrBoxQ.Text);
-      data.Add("MaxAdrQ", m_MaxAddrBoxQ.Text);
-      data.Add("CurAdrW", m_CurrentAddrBoxW.Text);
-      data.Add("MaxAdrW", m_MaxAddrBoxW.Text);
+      data.Add("ADDR", _addr.ToString("X"));
       data.Add("AutoQ", m_AutoQ.Checked ? "True" : "False");
       data.Add("AutoW", m_AutoW.Checked ? "True" : "False");
-
       data.Add("Q", m_QChk.Checked ? "True" : "False");
       data.Add("W", m_WChk.Checked ? "True" : "False");
       data.Add("E", m_EChk.Checked ? "True" : "False");
@@ -322,7 +301,7 @@ namespace AutoCheck
       string json = JsonConvert.SerializeObject(data, Formatting.Indented);
       File.WriteAllText(file, json);
     }
-
+    //----------------------------------------------------------------------------------
     private void LoadData()
     {
       string file = GetDataFile();
@@ -330,10 +309,15 @@ namespace AutoCheck
       {
         string json = File.ReadAllText(file);
         var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-        m_CurrentAddrBoxQ.Text = data["CurAdrQ"];
-        m_MaxAddrBoxQ.Text = data["MaxAdrQ"];
-        m_CurrentAddrBoxW.Text = data["CurAdrW"];
-        m_MaxAddrBoxW.Text = data["MaxAdrW"];
+
+        _addr = 0;
+        if (data.ContainsKey("ADDR"))
+        {
+          if (long.TryParse(data["ADDR"], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long result))
+          {
+            _addr = result;
+          }
+        }
 
         m_AutoQ.Checked = (data["AutoQ"].ToUpper() == "TRUE");
         m_AutoW.Checked = (data["AutoW"].ToUpper() == "TRUE");
@@ -348,12 +332,11 @@ namespace AutoCheck
           m_EChk.Checked = (data["E"].ToUpper() == "TRUE");
       }
     }
-
+    //----------------------------------------------------------------------------------
     private void OnVolumeValueChanged(object sender, EventArgs e)
     {
       _threadQ.WarnVolume = (float)m_VolumeCtrl.Value / (float)m_VolumeCtrl.Maximum;
     }
-
     //--------------------------------------------------------------------------------------------
     private void CheckWindows()
     {
@@ -371,7 +354,7 @@ namespace AutoCheck
 
       ShowMe(false);
     }
-
+    //----------------------------------------------------------------------------------
     private void ShowMe(bool show)
     {
       if (show)
@@ -387,8 +370,7 @@ namespace AutoCheck
         m_HideMenu.Visible = false;
       }
     }
-
-    //--------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
     private bool FindWindow(string name)
     {
       foreach (Process process in Process.GetProcesses())
@@ -403,13 +385,13 @@ namespace AutoCheck
       }
       return false;
     }
-    //--------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
     private void m_CloseButton_Click(object sender, EventArgs e)
     {
       m_bForcingClose = true;
       Close();
     }
-    //--------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
     private void m_NotifyIcon_Click(object sender, EventArgs e)
     {
       ShowMe(true);

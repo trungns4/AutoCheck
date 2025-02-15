@@ -3,6 +3,7 @@ using Binarysharp.MemoryManagement.Memory;
 using log4net;
 using NAudio.Wave;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -14,36 +15,42 @@ using WindowsInput.Native;
 
 namespace AutoCheck
 {
+  interface ITextDisplay
+  {
+    string Text { get; set; }
+    IAsyncResult BeginInvoke(Delegate method, params object[] args);
+    bool InvokeRequired { get; }
+  }
+
   internal class AutoKeyThread
   {
     private ManualResetEvent _flag = new ManualResetEvent(false);
+
+    private ITextDisplay _textDisplay;
 
     private Thread _thread;
     private Thread _keyThread;
     private Thread _warnThread;
 
     private bool _isRunning = false;
-
     private bool _full = false;
-    private TextBox _curAdrBox;
-    private TextBox _curValBox;
-
-    private TextBox _maxAdrBox;
-    private TextBox _maxValBox;
 
     private MemorySharp _sharp;
     private bool _auto;
 
+    //current
     private int _curVal = 0;
     private long _curAdr = 0;
 
+    //max
     private int _maxVal = 0;
     private long _maxAdr = 0;
 
+    //key to stroke
     private char _key;
-
     private double _scale = 1;
 
+    //warning
     private double _warnScale = 0;
     private float _warnVolume = 1.0f;
     private string _warnSound = "alarm.mp3";
@@ -60,47 +67,29 @@ namespace AutoCheck
     private InputSimulator _is = new InputSimulator();
     VirtualKeyCode _keyCode;
 
-    public AutoKeyThread(char key,
-      TextBox curAdrBox, TextBox curValBox,
-      TextBox maxAdrBox, TextBox maxValBox)
+    public AutoKeyThread(char key, ITextDisplay displayBox)
     {
       _auto = false;
       _sharp = null;
-
+      _textDisplay = displayBox;
       _key = key;
-      _curAdrBox = curAdrBox;
-      _curValBox = curValBox;
-
-      _maxAdrBox = maxAdrBox;
-      _maxValBox = maxValBox;
-
       _keyCode = Utils.KeyCode(_key);
     }
-
     //---------------------------------------------------------------------------------------
-    public bool Start(MemorySharp sharp)
+    public bool Start(MemorySharp sharp, long curAddr, long maxAddr)
     {
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       _sharp = sharp;
-      if (long.TryParse(_curAdrBox.Text, NumberStyles.HexNumber,
-                          CultureInfo.InvariantCulture, out long number))
+      if (curAddr == 0 || maxAddr == 0)
       {
-        _curAdr = number;
-      }
-      else
-      {
+        log.FatalFormat($"Address for {_key} is not correct");
         return false;
       }
 
-      if (long.TryParse(_maxAdrBox.Text, NumberStyles.HexNumber,
-                    CultureInfo.InvariantCulture, out long number2))
-      {
-        _maxAdr = number2;
-      }
-      else
-      {
-        return false;
-      }
+      _curAdr = curAddr;
+      _maxAdr = maxAddr;
 
+      //if this thread needs warning ==> load mp3 player
       if (_warnScale != 0)
       {
         string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -131,7 +120,6 @@ namespace AutoCheck
       _warnThread.IsBackground = true;
       _warnThread.Start();
 
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       log.Info("Monitoring Thread started");
 
       log.InfoFormat($"Key: {_key}");
@@ -404,22 +392,24 @@ namespace AutoCheck
     //---------------------------------------------------------------------------------------
     private void UpdateTexts(int current, int max)
     {
-      if (_curValBox.InvokeRequired)
+      string text;
+      if (max != 0 || current != 0)
       {
-        _curValBox.BeginInvoke(new Action(() => _curValBox.Text = current.ToString()));
+        double percel = (double)current / max * 100.0;
+        text = string.Format($"{percel:00.0}%");
       }
       else
       {
-        _curValBox.Text = current.ToString();
+        text = "";
       }
 
-      if (_maxValBox.InvokeRequired)
+      if (_textDisplay.InvokeRequired)
       {
-        _maxValBox.BeginInvoke(new Action(() => _maxValBox.Text = max.ToString()));
+        _textDisplay.BeginInvoke(new Action(() => _textDisplay.Text = text));
       }
       else
       {
-        _maxValBox.Text = max.ToString();
+        _textDisplay.Text = text;
       }
     }
   }

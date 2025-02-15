@@ -31,24 +31,15 @@
       this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
       this.m_ScanButton = new System.Windows.Forms.Button();
-      this.label1 = new System.Windows.Forms.Label();
-      this.m_CurrentAddrBoxQ = new System.Windows.Forms.TextBox();
-      this.label2 = new System.Windows.Forms.Label();
-      this.m_MaxAddrBoxQ = new System.Windows.Forms.TextBox();
+      this._HPBox = new System.Windows.Forms.TextBox();
       this.m_StartButton = new System.Windows.Forms.Button();
-      this.m_MaxValueBoxQ = new System.Windows.Forms.TextBox();
-      this.m_CurrentValueBoxQ = new System.Windows.Forms.TextBox();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.label1 = new System.Windows.Forms.Label();
       this.m_VolumeCtrl = new System.Windows.Forms.TrackBar();
       this.m_AutoQ = new System.Windows.Forms.CheckBox();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.m_AutoW = new System.Windows.Forms.CheckBox();
-      this.m_CurrentAddrBoxW = new System.Windows.Forms.TextBox();
-      this.label3 = new System.Windows.Forms.Label();
-      this.m_CurrentValueBoxW = new System.Windows.Forms.TextBox();
-      this.label4 = new System.Windows.Forms.Label();
-      this.m_MaxValueBoxW = new System.Windows.Forms.TextBox();
-      this.m_MaxAddrBoxW = new System.Windows.Forms.TextBox();
+      this.m_ManaBox = new System.Windows.Forms.TextBox();
       this.m_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.m_StartMenu = new System.Windows.Forms.ToolStripMenuItem();
       this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -75,51 +66,25 @@
       // 
       // m_ScanButton
       // 
-      this.m_ScanButton.Location = new System.Drawing.Point(148, 122);
+      this.m_ScanButton.Location = new System.Drawing.Point(5, 203);
       this.m_ScanButton.Name = "m_ScanButton";
       this.m_ScanButton.Size = new System.Drawing.Size(75, 23);
       this.m_ScanButton.TabIndex = 0;
       this.m_ScanButton.Text = "Scan...";
       this.m_ScanButton.UseVisualStyleBackColor = true;
-      this.m_ScanButton.Click += new System.EventHandler(this.OnScanQClicked);
+      this.m_ScanButton.Click += new System.EventHandler(this.OnScanClicked);
       // 
-      // label1
+      // _HPBox
       // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(6, 18);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(41, 13);
-      this.label1.TabIndex = 1;
-      this.label1.Text = "Current";
-      // 
-      // m_CurrentAddrBoxQ
-      // 
-      this.m_CurrentAddrBoxQ.Location = new System.Drawing.Point(6, 35);
-      this.m_CurrentAddrBoxQ.Name = "m_CurrentAddrBoxQ";
-      this.m_CurrentAddrBoxQ.ReadOnly = true;
-      this.m_CurrentAddrBoxQ.Size = new System.Drawing.Size(100, 20);
-      this.m_CurrentAddrBoxQ.TabIndex = 2;
-      // 
-      // label2
-      // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(6, 73);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(27, 13);
-      this.label2.TabIndex = 1;
-      this.label2.Text = "Max";
-      // 
-      // m_MaxAddrBoxQ
-      // 
-      this.m_MaxAddrBoxQ.Location = new System.Drawing.Point(6, 90);
-      this.m_MaxAddrBoxQ.Name = "m_MaxAddrBoxQ";
-      this.m_MaxAddrBoxQ.ReadOnly = true;
-      this.m_MaxAddrBoxQ.Size = new System.Drawing.Size(100, 20);
-      this.m_MaxAddrBoxQ.TabIndex = 2;
+      this._HPBox.Location = new System.Drawing.Point(6, 19);
+      this._HPBox.Name = "_HPBox";
+      this._HPBox.ReadOnly = true;
+      this._HPBox.Size = new System.Drawing.Size(78, 20);
+      this._HPBox.TabIndex = 2;
       // 
       // m_StartButton
       // 
-      this.m_StartButton.Location = new System.Drawing.Point(13, 497);
+      this.m_StartButton.Location = new System.Drawing.Point(5, 355);
       this.m_StartButton.Name = "m_StartButton";
       this.m_StartButton.Size = new System.Drawing.Size(75, 23);
       this.m_StartButton.TabIndex = 3;
@@ -127,44 +92,33 @@
       this.m_StartButton.UseVisualStyleBackColor = true;
       this.m_StartButton.Click += new System.EventHandler(this.OnStartButtonClicked);
       // 
-      // m_MaxValueBoxQ
-      // 
-      this.m_MaxValueBoxQ.Location = new System.Drawing.Point(125, 90);
-      this.m_MaxValueBoxQ.Name = "m_MaxValueBoxQ";
-      this.m_MaxValueBoxQ.ReadOnly = true;
-      this.m_MaxValueBoxQ.Size = new System.Drawing.Size(100, 20);
-      this.m_MaxValueBoxQ.TabIndex = 4;
-      // 
-      // m_CurrentValueBoxQ
-      // 
-      this.m_CurrentValueBoxQ.Location = new System.Drawing.Point(125, 35);
-      this.m_CurrentValueBoxQ.Name = "m_CurrentValueBoxQ";
-      this.m_CurrentValueBoxQ.ReadOnly = true;
-      this.m_CurrentValueBoxQ.Size = new System.Drawing.Size(100, 20);
-      this.m_CurrentValueBoxQ.TabIndex = 4;
-      // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.label1);
       this.groupBox1.Controls.Add(this.m_VolumeCtrl);
       this.groupBox1.Controls.Add(this.m_AutoQ);
-      this.groupBox1.Controls.Add(this.m_CurrentAddrBoxQ);
-      this.groupBox1.Controls.Add(this.label1);
-      this.groupBox1.Controls.Add(this.m_CurrentValueBoxQ);
-      this.groupBox1.Controls.Add(this.label2);
-      this.groupBox1.Controls.Add(this.m_MaxValueBoxQ);
-      this.groupBox1.Controls.Add(this.m_MaxAddrBoxQ);
+      this.groupBox1.Controls.Add(this._HPBox);
       this.groupBox1.Location = new System.Drawing.Point(4, 13);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(234, 190);
+      this.groupBox1.Size = new System.Drawing.Size(234, 121);
       this.groupBox1.TabIndex = 6;
       this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Q";
+      this.groupBox1.Text = "HP";
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(3, 51);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(85, 13);
+      this.label1.TabIndex = 8;
+      this.label1.Text = "Warning Volume";
       // 
       // m_VolumeCtrl
       // 
-      this.m_VolumeCtrl.Location = new System.Drawing.Point(87, 137);
+      this.m_VolumeCtrl.Location = new System.Drawing.Point(6, 69);
       this.m_VolumeCtrl.Name = "m_VolumeCtrl";
-      this.m_VolumeCtrl.Size = new System.Drawing.Size(138, 45);
+      this.m_VolumeCtrl.Size = new System.Drawing.Size(217, 45);
       this.m_VolumeCtrl.TabIndex = 7;
       this.m_VolumeCtrl.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
       this.m_VolumeCtrl.ValueChanged += new System.EventHandler(this.OnVolumeValueChanged);
@@ -174,93 +128,45 @@
       this.m_AutoQ.AutoSize = true;
       this.m_AutoQ.Checked = true;
       this.m_AutoQ.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoQ.Location = new System.Drawing.Point(9, 151);
+      this.m_AutoQ.Location = new System.Drawing.Point(93, 21);
       this.m_AutoQ.Name = "m_AutoQ";
-      this.m_AutoQ.Size = new System.Drawing.Size(48, 17);
+      this.m_AutoQ.Size = new System.Drawing.Size(59, 17);
       this.m_AutoQ.TabIndex = 6;
-      this.m_AutoQ.Text = "Auto";
+      this.m_AutoQ.Text = "Auto Q";
       this.m_AutoQ.UseVisualStyleBackColor = true;
       this.m_AutoQ.CheckedChanged += new System.EventHandler(this.OnAutoQCheckedChanged);
       // 
       // groupBox2
       // 
       this.groupBox2.Controls.Add(this.m_AutoW);
-      this.groupBox2.Controls.Add(this.m_CurrentAddrBoxW);
-      this.groupBox2.Controls.Add(this.label3);
-      this.groupBox2.Controls.Add(this.m_ScanButton);
-      this.groupBox2.Controls.Add(this.m_CurrentValueBoxW);
-      this.groupBox2.Controls.Add(this.label4);
-      this.groupBox2.Controls.Add(this.m_MaxValueBoxW);
-      this.groupBox2.Controls.Add(this.m_MaxAddrBoxW);
-      this.groupBox2.Location = new System.Drawing.Point(4, 212);
+      this.groupBox2.Controls.Add(this.m_ManaBox);
+      this.groupBox2.Location = new System.Drawing.Point(5, 140);
       this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(234, 161);
+      this.groupBox2.Size = new System.Drawing.Size(234, 57);
       this.groupBox2.TabIndex = 6;
       this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "W";
+      this.groupBox2.Text = "Mana";
       // 
       // m_AutoW
       // 
       this.m_AutoW.AutoSize = true;
       this.m_AutoW.Checked = true;
       this.m_AutoW.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoW.Location = new System.Drawing.Point(9, 126);
+      this.m_AutoW.Location = new System.Drawing.Point(90, 21);
       this.m_AutoW.Name = "m_AutoW";
-      this.m_AutoW.Size = new System.Drawing.Size(48, 17);
+      this.m_AutoW.Size = new System.Drawing.Size(62, 17);
       this.m_AutoW.TabIndex = 6;
-      this.m_AutoW.Text = "Auto";
+      this.m_AutoW.Text = "Auto W";
       this.m_AutoW.UseVisualStyleBackColor = true;
       this.m_AutoW.CheckedChanged += new System.EventHandler(this.OnAutoWCheckedChanged);
       // 
-      // m_CurrentAddrBoxW
+      // m_ManaBox
       // 
-      this.m_CurrentAddrBoxW.Location = new System.Drawing.Point(6, 35);
-      this.m_CurrentAddrBoxW.Name = "m_CurrentAddrBoxW";
-      this.m_CurrentAddrBoxW.ReadOnly = true;
-      this.m_CurrentAddrBoxW.Size = new System.Drawing.Size(100, 20);
-      this.m_CurrentAddrBoxW.TabIndex = 2;
-      // 
-      // label3
-      // 
-      this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(6, 18);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(41, 13);
-      this.label3.TabIndex = 1;
-      this.label3.Text = "Current";
-      // 
-      // m_CurrentValueBoxW
-      // 
-      this.m_CurrentValueBoxW.Location = new System.Drawing.Point(125, 35);
-      this.m_CurrentValueBoxW.Name = "m_CurrentValueBoxW";
-      this.m_CurrentValueBoxW.ReadOnly = true;
-      this.m_CurrentValueBoxW.Size = new System.Drawing.Size(100, 20);
-      this.m_CurrentValueBoxW.TabIndex = 4;
-      // 
-      // label4
-      // 
-      this.label4.AutoSize = true;
-      this.label4.Location = new System.Drawing.Point(6, 73);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(27, 13);
-      this.label4.TabIndex = 1;
-      this.label4.Text = "Max";
-      // 
-      // m_MaxValueBoxW
-      // 
-      this.m_MaxValueBoxW.Location = new System.Drawing.Point(125, 90);
-      this.m_MaxValueBoxW.Name = "m_MaxValueBoxW";
-      this.m_MaxValueBoxW.ReadOnly = true;
-      this.m_MaxValueBoxW.Size = new System.Drawing.Size(100, 20);
-      this.m_MaxValueBoxW.TabIndex = 4;
-      // 
-      // m_MaxAddrBoxW
-      // 
-      this.m_MaxAddrBoxW.Location = new System.Drawing.Point(6, 90);
-      this.m_MaxAddrBoxW.Name = "m_MaxAddrBoxW";
-      this.m_MaxAddrBoxW.ReadOnly = true;
-      this.m_MaxAddrBoxW.Size = new System.Drawing.Size(100, 20);
-      this.m_MaxAddrBoxW.TabIndex = 2;
+      this.m_ManaBox.Location = new System.Drawing.Point(6, 19);
+      this.m_ManaBox.Name = "m_ManaBox";
+      this.m_ManaBox.ReadOnly = true;
+      this.m_ManaBox.Size = new System.Drawing.Size(78, 20);
+      this.m_ManaBox.TabIndex = 2;
       // 
       // m_ContextMenu
       // 
@@ -333,7 +239,7 @@
       // 
       // m_CloseButton
       // 
-      this.m_CloseButton.Location = new System.Drawing.Point(152, 497);
+      this.m_CloseButton.Location = new System.Drawing.Point(163, 355);
       this.m_CloseButton.Name = "m_CloseButton";
       this.m_CloseButton.Size = new System.Drawing.Size(75, 23);
       this.m_CloseButton.TabIndex = 3;
@@ -347,7 +253,7 @@
       this.groupBox3.Controls.Add(this.m_EChk);
       this.groupBox3.Controls.Add(this.m_WChk);
       this.groupBox3.Controls.Add(this.m_QChk);
-      this.groupBox3.Location = new System.Drawing.Point(4, 379);
+      this.groupBox3.Location = new System.Drawing.Point(5, 237);
       this.groupBox3.Name = "groupBox3";
       this.groupBox3.Size = new System.Drawing.Size(234, 112);
       this.groupBox3.TabIndex = 7;
@@ -410,8 +316,9 @@
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(244, 556);
+      this.ClientSize = new System.Drawing.Size(243, 387);
       this.Controls.Add(this._About);
+      this.Controls.Add(this.m_ScanButton);
       this.Controls.Add(this.groupBox3);
       this.Controls.Add(this.groupBox2);
       this.Controls.Add(this.groupBox1);
@@ -443,23 +350,13 @@
     #endregion
 
     private System.Windows.Forms.Button m_ScanButton;
-    private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.TextBox m_CurrentAddrBoxQ;
-    private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.TextBox m_MaxAddrBoxQ;
+    private System.Windows.Forms.TextBox _HPBox;
     private System.Windows.Forms.Button m_StartButton;
-    private System.Windows.Forms.TextBox m_MaxValueBoxQ;
-    private System.Windows.Forms.TextBox m_CurrentValueBoxQ;
     private System.Windows.Forms.GroupBox groupBox1;
     private System.Windows.Forms.CheckBox m_AutoQ;
     private System.Windows.Forms.GroupBox groupBox2;
     private System.Windows.Forms.CheckBox m_AutoW;
-    private System.Windows.Forms.TextBox m_CurrentAddrBoxW;
-    private System.Windows.Forms.Label label3;
-    private System.Windows.Forms.TextBox m_CurrentValueBoxW;
-    private System.Windows.Forms.Label label4;
-    private System.Windows.Forms.TextBox m_MaxValueBoxW;
-    private System.Windows.Forms.TextBox m_MaxAddrBoxW;
+    private System.Windows.Forms.TextBox m_ManaBox;
     private System.Windows.Forms.TrackBar m_VolumeCtrl;
     private System.Windows.Forms.ContextMenuStrip m_ContextMenu;
     private System.Windows.Forms.ToolStripMenuItem m_AutoHideMenu;
@@ -478,6 +375,7 @@
     private System.Windows.Forms.CheckBox m_QChk;
     private System.Windows.Forms.Label m_KeyCount;
     private System.Windows.Forms.Label _About;
+    private System.Windows.Forms.Label label1;
   }
 }
 

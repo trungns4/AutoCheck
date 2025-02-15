@@ -246,7 +246,7 @@ namespace AutoCheck
             {
               _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = (region.BaseAddress.ToInt64() + adr).ToString("X")));
               _offset = (int)((double)(current) / (double)(total) * 100) - 10;
-              _offset = Math.Min(Math.Max(0, _offset), 99);
+              _offset = Math.Min(Math.Max(1, _offset), 99);
               m_OffsetBox.Value = _offset;
               return;
             }
