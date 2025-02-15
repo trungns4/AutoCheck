@@ -65,6 +65,7 @@
       this.m_EChk = new System.Windows.Forms.CheckBox();
       this.m_WChk = new System.Windows.Forms.CheckBox();
       this.m_QChk = new System.Windows.Forms.CheckBox();
+      this._About = new System.Windows.Forms.Label();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.m_VolumeCtrl)).BeginInit();
       this.groupBox2.SuspendLayout();
@@ -395,11 +396,22 @@
       this.m_QChk.Text = "Q";
       this.m_QChk.UseVisualStyleBackColor = true;
       // 
+      // _About
+      // 
+      this._About.AutoSize = true;
+      this._About.ForeColor = System.Drawing.SystemColors.ControlDark;
+      this._About.Location = new System.Drawing.Point(10, 531);
+      this._About.Name = "_About";
+      this._About.Size = new System.Drawing.Size(13, 13);
+      this._About.TabIndex = 8;
+      this._About.Text = "..";
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(244, 533);
+      this.ClientSize = new System.Drawing.Size(244, 556);
+      this.Controls.Add(this._About);
       this.Controls.Add(this.groupBox3);
       this.Controls.Add(this.groupBox2);
       this.Controls.Add(this.groupBox1);
@@ -424,6 +436,7 @@
       this.groupBox3.ResumeLayout(false);
       this.groupBox3.PerformLayout();
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
@@ -464,6 +477,7 @@
     private System.Windows.Forms.CheckBox m_WChk;
     private System.Windows.Forms.CheckBox m_QChk;
     private System.Windows.Forms.Label m_KeyCount;
+    private System.Windows.Forms.Label _About;
   }
 }
 

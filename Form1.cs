@@ -43,6 +43,7 @@ namespace AutoCheck
 
     private void OnFormLoad(object sender, EventArgs e)
     {
+      _About.Text = this.GetType().Assembly.GetName().Version.ToString();
       _threadQ = new AutoKeyThread('q', m_CurrentAddrBoxQ, m_CurrentValueBoxQ, m_MaxAddrBoxQ, m_MaxValueBoxQ);
       _threadW = new AutoKeyThread('w', m_CurrentAddrBoxW, m_CurrentValueBoxW, m_MaxAddrBoxW, m_MaxValueBoxW);
 
@@ -105,14 +106,12 @@ namespace AutoCheck
       _threadW.WarnScale = 0;
 
       _threadQ.KeyDelay = Utils.GetConfigInt("QKeyDelay", 16);
-      _threadQ.KeyThreadDelay = Utils.GetConfigInt("QKeyThreadDelay", 16);
-      _threadQ.KeyThreadOptTime = Utils.GetConfigInt("QThreadOptTime", 100);
+      _threadQ.KeyThreadOptTime = Utils.GetConfigInt("QThreadOptTime", 32);
       _threadQ.MemThreadDelay = Utils.GetConfigInt("QMemThreadDelay", 10);
       _threadQ.WarnThreadDelay = Utils.GetConfigInt("QWarnThreadDelay", 10);
 
       _threadW.KeyDelay = Utils.GetConfigInt("WKeyDelay", 16);
-      _threadW.KeyThreadDelay = Utils.GetConfigInt("WKeyThreadDelay", 16);
-      _threadW.KeyThreadOptTime = Utils.GetConfigInt("WKeyThreadOptTime", 100);
+      _threadW.KeyThreadOptTime = Utils.GetConfigInt("WKeyThreadOptTime", 32);
       _threadW.MemThreadDelay = Utils.GetConfigInt("WMemThreadDelay", 16);
       _threadW.WarnThreadDelay = Utils.GetConfigInt("WWarnThreadDelay", 16);
 

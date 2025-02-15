@@ -52,7 +52,6 @@ namespace AutoCheck
     private AudioFileReader m_audioFile;
 
     private int _keyDelay = 8;
-    private int _keyThreadDelay = 10;
     private int _memThreadDelay = 10;
     private int _warnThreadDelay = 10;
 
@@ -137,11 +136,9 @@ namespace AutoCheck
 
       log.InfoFormat($"Key: {_key}");
       log.InfoFormat($"Key Delay: {_keyDelay}");
-      log.InfoFormat($"Key Thread Delay: {_keyThreadDelay}");
+      log.InfoFormat($"Key Operation Time: {_keyThreadOptTime}");
       log.InfoFormat($"Mem Thread Delay: {_memThreadDelay}");
       log.InfoFormat($"Warn Thread Delay: {_warnThreadDelay}");
-      log.InfoFormat($"Operation Time: {_keyThreadOptTime}");
-
 
       log.InfoFormat($"Scale: {_scale}");
       log.InfoFormat($"Warn Scale: {_warnScale}");
@@ -235,18 +232,6 @@ namespace AutoCheck
       set
       {
         _keyDelay = value;
-      }
-    }
-    //---------------------------------------------------------------------------------------
-    public int KeyThreadDelay
-    {
-      get
-      {
-        return _keyThreadDelay;
-      }
-      set
-      {
-        _keyThreadDelay = value;
       }
     }
     //---------------------------------------------------------------------------------------
@@ -385,15 +370,18 @@ namespace AutoCheck
             _is.Keyboard.KeyDown(_keyCode);
             Thread.Sleep(_keyDelay);
             _is.Keyboard.KeyUp(_keyCode);
-            while (sw.ElapsedMilliseconds < _keyThreadOptTime)
+            Thread.Sleep(_keyDelay);
+
+            int sleepTime = _keyThreadOptTime - (int)sw.ElapsedMilliseconds;
+            if (sleepTime <= 0)
             {
-              Thread.Sleep(10);
+              sleepTime = _keyDelay / 2;
             }
+            Thread.Sleep(sleepTime);
           }
         }
         finally
         {
-          Thread.Sleep(_keyThreadDelay);
         }
       }
     }

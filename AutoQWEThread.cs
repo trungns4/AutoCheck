@@ -23,7 +23,6 @@ namespace AutoCheck
     private bool _isRunning = false;
 
     private int _keyDelay = 10;
-    private int _threadDelay = 20;
     private int _threadOptTime = 50;
 
     private MemorySharp _sharp;
@@ -46,12 +45,6 @@ namespace AutoCheck
     {
       get { return _keyDelay; }
       set { _keyDelay = value; }
-    }
-
-    public int ThreadDelay
-    {
-      get { return _threadDelay; }
-      set { _threadDelay = value; }
     }
 
     public int ThreadOptTime
@@ -109,7 +102,6 @@ namespace AutoCheck
 
       log.InfoFormat($"Q: {_QEnable} W: {_WEnable} E: {_EEnable}");
       log.InfoFormat($"Key Delay: {_keyDelay}");
-      log.InfoFormat($"Thread Delay: {_threadDelay}");
       log.InfoFormat($"Operation Time: {_threadOptTime}");
 
       return true;
@@ -150,6 +142,7 @@ namespace AutoCheck
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
             Thread.Sleep(_keyDelay);
             _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
+            Thread.Sleep(_keyDelay);
           }
 
           if (_WEnable)
@@ -157,6 +150,7 @@ namespace AutoCheck
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_W);
             Thread.Sleep(_keyDelay);
             _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_W);
+            Thread.Sleep(_keyDelay);
           }
 
           if (_EEnable)
@@ -164,6 +158,7 @@ namespace AutoCheck
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_E);
             Thread.Sleep(_keyDelay);
             _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_E);
+            Thread.Sleep(_keyDelay);
           }
 
           _count++;
@@ -177,17 +172,18 @@ namespace AutoCheck
             _label.Text = _count.ToString();
           }
 
-          while (sw.ElapsedMilliseconds < _threadOptTime)
+          int sleepTime = _threadOptTime - (int)sw.ElapsedMilliseconds;
+          if (sleepTime <= 0)
           {
-            Thread.Sleep(10);
+            sleepTime = _keyDelay / 2;
           }
+          Thread.Sleep(sleepTime);
         }
         catch
         {
         }
         finally
         {
-          Thread.Sleep(_threadDelay);
         }
       }
     }
