@@ -1,7 +1,9 @@
-﻿using Binarysharp.MemoryManagement;
+﻿using AutoCheck.Properties;
+using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
 using log4net;
 using NAudio.Wave;
+using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -63,15 +65,17 @@ namespace AutoCheck
     private WaveOutEvent m_outputDevice;
     private AudioFileReader m_audioFile;
 
-    private int _keyDelay = 8;
+    private int _keyUpDelay = 8;
+    private int _keyDownDelay = 8;
+
     private int _memThreadDelay = 10;
     private int _warnThreadDelay = 10;
-
-    private int _keyThreadOptTime = 100;
+    private int _keyThreadDelay = 10;
 
     private InputSimulator _is = new InputSimulator();
     VirtualKeyCode _keyCode;
 
+    //---------------------------------------------------------------------------------------
     public AutoKeyThread(char key, IValuesDisplay displayBox)
     {
       _auto = false;
@@ -85,12 +89,6 @@ namespace AutoCheck
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       _sharp = sharp;
-      if (curAddr == 0 || maxAddr == 0)
-      {
-        log.FatalFormat($"Address for {_key} is not correct");
-        return false;
-      }
-
       _curAdr = curAddr;
       _maxAdr = maxAddr;
 
@@ -128,13 +126,15 @@ namespace AutoCheck
       log.Info("Monitoring Thread started");
 
       log.InfoFormat($"Key: {_key}");
-      log.InfoFormat($"Key Delay: {_keyDelay}");
-      log.InfoFormat($"Key Operation Time: {_keyThreadOptTime}");
+      log.InfoFormat($"Key Up Delay: {_keyUpDelay}");
+      log.InfoFormat($"Key Down Delay: {_keyDownDelay}");
+      log.InfoFormat($"Key Thread Delay: {_keyThreadDelay}");
       log.InfoFormat($"Mem Thread Delay: {_memThreadDelay}");
       log.InfoFormat($"Warn Thread Delay: {_warnThreadDelay}");
 
       log.InfoFormat($"Scale: {_scale}");
       log.InfoFormat($"Warn Scale: {_warnScale}");
+      log.InfoFormat($"Warn Volume: {_warnVolume:0.00}");
 
       return true;
     }
@@ -223,15 +223,27 @@ namespace AutoCheck
       }
     }
     //---------------------------------------------------------------------------------------
-    public int KeyDelay
+    public int KeyUpDelay
     {
       get
       {
-        return _keyDelay;
+        return _keyUpDelay;
       }
       set
       {
-        _keyDelay = value;
+        _keyUpDelay = value;
+      }
+    }
+    //---------------------------------------------------------------------------------------
+    public int KeyDownDelay
+    {
+      get
+      {
+        return _keyDownDelay;
+      }
+      set
+      {
+        _keyDownDelay = value;
       }
     }
     //---------------------------------------------------------------------------------------
@@ -259,15 +271,15 @@ namespace AutoCheck
       }
     }
     //---------------------------------------------------------------------------------------
-    public int KeyThreadOptTime
+    public int KeyThreadDelay
     {
       get
       {
-        return _keyThreadOptTime;
+        return _keyThreadDelay;
       }
       set
       {
-        _keyThreadOptTime = value;
+        _keyThreadDelay = value;
       }
     }
     //---------------------------------------------------------------------------------------
@@ -323,8 +335,11 @@ namespace AutoCheck
       {
         try
         {
-          AutoFlags.IsTargetWindowActive = Utils.IsWindowActive(_sharp.Pid);
-          if (_curAdr != 0 && _maxAdr != 0 && _auto)
+          if (_key == 'q')
+          {
+            AutoFlags.IsTargetWindowActive = Utils.IsWindowActive(_sharp.Pid);
+          }
+          if (_curAdr >= 24 && _maxAdr >= 24 && _auto)
           {
             _curVal = _sharp.Read<int>((IntPtr)_curAdr, false);
             _maxVal = _sharp.Read<int>((IntPtr)_maxAdr, false);
@@ -362,27 +377,21 @@ namespace AutoCheck
     {
       while (_isRunning)
       {
-        try
+        _flag.WaitOne();
+        bool delay = true;
+        while (_auto == true && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
         {
-          _flag.WaitOne();
-          while (_auto == true && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
-          {
-            var sw = Stopwatch.StartNew();
-            _is.Keyboard.KeyDown(_keyCode);
-            Thread.Sleep(_keyDelay);
-            _is.Keyboard.KeyUp(_keyCode);
-            Thread.Sleep(_keyDelay);
+          _is.Keyboard.KeyDown(_keyCode);
+          Thread.Sleep(_keyUpDelay);
 
-            int sleepTime = _keyThreadOptTime - (int)sw.ElapsedMilliseconds;
-            if (sleepTime <= 0)
-            {
-              sleepTime = _keyDelay / 2;
-            }
-            Thread.Sleep(sleepTime);
-          }
+          _is.Keyboard.KeyUp(_keyCode);
+          Thread.Sleep(_keyDownDelay);
+
+          delay = false;
         }
-        finally
+        if (delay == true)
         {
+          Thread.Sleep(_keyThreadDelay);
         }
       }
     }
@@ -418,6 +427,53 @@ namespace AutoCheck
         _ValuesDisplay.MaxValue = max;
         _ValuesDisplay.CurValue = current;
       }
+    }
+    //---------------------------------------------------------------------------------------
+    public JObject GetSettings()
+    {
+      JObject ret = new JObject()
+      {
+        ["_auto"] = _auto,
+        ["_keyUpDelay"] = _keyUpDelay,
+        ["_keyDownDelay"] = _keyDownDelay,
+        ["_keyThreadDelay"] = _keyThreadDelay,
+        ["_memThreadDelay"] = _memThreadDelay,
+        ["_warnThreadDelay"] = _warnThreadDelay,
+        ["_scale"] = _scale,
+        ["_warnScale"] = _warnScale,
+        ["_warnVolume"] = _warnVolume
+      };
+
+      return ret;
+    }
+    //---------------------------------------------------------------------------------------
+    public void LoadSettings(JObject settings)
+    {
+      _auto = Utils.Get(settings, "_auto", true);
+      _keyUpDelay = Utils.Get(settings, "_keyUpDelay", 8);
+      _keyDownDelay = Utils.Get(settings, "_keyDownDelay", 8);
+      _keyThreadDelay = Utils.Get(settings, "_keyThreadDelay", 16);
+      _memThreadDelay = Utils.Get(settings, "_memThreadDelay", 16);
+      _warnThreadDelay = Utils.Get(settings, "_warnThreadDelay", 16);
+
+      _scale = Utils.Get(settings, "_scale", 1.0f);
+      _warnScale = Utils.Get(settings, "_warnScale", 1.0f);
+      _warnVolume = Utils.Get(settings, "_warnVolume", 0.5f);
+
+      _scale = Utils.Clamp(_scale, 0.0f, 1.5f);
+      _warnScale = Utils.Clamp(_warnScale, 0.0f, 1.5f);
+      _warnVolume = Utils.Clamp(_warnVolume, 0.0f, 1.0f);
+
+
+      //2ms and 1 second
+      int minDelay = 2;
+      int maxDelay = 1000;
+
+      _keyUpDelay = Utils.Clamp(_keyUpDelay, minDelay, maxDelay);
+      _keyDownDelay = Utils.Clamp(_keyDownDelay, minDelay, maxDelay);
+      _keyThreadDelay = Utils.Clamp(_keyThreadDelay, minDelay, maxDelay);
+      _memThreadDelay = Utils.Clamp(_memThreadDelay, minDelay, maxDelay);
+      _warnThreadDelay = Utils.Clamp(_warnThreadDelay, minDelay, maxDelay);
     }
   }
 }

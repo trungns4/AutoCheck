@@ -4,6 +4,7 @@ using Binarysharp.MemoryManagement.Modules;
 using Binarysharp.MemoryManagement.Native;
 using Gma.System.MouseKeyHook;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,13 +46,22 @@ namespace AutoCheck
     private void OnFormLoad(object sender, EventArgs e)
     {
       _About.Text = this.GetType().Assembly.GetName().Version.ToString();
-      _threadQ = new AutoKeyThread('q', new ProgressBarAdapter(m_QPBar));
-      _threadW = new AutoKeyThread('w', new ProgressBarAdapter(m_WPBar));
+      _threadQ = new AutoKeyThread('q', new ProgressBarAdapter(m_QPBar))
+      {
+        WarnScale = 0.96,
+        Scale = 0.99
+      };
+
+      _threadW = new AutoKeyThread('w', new ProgressBarAdapter(m_WPBar))
+      {
+        WarnScale = 0,
+        Scale = 0.9
+      };
 
       _qweThread = new AutoQWEThread(m_KeyCount);
 
-      LoadConfig();
       LoadData();
+      UpdateUIByData();
 
       m_GlobalHook = Hook.GlobalEvents();
       m_GlobalHook.KeyUp += OnKeyUp;
@@ -89,35 +100,7 @@ namespace AutoCheck
         e.Handled = true;
       }
     }
-    //----------------------------------------------------------------------------------
-    private void LoadConfig()
-    {
-      _threadW.Scale = Utils.GetConfigDouble("scaleW", 0.99);
-      _threadQ.Scale = Utils.GetConfigDouble("scaleQ", 0.99);
 
-      _threadQ.WarnScale = Utils.GetConfigDouble("WarnScale", 0.99);
-      _threadQ.WarnVolume = (float)(Utils.GetConfigDouble("WarnVolume", 1));
-      _threadQ.WarnSound = Utils.GetConfigString("WarnSound", "alarm.mp3");
-
-      m_VolumeCtrl.Minimum = 0;
-      m_VolumeCtrl.Maximum = 100;
-      m_VolumeCtrl.Value = (int)(Math.Min(_threadQ.WarnVolume, 1.0f) * 100f);
-
-      _threadW.WarnScale = 0;
-
-      _threadQ.KeyDelay = Utils.GetConfigInt("QKeyDelay", 16);
-      _threadQ.KeyThreadOptTime = Utils.GetConfigInt("QThreadOptTime", 32);
-      _threadQ.MemThreadDelay = Utils.GetConfigInt("QMemThreadDelay", 10);
-      _threadQ.WarnThreadDelay = Utils.GetConfigInt("QWarnThreadDelay", 10);
-
-      _threadW.KeyDelay = Utils.GetConfigInt("WKeyDelay", 16);
-      _threadW.KeyThreadOptTime = Utils.GetConfigInt("WKeyThreadOptTime", 32);
-      _threadW.MemThreadDelay = Utils.GetConfigInt("WMemThreadDelay", 16);
-      _threadW.WarnThreadDelay = Utils.GetConfigInt("WWarnThreadDelay", 16);
-
-      _qweThread.Delay = Utils.GetConfigInt("QWEDelay", 16);
-      _qweThread.ThreadOptTime = Utils.GetConfigInt("QWEThreadOptTime", 16);
-    }
     //----------------------------------------------------------------------------------
     private void OnStartMenuClick(object sender, EventArgs e)
     {
@@ -286,51 +269,73 @@ namespace AutoCheck
       return Path.Combine(exeDirectory, "data.json");
     }
     //----------------------------------------------------------------------------------
+    private string GetDefDataFile()
+    {
+      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+      return Path.Combine(exeDirectory, "defdata.json");
+    }
+    //----------------------------------------------------------------------------------
     private void SaveData()
     {
       string file = GetDataFile();
-      var data = new Dictionary<string, string>();
 
-      data.Add("ADDR", _addr.ToString("X"));
-      data.Add("AutoQ", m_AutoQ.Checked ? "True" : "False");
-      data.Add("AutoW", m_AutoW.Checked ? "True" : "False");
-      data.Add("Q", m_QChk.Checked ? "True" : "False");
-      data.Add("W", m_WChk.Checked ? "True" : "False");
-      data.Add("E", m_EChk.Checked ? "True" : "False");
+      var settings = new JObject()
+      {
+        ["ADR"] = _addr.ToString("X"),
+        ["Q"] = _threadQ.GetSettings(),
+        ["W"] = _threadW.GetSettings(),
+        ["QWE"] = _qweThread.GetSettings()
+      };
 
-      string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+      string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
       File.WriteAllText(file, json);
     }
     //----------------------------------------------------------------------------------
     private void LoadData()
     {
-      string file = GetDataFile();
-      if (File.Exists(file) == true)
+      try
       {
-        string json = File.ReadAllText(file);
-        var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+        string file = GetDataFile();
 
-        _addr = 0;
-        if (data.ContainsKey("ADDR"))
+        if (File.Exists(file) == false)
         {
-          if (long.TryParse(data["ADDR"], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long result))
+          File.Copy(GetDefDataFile(), file);
+        }
+
+        if (File.Exists(file) == true)
+        {
+          string json = File.ReadAllText(file);
+          JObject settings = JObject.Parse(json);
+
+          string adr = Utils.Get(settings, "ADR", "0x0");
+          if (long.TryParse(adr, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long result))
           {
             _addr = result;
           }
+
+          _qweThread.LoadSettings(settings["QWE"] as JObject);
+          _threadQ.LoadSettings(settings["Q"] as JObject);
+          _threadW.LoadSettings(settings["W"] as JObject);
         }
 
-        m_AutoQ.Checked = (data["AutoQ"].ToUpper() == "TRUE");
-        m_AutoW.Checked = (data["AutoW"].ToUpper() == "TRUE");
-
-        if (data.ContainsKey("Q"))
-          m_QChk.Checked = (data["Q"].ToUpper() == "TRUE");
-
-        if (data.ContainsKey("W"))
-          m_WChk.Checked = (data["W"].ToUpper() == "TRUE");
-
-        if (data.ContainsKey("E"))
-          m_EChk.Checked = (data["E"].ToUpper() == "TRUE");
       }
+      catch
+      {
+        MessageBox.Show("Load data failed");
+      }
+    }
+    //----------------------------------------------------------------------------------
+    private void UpdateUIByData()
+    {
+      m_AutoQ.Checked = _threadQ.Auto;
+      m_AutoW.Checked = _threadW.Auto;
+      m_QChk.Checked = _qweThread.QEnable;
+      m_WChk.Checked = _qweThread.WEnable;
+      m_EChk.Checked = _qweThread.EEnable;
+
+      m_VolumeCtrl.Minimum = 0;
+      m_VolumeCtrl.Maximum = 100;
+      m_VolumeCtrl.Value = (int)(Math.Min(_threadQ.WarnVolume, 1.0f) * 100f);
     }
     //----------------------------------------------------------------------------------
     private void OnVolumeValueChanged(object sender, EventArgs e)
@@ -340,8 +345,6 @@ namespace AutoCheck
     //--------------------------------------------------------------------------------------------
     private void CheckWindows()
     {
-      m_NotifyIcon.Text = string.Format("Status: {0}/{1}", _threadQ.Value, _threadW.Value);
-
       if (m_bAutoHide == false)
       {
         return;

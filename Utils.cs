@@ -1,9 +1,12 @@
 ﻿using Binarysharp.MemoryManagement;
+using log4net;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Web;
 using WindowsInput.Native;
@@ -97,6 +100,42 @@ namespace AutoCheck
         return System.Configuration.ConfigurationManager.AppSettings[name];
       }
       return def;
+    }
+
+    public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
+    {
+      if (value.CompareTo(min) < 0) return min;
+      if (value.CompareTo(max) > 0) return max;
+      return value;
+    }
+
+    public static T Get<T>(JObject settings, string key, T defaultValue)
+    {
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+      if (settings.TryGetValue(key, out JToken value))
+      {
+        try
+        {
+          // Handle null values
+          if (value.Type == JTokenType.Null)
+          {
+            return defaultValue;
+          }
+
+          return value.Value<T>();
+        }
+        catch
+        {
+          log.WarnFormat($"Warning: Failed to convert key '{key}' to {typeof(T).Name}. Using default value.");
+          return defaultValue;
+        }
+      }
+      else
+      {
+        log.WarnFormat($"Warning: Key '{key}' is missing. Using default value.");
+        return defaultValue;
+      }
     }
   }
 }

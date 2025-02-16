@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThreadTime.cs" />
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="ScanHPForm.resx">
       <DependentUpon>ScanHPForm.cs</DependentUpon>
@@ -149,6 +150,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="defdata.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="PreBuild.ps1" />
     <None Include="Properties\Settings.settings">
