@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AutoCheck.Properties;
 using Binarysharp.MemoryManagement;
 using log4net;
 using Newtonsoft.Json.Linq;
@@ -17,85 +18,26 @@ namespace AutoCheck
 {
   internal class AutoQWEThread
   {
-    private bool _QEnable = true;
-    private bool _WEnable = false;
-    private bool _EEnable = false;
-
     private Thread _qThread;
     private Thread _wThread;
     private Thread _eThread;
 
     private bool _isRunning = false;
-
-    private int _keyDownDelayQ = 16;
-    private int _keyUpDelayQ = 16;
-    private int _keyDownDelayW = 16;
-    private int _keyUpDelayW = 16;
-    private int _keyDownDelayE = 16;
-    private int _keyUpDelayE = 16;
-
-    private int _threadDelayQ = 32;
-    private int _threadDelayW = 32;
-    private int _threadDelayE = 32;
-
     private System.Windows.Forms.Label _label;
-
     private long _count = 0;
     private InputSimulator _is = new InputSimulator();
 
-    public AutoQWEThread(System.Windows.Forms.Label label)
+    private QWEThreadSettings _settings;
+
+    public AutoQWEThread(QWEThreadSettings settings, System.Windows.Forms.Label label)
     {
       _label = label;
+      _settings = settings;
     }
-
+    //---------------------------------------------------------------------------------------
     public bool IsRunning()
     {
       return _isRunning;
-    }
-    //---------------------------------------------------------------------------------------
-    public int Delay
-    {
-      get { return _keyUpDelayQ; }
-      set { _keyUpDelayQ = value; }
-    }
-    //---------------------------------------------------------------------------------------
-    public int ThreadDelayQ
-    {
-      get
-      {
-        return _threadDelayQ;
-      }
-      set
-      {
-        _threadDelayQ = value;
-      }
-    }
-    //---------------------------------------------------------------------------------------
-    public bool QEnable
-    {
-      get { return _QEnable; }
-      set
-      {
-        _QEnable = value;
-      }
-    }
-    //---------------------------------------------------------------------------------------
-    public bool WEnable
-    {
-      get { return _WEnable; }
-      set
-      {
-        _WEnable = value;
-      }
-    }
-    //---------------------------------------------------------------------------------------
-    public bool EEnable
-    {
-      get { return _EEnable; }
-      set
-      {
-        _EEnable = value;
-      }
     }
     //---------------------------------------------------------------------------------------
     public bool Start(MemorySharp sharp)
@@ -120,9 +62,7 @@ namespace AutoCheck
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       log.DebugFormat("Auto Key Threads started");
 
-      log.InfoFormat($"Q: {_QEnable} W: {_WEnable} E: {_EEnable}");
-      log.InfoFormat($"Key Delay: {_keyUpDelayQ}");
-      log.InfoFormat($"Thread Delay Q: {_threadDelayQ}");
+      log.InfoFormat($"Q: {_settings._q} W: {_settings._w} E: {_settings._e}");
 
       return true;
     }
@@ -173,95 +113,52 @@ namespace AutoCheck
       {
         if (AutoFlags.IsTargetWindowActive == false)
         {
-          Thread.Sleep(_threadDelayQ);
+          Thread.Sleep(_settings._threadDelayQ);
           continue;
         }
 
         if (key == 'q')
         {
-          if (_QEnable)
+          if (_settings._q)
           {
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
-            Thread.Sleep(_keyDownDelayQ);
+            Thread.Sleep(_settings._keyDownDelayQ);
 
             _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
-            UpdateUIAndSleep(_keyUpDelayQ);
+            UpdateUIAndSleep(_settings._keyUpDelayQ);
           }
         }
 
         if (key == 'w')
         {
-          if (_WEnable)
+          if (_settings._w)
           {
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_W);
-            Thread.Sleep(_keyDownDelayW);
+            Thread.Sleep(_settings._keyDownDelayW);
 
             _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_W);
-            UpdateUIAndSleep(_keyUpDelayW);
+            UpdateUIAndSleep(_settings._keyUpDelayW);
           }
         }
 
         if (key == 'e')
         {
-          if (_WEnable)
+          if (_settings._e)
           {
             _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_E);
-            Thread.Sleep(_keyDownDelayE);
+            Thread.Sleep(_settings._keyDownDelayE);
 
             _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_E);
-            UpdateUIAndSleep(_keyUpDelayE);
+            UpdateUIAndSleep(_settings._keyUpDelayE);
           }
         }
 
-        if (_QEnable == false && _WEnable == false && _EEnable == false)
+        if (_settings._q == false && _settings._w == false && _settings._e == false)
         {
           UpdateLabel();
-          Thread.Sleep(Math.Min(_threadDelayQ, Math.Min(_threadDelayW, _threadDelayE)));
+          Thread.Sleep(Math.Min(_settings._threadDelayQ, Math.Min(_settings._threadDelayW, _settings._threadDelayE)));
         }
       }
-    }
-
-    //---------------------------------------------------------------------------------------
-    public JObject GetSettings()
-    {
-      JObject ret = new JObject()
-      {
-        ["_q"] = _QEnable,
-        ["_w"] = _WEnable,
-        ["_e"] = _EEnable,
-
-        ["_keyUpDelayQ"] = _keyUpDelayQ,
-        ["_keyDownDelayQ"] = _keyDownDelayQ,
-        ["_threadDelayQ"] = _threadDelayQ,
-
-        ["_keyUpDelayW"] = _keyUpDelayW,
-        ["_keyDownDelayW"] = _keyDownDelayW,
-        ["_threadDelayW"] = _threadDelayW,
-
-        ["_keyUpDelayE"] = _keyUpDelayE,
-        ["_keyDownDelayE"] = _keyDownDelayE,
-        ["_threadDelayE"] = _threadDelayE,
-      };
-      return ret;
-    }
-    //---------------------------------------------------------------------------------------
-    public void LoadSettings(JObject settings)
-    {
-      _QEnable = Utils.Get(settings, "_q", true);
-      _WEnable = Utils.Get(settings, "_w", false);
-      _EEnable = Utils.Get(settings, "_e", false);
-
-      _keyUpDelayQ = Utils.Get(settings, "_keyUpDelayQ", 10);
-      _keyDownDelayQ = Utils.Get(settings, "_keyDownDelayQ", 10);
-      _threadDelayQ = Utils.Get(settings, "_threadDelayQ", 10);
-
-      _keyUpDelayW = Utils.Get(settings, "_keyUpDelayW", 10);
-      _keyDownDelayW = Utils.Get(settings, "_keyDownDelayW", 10);
-      _threadDelayW = Utils.Get(settings, "_threadDelayW", 10);
-
-      _keyUpDelayE = Utils.Get(settings, "_keyUpDelayE", 10);
-      _keyDownDelayE = Utils.Get(settings, "_keyDownDelayE", 10);
-      _threadDelayE = Utils.Get(settings, "_threadDelayE", 10);
     }
   }
 }

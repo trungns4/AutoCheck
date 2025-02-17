@@ -57,6 +57,7 @@
       this.m_WChk = new System.Windows.Forms.CheckBox();
       this.m_QChk = new System.Windows.Forms.CheckBox();
       this._About = new System.Windows.Forms.Label();
+      this._SettingsButton = new System.Windows.Forms.Button();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.m_VolumeCtrl)).BeginInit();
       this.groupBox2.SuspendLayout();
@@ -92,7 +93,7 @@
       this.groupBox1.Controls.Add(this.m_AutoQ);
       this.groupBox1.Location = new System.Drawing.Point(4, 13);
       this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(234, 121);
+      this.groupBox1.Size = new System.Drawing.Size(196, 121);
       this.groupBox1.TabIndex = 6;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "HP";
@@ -101,7 +102,7 @@
       // 
       this.m_QPBar.Location = new System.Drawing.Point(7, 24);
       this.m_QPBar.Name = "m_QPBar";
-      this.m_QPBar.Size = new System.Drawing.Size(147, 12);
+      this.m_QPBar.Size = new System.Drawing.Size(120, 15);
       this.m_QPBar.TabIndex = 9;
       // 
       // label1
@@ -117,7 +118,7 @@
       // 
       this.m_VolumeCtrl.Location = new System.Drawing.Point(6, 69);
       this.m_VolumeCtrl.Name = "m_VolumeCtrl";
-      this.m_VolumeCtrl.Size = new System.Drawing.Size(217, 45);
+      this.m_VolumeCtrl.Size = new System.Drawing.Size(186, 45);
       this.m_VolumeCtrl.TabIndex = 7;
       this.m_VolumeCtrl.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
       this.m_VolumeCtrl.ValueChanged += new System.EventHandler(this.OnVolumeValueChanged);
@@ -127,7 +128,7 @@
       this.m_AutoQ.AutoSize = true;
       this.m_AutoQ.Checked = true;
       this.m_AutoQ.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoQ.Location = new System.Drawing.Point(168, 22);
+      this.m_AutoQ.Location = new System.Drawing.Point(133, 22);
       this.m_AutoQ.Name = "m_AutoQ";
       this.m_AutoQ.Size = new System.Drawing.Size(59, 17);
       this.m_AutoQ.TabIndex = 6;
@@ -141,7 +142,7 @@
       this.groupBox2.Controls.Add(this.m_AutoW);
       this.groupBox2.Location = new System.Drawing.Point(5, 140);
       this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(234, 57);
+      this.groupBox2.Size = new System.Drawing.Size(195, 57);
       this.groupBox2.TabIndex = 6;
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Mana";
@@ -150,7 +151,7 @@
       // 
       this.m_WPBar.Location = new System.Drawing.Point(6, 24);
       this.m_WPBar.Name = "m_WPBar";
-      this.m_WPBar.Size = new System.Drawing.Size(147, 12);
+      this.m_WPBar.Size = new System.Drawing.Size(120, 15);
       this.m_WPBar.TabIndex = 9;
       // 
       // m_AutoW
@@ -158,7 +159,7 @@
       this.m_AutoW.AutoSize = true;
       this.m_AutoW.Checked = true;
       this.m_AutoW.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoW.Location = new System.Drawing.Point(167, 22);
+      this.m_AutoW.Location = new System.Drawing.Point(133, 22);
       this.m_AutoW.Name = "m_AutoW";
       this.m_AutoW.Size = new System.Drawing.Size(62, 17);
       this.m_AutoW.TabIndex = 6;
@@ -237,7 +238,7 @@
       // 
       // m_CloseButton
       // 
-      this.m_CloseButton.Location = new System.Drawing.Point(163, 355);
+      this.m_CloseButton.Location = new System.Drawing.Point(121, 355);
       this.m_CloseButton.Name = "m_CloseButton";
       this.m_CloseButton.Size = new System.Drawing.Size(75, 23);
       this.m_CloseButton.TabIndex = 3;
@@ -253,7 +254,7 @@
       this.groupBox3.Controls.Add(this.m_QChk);
       this.groupBox3.Location = new System.Drawing.Point(5, 237);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(234, 112);
+      this.groupBox3.Size = new System.Drawing.Size(195, 112);
       this.groupBox3.TabIndex = 7;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Auto QWE";
@@ -263,7 +264,7 @@
       this.m_KeyCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.m_KeyCount.Location = new System.Drawing.Point(2, 60);
       this.m_KeyCount.Name = "m_KeyCount";
-      this.m_KeyCount.Size = new System.Drawing.Size(221, 44);
+      this.m_KeyCount.Size = new System.Drawing.Size(134, 44);
       this.m_KeyCount.TabIndex = 3;
       this.m_KeyCount.Text = "...";
       this.m_KeyCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -271,7 +272,7 @@
       // m_EChk
       // 
       this.m_EChk.AutoSize = true;
-      this.m_EChk.Location = new System.Drawing.Point(190, 29);
+      this.m_EChk.Location = new System.Drawing.Point(103, 29);
       this.m_EChk.Name = "m_EChk";
       this.m_EChk.Size = new System.Drawing.Size(33, 17);
       this.m_EChk.TabIndex = 1;
@@ -282,7 +283,7 @@
       // m_WChk
       // 
       this.m_WChk.AutoSize = true;
-      this.m_WChk.Location = new System.Drawing.Point(98, 29);
+      this.m_WChk.Location = new System.Drawing.Point(50, 29);
       this.m_WChk.Name = "m_WChk";
       this.m_WChk.Size = new System.Drawing.Size(37, 17);
       this.m_WChk.TabIndex = 1;
@@ -313,11 +314,22 @@
       this._About.TabIndex = 8;
       this._About.Text = "..";
       // 
+      // _SettingsButton
+      // 
+      this._SettingsButton.Location = new System.Drawing.Point(121, 203);
+      this._SettingsButton.Name = "_SettingsButton";
+      this._SettingsButton.Size = new System.Drawing.Size(75, 23);
+      this._SettingsButton.TabIndex = 9;
+      this._SettingsButton.Text = "Settings...";
+      this._SettingsButton.UseVisualStyleBackColor = true;
+      this._SettingsButton.Click += new System.EventHandler(this._SettingsButton_Click_1);
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(243, 414);
+      this.ClientSize = new System.Drawing.Size(212, 414);
+      this.Controls.Add(this._SettingsButton);
       this.Controls.Add(this._About);
       this.Controls.Add(this.m_ScanButton);
       this.Controls.Add(this.groupBox3);
@@ -377,6 +389,7 @@
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.ProgressBar m_QPBar;
     private System.Windows.Forms.ProgressBar m_WPBar;
+    private System.Windows.Forms.Button _SettingsButton;
   }
 }
 

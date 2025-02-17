@@ -1,4 +1,5 @@
-﻿using Binarysharp.MemoryManagement;
+﻿using AutoCheck.Properties;
+using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
 using Binarysharp.MemoryManagement.Modules;
 using Binarysharp.MemoryManagement.Native;
@@ -29,7 +30,6 @@ namespace AutoCheck
     private AutoKeyThread _threadW;
     private AutoQWEThread _qweThread = null;
     private bool _starting = false;
-    private long _addr = 0;
 
     private System.Windows.Forms.Timer m_Timer;
     private bool m_bForcingClose = false;
@@ -38,6 +38,8 @@ namespace AutoCheck
 
     private IKeyboardMouseEvents m_GlobalHook;
 
+    private Settings _settings = new Settings();
+
     public Form1()
     {
       InitializeComponent();
@@ -45,22 +47,14 @@ namespace AutoCheck
 
     private void OnFormLoad(object sender, EventArgs e)
     {
-      _About.Text = this.GetType().Assembly.GetName().Version.ToString();
-      _threadQ = new AutoKeyThread('q', new ProgressBarAdapter(m_QPBar))
-      {
-        WarnScale = 0.96,
-        Scale = 0.99
-      };
-
-      _threadW = new AutoKeyThread('w', new ProgressBarAdapter(m_WPBar))
-      {
-        WarnScale = 0,
-        Scale = 0.9
-      };
-
-      _qweThread = new AutoQWEThread(m_KeyCount);
-
       LoadData();
+
+      _About.Text = this.GetType().Assembly.GetName().Version.ToString();
+      _threadQ = new AutoKeyThread('q', _settings.Q, new ProgressBarAdapter(m_QPBar));
+      _threadW = new AutoKeyThread('w', _settings.W, new ProgressBarAdapter(m_WPBar));
+
+      _qweThread = new AutoQWEThread(_settings.QWE, m_KeyCount);
+
       UpdateUIByData();
 
       m_GlobalHook = Hook.GlobalEvents();
@@ -169,18 +163,18 @@ namespace AutoCheck
       ScanHPForm f = new ScanHPForm();
       if (f.ShowDialog() == DialogResult.OK)
       {
-        _addr = f.GetAddress();
+        _settings.Address = f.GetAddress();
       }
     }
     //----------------------------------------------------------------------------------
     private void OnAutoWCheckedChanged(object sender, EventArgs e)
     {
-      _threadW.Auto = m_AutoW.Checked;
+      _settings.W._auto = m_AutoW.Checked;
     }
     //----------------------------------------------------------------------------------
     private void OnAutoQCheckedChanged(object sender, EventArgs e)
     {
-      _threadQ.Auto = m_AutoQ.Checked;
+      _settings.Q._auto = m_AutoQ.Checked;
     }
     //----------------------------------------------------------------------------------
     private bool Start()
@@ -188,7 +182,13 @@ namespace AutoCheck
       _sharp = Utils.CreateMemorySharp();
       if (_sharp == null)
       {
-        MessageBox.Show("Could not read the memory");
+        MessageBox.Show("Could not read the memory", Resources.MsgBoxCaption);
+        return false;
+      }
+
+      if (_settings.Address == 0)
+      {
+        MessageBox.Show("Address is invalid. Perform a scanning first", Resources.MsgBoxCaption);
         return false;
       }
 
@@ -196,6 +196,7 @@ namespace AutoCheck
       m_ScanButton.Enabled = false;
 
       m_StartMenu.Text = "Stop";
+      _SettingsButton.Enabled = false;
 
       var stopwatch = System.Diagnostics.Stopwatch.StartNew();
       while (stopwatch.ElapsedMilliseconds < 10) { /* Do nothing */ }
@@ -211,6 +212,8 @@ namespace AutoCheck
       m_ScanButton.Enabled = true;
 
       m_StartMenu.Text = "Start";
+      _SettingsButton.Enabled = true;
+
 
       _sharp?.Dispose();
       return true;
@@ -236,17 +239,11 @@ namespace AutoCheck
         }
         else
         {
-          _threadQ.Auto = m_AutoQ.Checked;
-          _threadW.Auto = m_AutoW.Checked;
-
-          _qweThread.QEnable = m_QChk.Checked;
-          _qweThread.WEnable = m_WChk.Checked;
-          _qweThread.EEnable = m_EChk.Checked;
-
           if (Start())
           {
-            _threadQ.Start(_sharp, _addr, _addr + 16);
-            _threadW.Start(_sharp, _addr + 8, _addr + 24);
+            var addr = _settings.Address;
+            _threadQ.Start(_sharp, addr, addr + 16);
+            _threadW.Start(_sharp, addr + 8, addr + 24);
             _qweThread.Start(_sharp);
           }
         }
@@ -269,78 +266,39 @@ namespace AutoCheck
       return Path.Combine(exeDirectory, "data.json");
     }
     //----------------------------------------------------------------------------------
-    private string GetDefDataFile()
-    {
-      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-      return Path.Combine(exeDirectory, "defdata.json");
-    }
-    //----------------------------------------------------------------------------------
     private void SaveData()
     {
-      string file = GetDataFile();
-
-      var settings = new JObject()
-      {
-        ["ADR"] = _addr.ToString("X"),
-        ["Q"] = _threadQ.GetSettings(),
-        ["W"] = _threadW.GetSettings(),
-        ["QWE"] = _qweThread.GetSettings()
-      };
-
-      string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-      File.WriteAllText(file, json);
+      _settings.SaveData();
     }
     //----------------------------------------------------------------------------------
     private void LoadData()
     {
       try
       {
-        string file = GetDataFile();
-
-        if (File.Exists(file) == false)
-        {
-          File.Copy(GetDefDataFile(), file);
-        }
-
-        if (File.Exists(file) == true)
-        {
-          string json = File.ReadAllText(file);
-          JObject settings = JObject.Parse(json);
-
-          string adr = Utils.Get(settings, "ADR", "0x0");
-          if (long.TryParse(adr, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long result))
-          {
-            _addr = result;
-          }
-
-          _qweThread.LoadSettings(settings["QWE"] as JObject);
-          _threadQ.LoadSettings(settings["Q"] as JObject);
-          _threadW.LoadSettings(settings["W"] as JObject);
-        }
-
+        _settings.LoadData();
       }
       catch
       {
-        MessageBox.Show("Load data failed");
+        MessageBox.Show("Load data failed", Resources.MsgBoxCaption);
       }
     }
     //----------------------------------------------------------------------------------
     private void UpdateUIByData()
     {
-      m_AutoQ.Checked = _threadQ.Auto;
-      m_AutoW.Checked = _threadW.Auto;
-      m_QChk.Checked = _qweThread.QEnable;
-      m_WChk.Checked = _qweThread.WEnable;
-      m_EChk.Checked = _qweThread.EEnable;
+      m_AutoQ.Checked = _settings.Q._auto;
+      m_AutoW.Checked = _settings.W._auto;
+      m_QChk.Checked = _settings.QWE._q;
+      m_WChk.Checked = _settings.QWE._w;
+      m_EChk.Checked = _settings.QWE._e;
 
       m_VolumeCtrl.Minimum = 0;
       m_VolumeCtrl.Maximum = 100;
-      m_VolumeCtrl.Value = (int)(Math.Min(_threadQ.WarnVolume, 1.0f) * 100f);
+      m_VolumeCtrl.Value = (int)(Math.Min(_settings.Q._warnVolume, 1.0f) * 100f);
     }
     //----------------------------------------------------------------------------------
     private void OnVolumeValueChanged(object sender, EventArgs e)
     {
-      _threadQ.WarnVolume = (float)m_VolumeCtrl.Value / (float)m_VolumeCtrl.Maximum;
+      _settings.Q._warnVolume = (float)m_VolumeCtrl.Value / (float)m_VolumeCtrl.Maximum;
     }
     //--------------------------------------------------------------------------------------------
     private void CheckWindows()
@@ -402,17 +360,27 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void OnQChkChanged(object sender, EventArgs e)
     {
-      _qweThread.QEnable = m_QChk.Checked;
+      _settings.QWE._q = m_QChk.Checked;
     }
     //----------------------------------------------------------------------------------
     private void OnEChkChanged(object sender, EventArgs e)
     {
-      _qweThread.EEnable = m_EChk.Checked;
+      _settings.QWE._e = m_EChk.Checked;
     }
     //----------------------------------------------------------------------------------
     private void OnWChkChanged(object sender, EventArgs e)
     {
-      _qweThread.WEnable = m_WChk.Checked;
+      _settings.QWE._w = m_WChk.Checked;
+    }
+    //----------------------------------------------------------------------------------
+    private void _SettingsButton_Click_1(object sender, EventArgs e)
+    {
+      SettingsForm settingsForm = new SettingsForm(_settings);
+      if (settingsForm.ShowDialog() == DialogResult.OK)
+      {
+        _settings.CopyFrom(settingsForm.Settings);
+        UpdateUIByData();
+      }
     }
   }
 }

@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AutoCheck.Properties;
 using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
 using Newtonsoft.Json;
@@ -186,20 +187,20 @@ namespace AutoCheck
         _scanning = true;
         if (false == int.TryParse(_InputBox.Text, out int val))
         {
-          MessageBox.Show("Please enter HP");
+          MessageBox.Show("Please enter HP", Resources.MsgBoxCaption);
           return;
         }
 
         if (false == int.TryParse(m_OffsetBox.Text, out int offset) || offset <= 0 || offset >= 100)
         {
-          MessageBox.Show("Please enter offset");
+          MessageBox.Show("Please enter offset", Resources.MsgBoxCaption);
           return;
         }
 
         MemorySharp sharp = Utils.CreateMemorySharp();
         if (sharp == null)
         {
-          MessageBox.Show("Could not find the window");
+          MessageBox.Show("Could not find the window", Resources.MsgBoxCaption);
           return;
         }
 

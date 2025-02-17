@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using log4net;
@@ -10,6 +11,17 @@ namespace AutoCheck
   internal static class Program
   {
     static Mutex mutex = new Mutex(true, "_AUTOCHECK_");
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    private const int SW_RESTORE = 9;
 
     /// <summary>
     /// The main entry point for the application.
@@ -28,6 +40,16 @@ namespace AutoCheck
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(new Form1());
+      }
+      else
+      {
+        // Bring existing instance to the foreground
+        IntPtr hWnd = FindWindow(null, "AutoCheck"); 
+        if (hWnd != IntPtr.Zero)
+        {
+          ShowWindow(hWnd, SW_RESTORE);
+          SetForegroundWindow(hWnd);
+        }
       }
     }
   }
