@@ -78,14 +78,12 @@ namespace AutoCheck
 
   public class Settings
   {
-    public string ADR { get; set; }
     public QWMemThreadSettings Q { get; set; }
     public QWMemThreadSettings W { get; set; }
     public QWEThreadSettings QWE { get; set; }
 
     public Settings()
     {
-      ADR = "0";
       Q = new QWMemThreadSettings()
       {
 
@@ -103,24 +101,6 @@ namespace AutoCheck
 
       };
     }
-
-    //----------------------------------------------------------------------------------
-    public long Address
-    {
-      get
-      {
-        if (long.TryParse(ADR, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long result))
-        {
-          return result;
-        }
-        return 0;
-      }
-      set
-      {
-        ADR = value.ToString("X");
-      }
-    }
-
     //----------------------------------------------------------------------------------
     private static string GetDataFile()
     {
@@ -145,10 +125,6 @@ namespace AutoCheck
 
         if (tempSettings != null)
         {
-          // Now update the properties of the current instance with the deserialized data
-          // Update simple properties
-          if (tempSettings.ADR != null) ADR = tempSettings.ADR;
-
           // Update complex nested objects by copying values
           if (tempSettings.Q != null)
           {
@@ -222,9 +198,6 @@ namespace AutoCheck
     {
       if (other == null) return;
 
-      // Copy simple properties
-      ADR = other.ADR;
-
       // Copy complex nested objects
       if (other.Q != null)
       {
@@ -271,6 +244,5 @@ namespace AutoCheck
         QWE._threadDelayE = other.QWE._threadDelayE;
       }
     }
-
   }
 }

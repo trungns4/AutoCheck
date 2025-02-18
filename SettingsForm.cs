@@ -197,12 +197,7 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void m_DefaultButton_Click(object sender, EventArgs e)
     {
-      var adr = _settings.Address;
-      _settings = new Settings()
-      {
-        Address = adr,
-      };
-
+      _settings = new Settings();
       _saved = false;
       ShowData();
     }

@@ -4,6 +4,7 @@ using Binarysharp.MemoryManagement.Memory;
 using Binarysharp.MemoryManagement.Modules;
 using Binarysharp.MemoryManagement.Native;
 using Gma.System.MouseKeyHook;
+using NAudio.Gui;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -13,6 +14,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
@@ -25,6 +27,8 @@ namespace AutoCheck
   public partial class Form1 : Form
   {
     private MemorySharp _sharp = null;
+
+    private long _addr = 0;
 
     private AutoKeyThread _threadQ;
     private AutoKeyThread _threadW;
@@ -163,7 +167,7 @@ namespace AutoCheck
       ScanHPForm f = new ScanHPForm();
       if (f.ShowDialog() == DialogResult.OK)
       {
-        _settings.Address = f.GetAddress();
+        _addr = f.GetAddress();
       }
     }
     //----------------------------------------------------------------------------------
@@ -186,7 +190,7 @@ namespace AutoCheck
         return false;
       }
 
-      if (_settings.Address == 0)
+      if (_addr == 0)
       {
         MessageBox.Show("Address is invalid. Perform a scanning first", Resources.MsgBoxCaption);
         return false;
@@ -241,9 +245,8 @@ namespace AutoCheck
         {
           if (Start())
           {
-            var addr = _settings.Address;
-            _threadQ.Start(_sharp, addr, addr + 16);
-            _threadW.Start(_sharp, addr + 8, addr + 24);
+            _threadQ.Start(_sharp, _addr, _addr + 16);
+            _threadW.Start(_sharp, _addr + 8, _addr + 24);
             _qweThread.Start(_sharp);
           }
         }
@@ -260,25 +263,57 @@ namespace AutoCheck
       ToggleStartStop();
     }
     //----------------------------------------------------------------------------------
-    private string GetDataFile()
+    private string GetAddressFile()
     {
       string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-      return Path.Combine(exeDirectory, "data.json");
+      return Path.Combine(exeDirectory, "addr.json");
+    }
+    //----------------------------------------------------------------------------------
+    private void SaveAddress()
+    {
+      string file = GetAddressFile();
+      var data = new Dictionary<string, long>
+      {
+        { "addr", _addr }
+      };
+      string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+      File.WriteAllText(file, json);
+    }
+    //----------------------------------------------------------------------------------
+    private void LoadAddress()
+    {
+      try
+      {
+        string file = GetAddressFile();
+        if (File.Exists(file) == true)
+        {
+          string json = File.ReadAllText(file);
+          var data = JsonConvert.DeserializeObject<Dictionary<string, long>>(json);
+          _addr = data["addr"];
+        }
+      }
+      catch
+      {
+        _addr = 0;
+      }
     }
     //----------------------------------------------------------------------------------
     private void SaveData()
     {
       _settings.SaveData();
+      SaveAddress();
     }
     //----------------------------------------------------------------------------------
     private void LoadData()
     {
       try
       {
+        LoadAddress();
         _settings.LoadData();
       }
       catch
       {
+        _settings = new Settings();
         MessageBox.Show("Load data failed", Resources.MsgBoxCaption);
       }
     }
