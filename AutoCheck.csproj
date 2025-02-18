@@ -118,7 +118,9 @@
     <Compile Include="AutoFlags.cs" />
     <Compile Include="AutoKeyThread.cs" />
     <Compile Include="AutoQWEThread.cs" />
+    <Compile Include="AutoScanPortion.cs" />
     <Compile Include="ProgressBarAdapter.cs" />
+    <Compile Include="ScanHP.cs" />
     <Compile Include="ScanHPForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +135,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScanPortionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScanPortionForm.Designer.cs">
+      <DependentUpon>ScanPortionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
@@ -157,6 +165,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ScanPortionForm.resx">
+      <DependentUpon>ScanPortionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>

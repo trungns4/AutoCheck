@@ -91,6 +91,8 @@
       this.m_CancelButton = new System.Windows.Forms.Button();
       this.m_OKButton = new System.Windows.Forms.Button();
       this._SaveButton = new System.Windows.Forms.Button();
+      this.m_QAutoKey = new System.Windows.Forms.CheckBox();
+      this.m_WAutoKey = new System.Windows.Forms.CheckBox();
       this.g1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.m_QWarnVolume)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.m_QWarnScale)).BeginInit();
@@ -123,6 +125,7 @@
       // 
       // g1
       // 
+      this.g1.Controls.Add(this.m_QAutoKey);
       this.g1.Controls.Add(this.m_QWarnVolume);
       this.g1.Controls.Add(this.m_QWarnScale);
       this.g1.Controls.Add(this.m_QScale);
@@ -287,6 +290,7 @@
       // 
       // groupBox2
       // 
+      this.groupBox2.Controls.Add(this.m_WAutoKey);
       this.groupBox2.Controls.Add(this.m_WWarnVolume);
       this.groupBox2.Controls.Add(this.m_WWarnScale);
       this.groupBox2.Controls.Add(this.m_WScale);
@@ -703,6 +707,26 @@
       this._SaveButton.UseVisualStyleBackColor = true;
       this._SaveButton.Click += new System.EventHandler(this._SaveButton_Click);
       // 
+      // m_QAutoKey
+      // 
+      this.m_QAutoKey.AutoSize = true;
+      this.m_QAutoKey.Location = new System.Drawing.Point(113, 19);
+      this.m_QAutoKey.Name = "m_QAutoKey";
+      this.m_QAutoKey.Size = new System.Drawing.Size(69, 17);
+      this.m_QAutoKey.TabIndex = 3;
+      this.m_QAutoKey.Text = "Auto Key";
+      this.m_QAutoKey.UseVisualStyleBackColor = true;
+      // 
+      // m_WAutoKey
+      // 
+      this.m_WAutoKey.AutoSize = true;
+      this.m_WAutoKey.Location = new System.Drawing.Point(113, 19);
+      this.m_WAutoKey.Name = "m_WAutoKey";
+      this.m_WAutoKey.Size = new System.Drawing.Size(69, 17);
+      this.m_WAutoKey.TabIndex = 3;
+      this.m_WAutoKey.Text = "Auto Key";
+      this.m_WAutoKey.UseVisualStyleBackColor = true;
+      // 
       // SettingsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -821,5 +845,7 @@
     private System.Windows.Forms.Button m_CancelButton;
     private System.Windows.Forms.Button m_OKButton;
     private System.Windows.Forms.Button _SaveButton;
+    private System.Windows.Forms.CheckBox m_QAutoKey;
+    private System.Windows.Forms.CheckBox m_WAutoKey;
   }
 }

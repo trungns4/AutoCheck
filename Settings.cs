@@ -18,6 +18,7 @@ namespace AutoCheck
   public class QWMemThreadSettings
   {
     public bool _auto { get; set; }
+    public bool _autoKey { get; set; }
     public int _keyUpDelay { get; set; }
     public int _keyDownDelay { get; set; }
     public int _keyThreadDelay { get; set; }
@@ -30,6 +31,7 @@ namespace AutoCheck
     public QWMemThreadSettings()
     {
       _auto = true;
+      _autoKey = true;
       _keyUpDelay = 16;
       _keyDownDelay = 16;
       _keyThreadDelay = 32;
@@ -129,6 +131,7 @@ namespace AutoCheck
           if (tempSettings.Q != null)
           {
             Q._auto = tempSettings.Q._auto;
+            Q._autoKey = tempSettings.Q._autoKey;
             Q._keyUpDelay = tempSettings.Q._keyUpDelay;
             Q._keyDownDelay = tempSettings.Q._keyDownDelay;
             Q._keyThreadDelay = tempSettings.Q._keyThreadDelay;
@@ -142,6 +145,7 @@ namespace AutoCheck
           if (tempSettings.W != null)
           {
             W._auto = tempSettings.W._auto;
+            W._autoKey = tempSettings.W._autoKey; 
             W._keyUpDelay = tempSettings.W._keyUpDelay;
             W._keyDownDelay = tempSettings.W._keyDownDelay;
             W._keyThreadDelay = tempSettings.W._keyThreadDelay;
@@ -202,6 +206,8 @@ namespace AutoCheck
       if (other.Q != null)
       {
         Q._auto = other.Q._auto;
+        Q._autoKey = other.Q._autoKey;
+
         Q._keyUpDelay = other.Q._keyUpDelay;
         Q._keyDownDelay = other.Q._keyDownDelay;
         Q._keyThreadDelay = other.Q._keyThreadDelay;
@@ -215,6 +221,8 @@ namespace AutoCheck
       if (other.W != null)
       {
         W._auto = other.W._auto;
+        W._autoKey = other.W._autoKey;
+
         W._keyUpDelay = other.W._keyUpDelay;
         W._keyDownDelay = other.W._keyDownDelay;
         W._keyThreadDelay = other.W._keyThreadDelay;

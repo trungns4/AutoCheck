@@ -23,8 +23,6 @@ namespace AutoCheck
   public partial class ScanHPForm : Form
   {
     private bool _scanning = false;
-    private bool _stop = false;
-    private int _offset = 50;
 
     public ScanHPForm()
     {
@@ -50,14 +48,9 @@ namespace AutoCheck
       }
     }
     //--------------------------------------------------------------------------------------------
-    private void _StopButton_Click(object sender, EventArgs e)
+    private void _Scan_Click(object sender, EventArgs e)
     {
-      _stop = true;
-    }
-    //--------------------------------------------------------------------------------------------
-    private async void _Scan_Click(object sender, EventArgs e)
-    {
-      await Task.Run(() => Scan());
+      Scan();
     }
     //--------------------------------------------------------------------------------------------
     private void _OKButton_Click(object sender, EventArgs e)
@@ -99,7 +92,7 @@ namespace AutoCheck
     //--------------------------------------------------------------------------------------------
     private void LoadData()
     {
-      _offset = 1;
+      var offset = 1;
       _InputBox.Text = "";
       string file = GetDataFile();
       if (File.Exists(file) == true)
@@ -114,75 +107,20 @@ namespace AutoCheck
         {
           if (int.TryParse(data["OFFSET"], out int number))
           {
-            _offset = Math.Min(99, Math.Max(1, number));
+            offset = Math.Min(99, Math.Max(1, number));
           }
         }
       }
-      m_OffsetBox.Value = _offset;
+      m_OffsetBox.Value = offset;
     }
     //--------------------------------------------------------------------------------------------
-    private long TotalBytes(MemorySharp sharp, out List<RemoteRegion> errRegions)
-    {
-      long totalBytes = 0;
-      errRegions = new List<RemoteRegion>();
-      foreach (var region in sharp.Memory.Regions)
-      {
-        try
-        {
-          var rs = region.Information.RegionSize;
-          totalBytes += rs;
-        }
-        catch
-        {
-          errRegions.Add(region);
-        }
-      }
-      return totalBytes;
-    }
-    //--------------------------------------------------------------------------------------------
-    private int Find(byte[] buffer, int number)
-    {
-      if (buffer.Length < 28)
-      {
-        return -1;
-      }
-
-      for (int i = 0; i <= buffer.Length - 28; i++)
-      {
-        if (_stop)
-        {
-          return -1;
-        }
-
-        int a = BitConverter.ToInt32(buffer, i);
-        int b = BitConverter.ToInt32(buffer, i + 8);
-        int c = BitConverter.ToInt32(buffer, i + 16);
-        int d = BitConverter.ToInt32(buffer, i + 24);
-
-        if (a == c && a == number && b == d)
-        {
-          return i;
-        }
-      }
-      return -1;
-    }
-
-    //--------------------------------------------------------------------------------------------
-    protected void Scan()
+    private void Scan()
     {
       if (_scanning)
       {
         return;
       }
 
-      var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
-
-      foreach (var item in buttons)
-      {
-        item.BeginInvoke(new Action(() => item.Enabled = false));
-      }
-
-      _stop = false;
 
       try
       {
@@ -199,74 +137,59 @@ namespace AutoCheck
           return;
         }
 
-        MemorySharp sharp = Utils.CreateMemorySharp();
-        if (sharp == null)
+        ScanHP scan = new ScanHP();
+        EventHandler stopButtonClickHandler = (sender, e) =>
         {
-          MessageBox.Show("Could not find the window", Resources.MsgBoxCaption);
-          return;
-        }
+          scan.Stop();
+        };
+        _StopButton.Click += stopButtonClickHandler;
 
-        long total = TotalBytes(sharp, out List<RemoteRegion> errRegions);
-
-        _ProgBar.BeginInvoke(new Action(() => _ProgBar.Visible = true));
-        _ProgBar.BeginInvoke(new Action(() => _ProgBar.Minimum = 0));
-        _ProgBar.BeginInvoke(new Action(() => _ProgBar.Maximum = (int)(total + 1)));
-        _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = "Scanning..."));
-
-        int current = 0;
-        double percelOffset = offset;
-        foreach (var region in sharp.Memory.Regions)
+        scan.Scan(val, offset,
+        total =>
         {
-          try
+          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Visible = true));
+          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Minimum = 0));
+          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Maximum = (int)(total + 1)));
+
+          var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
+          foreach (var item in buttons)
           {
-            if (errRegions.Contains(region))
-            {
-              continue;
-            }
-
-            var rs = region.Information.RegionSize;
-
-            if (((double)current) < (double)(total * percelOffset / 100.0))
-            {
-              current += rs;
-              _ProgBar.BeginInvoke(new Action(() => _ProgBar.Value = Math.Min(current, _ProgBar.Maximum)));
-              continue;
-            }
-
-            byte[] buffer = sharp.Read<byte>(region.BaseAddress, rs, false);
-            _ProgBar.BeginInvoke(new Action(() => _ProgBar.Value = Math.Min(current, _ProgBar.Maximum)));
-            Thread.Sleep(10);
-
-            current += rs;
-            if (_stop)
-            {
-              _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = "Not found"));
-              return;
-            }
-
-            int adr = Find(buffer, val);
-            if (adr >= 0)
-            {
-              _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = (region.BaseAddress.ToInt64() + adr).ToString("X")));
-              _offset = (int)((double)(current) / (double)(total) * 100) - 10;
-              _offset = Math.Min(Math.Max(1, _offset), 99);
-              m_OffsetBox.Value = _offset;
-              return;
-            }
+            item.Enabled = false;
           }
-          catch { }
-        }
+        },
+        progress =>
+        {
+          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Value = Math.Min((int)progress, _ProgBar.Maximum)));
+          _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = "Scanning..."));
+          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Refresh()));
+        },
+        (adr, ofs) =>
+        {
+          if (adr > 0 & ofs > 0)
+          {
+            _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = adr.ToString("X")));
+            m_OffsetBox.BeginInvoke(new Action(() => m_OffsetBox.Text = ofs.ToString()));
+          }
+          else
+          {
+            _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = "Not found"));
+          }
 
-        _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = "Not Found"));
+          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Visible = false));
+
+          var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
+          foreach (var item in buttons)
+          {
+            item.BeginInvoke(new Action(() => item.Enabled = true));
+          }
+
+          _StopButton.Click -= stopButtonClickHandler;
+          _scanning = false;
+        }
+        );
       }
       finally
       {
-        _ProgBar.BeginInvoke(new Action(() => _ProgBar.Visible = false));
-        _scanning = false;
-        foreach (var item in buttons)
-        {
-          item.BeginInvoke(new Action(() => item.Enabled = true));
-        }
       }
     }
   }

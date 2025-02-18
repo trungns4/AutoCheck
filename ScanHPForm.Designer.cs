@@ -38,14 +38,12 @@
       this._StopButton = new System.Windows.Forms.Button();
       this.m_OffsetBox = new System.Windows.Forms.NumericUpDown();
       this.label2 = new System.Windows.Forms.Label();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
       ((System.ComponentModel.ISupportInitialize)(this.m_OffsetBox)).BeginInit();
-      this.groupBox1.SuspendLayout();
       this.SuspendLayout();
       // 
       // _OKButton
       // 
-      this._OKButton.Location = new System.Drawing.Point(92, 127);
+      this._OKButton.Location = new System.Drawing.Point(183, 77);
       this._OKButton.Name = "_OKButton";
       this._OKButton.Size = new System.Drawing.Size(75, 23);
       this._OKButton.TabIndex = 0;
@@ -55,7 +53,7 @@
       // 
       // _CancelButton
       // 
-      this._CancelButton.Location = new System.Drawing.Point(173, 127);
+      this._CancelButton.Location = new System.Drawing.Point(264, 77);
       this._CancelButton.Name = "_CancelButton";
       this._CancelButton.Size = new System.Drawing.Size(75, 23);
       this._CancelButton.TabIndex = 1;
@@ -66,7 +64,7 @@
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(6, 13);
+      this.label1.Location = new System.Drawing.Point(21, 7);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(22, 13);
       this.label1.TabIndex = 2;
@@ -75,14 +73,14 @@
       // 
       // _InputBox
       // 
-      this._InputBox.Location = new System.Drawing.Point(6, 29);
+      this._InputBox.Location = new System.Drawing.Point(21, 23);
       this._InputBox.Name = "_InputBox";
       this._InputBox.Size = new System.Drawing.Size(98, 20);
       this._InputBox.TabIndex = 3;
       // 
       // _ProgBar
       // 
-      this._ProgBar.Location = new System.Drawing.Point(6, 55);
+      this._ProgBar.Location = new System.Drawing.Point(21, 49);
       this._ProgBar.Name = "_ProgBar";
       this._ProgBar.Size = new System.Drawing.Size(320, 13);
       this._ProgBar.TabIndex = 4;
@@ -90,7 +88,7 @@
       // 
       // _ScanButton
       // 
-      this._ScanButton.Location = new System.Drawing.Point(6, 72);
+      this._ScanButton.Location = new System.Drawing.Point(21, 77);
       this._ScanButton.Name = "_ScanButton";
       this._ScanButton.Size = new System.Drawing.Size(75, 23);
       this._ScanButton.TabIndex = 5;
@@ -100,7 +98,7 @@
       // 
       // _AdrBox
       // 
-      this._AdrBox.Location = new System.Drawing.Point(228, 29);
+      this._AdrBox.Location = new System.Drawing.Point(243, 23);
       this._AdrBox.Name = "_AdrBox";
       this._AdrBox.ReadOnly = true;
       this._AdrBox.Size = new System.Drawing.Size(98, 20);
@@ -108,17 +106,16 @@
       // 
       // _StopButton
       // 
-      this._StopButton.Location = new System.Drawing.Point(98, 72);
+      this._StopButton.Location = new System.Drawing.Point(102, 77);
       this._StopButton.Name = "_StopButton";
       this._StopButton.Size = new System.Drawing.Size(75, 23);
       this._StopButton.TabIndex = 7;
       this._StopButton.Text = "Stop";
       this._StopButton.UseVisualStyleBackColor = true;
-      this._StopButton.Click += new System.EventHandler(this._StopButton_Click);
       // 
-      // m_Offset
+      // m_OffsetBox
       // 
-      this.m_OffsetBox.Location = new System.Drawing.Point(117, 29);
+      this.m_OffsetBox.Location = new System.Drawing.Point(132, 23);
       this.m_OffsetBox.Maximum = new decimal(new int[] {
             99,
             0,
@@ -129,7 +126,7 @@
             0,
             0,
             0});
-      this.m_OffsetBox.Name = "m_Offset";
+      this.m_OffsetBox.Name = "m_OffsetBox";
       this.m_OffsetBox.Size = new System.Drawing.Size(98, 20);
       this.m_OffsetBox.TabIndex = 8;
       this.m_OffsetBox.Value = new decimal(new int[] {
@@ -141,37 +138,28 @@
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(117, 13);
+      this.label2.Location = new System.Drawing.Point(132, 7);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(52, 13);
       this.label2.TabIndex = 2;
       this.label2.Text = "Offset (%)";
       this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
-      // groupBox1
-      // 
-      this.groupBox1.Controls.Add(this.m_OffsetBox);
-      this.groupBox1.Controls.Add(this.label1);
-      this.groupBox1.Controls.Add(this._StopButton);
-      this.groupBox1.Controls.Add(this.label2);
-      this.groupBox1.Controls.Add(this._AdrBox);
-      this.groupBox1.Controls.Add(this._InputBox);
-      this.groupBox1.Controls.Add(this._ScanButton);
-      this.groupBox1.Controls.Add(this._ProgBar);
-      this.groupBox1.Location = new System.Drawing.Point(12, 12);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(340, 109);
-      this.groupBox1.TabIndex = 9;
-      this.groupBox1.TabStop = false;
-      // 
       // ScanHPForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(365, 165);
-      this.Controls.Add(this.groupBox1);
+      this.ClientSize = new System.Drawing.Size(365, 117);
+      this.Controls.Add(this.m_OffsetBox);
+      this.Controls.Add(this.label1);
       this.Controls.Add(this._CancelButton);
+      this.Controls.Add(this._StopButton);
       this.Controls.Add(this._OKButton);
+      this.Controls.Add(this.label2);
+      this.Controls.Add(this._InputBox);
+      this.Controls.Add(this._AdrBox);
+      this.Controls.Add(this._ProgBar);
+      this.Controls.Add(this._ScanButton);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
       this.Location = new System.Drawing.Point(2, 250);
       this.MaximizeBox = false;
@@ -185,9 +173,8 @@
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ScanHPForm_FormClosed);
       this.Load += new System.EventHandler(this.ScanHPForm_Load);
       ((System.ComponentModel.ISupportInitialize)(this.m_OffsetBox)).EndInit();
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
       this.ResumeLayout(false);
+      this.PerformLayout();
 
     }
 
@@ -203,6 +190,5 @@
     private System.Windows.Forms.Button _StopButton;
     private System.Windows.Forms.NumericUpDown m_OffsetBox;
     private System.Windows.Forms.Label label2;
-    private System.Windows.Forms.GroupBox groupBox1;
   }
 }

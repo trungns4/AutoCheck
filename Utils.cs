@@ -28,6 +28,10 @@ namespace AutoCheck
     [DllImport("user32.dll")]
     public static extern short VkKeyScan(char ch);
 
+
+    [DllImport("user32.dll")]
+    public static extern bool SetForegroundWindow(IntPtr hWnd);
+
     public static MemorySharp CreateMemorySharp()
     {
       var processId = GetProcessId();
@@ -61,6 +65,22 @@ namespace AutoCheck
     public static bool IsWindowActive(int id)
     {
       return (GetWindowThreadProcessId(GetForegroundWindow(), out uint pid), pid == id).Item2;
+    }
+
+    public static void SetWindowActive(int processId)
+    {
+      IntPtr hwnd = GetMainWindowHandle(processId);
+      if (hwnd != IntPtr.Zero)
+      {
+        SetForegroundWindow(hwnd);
+      }
+    }
+
+
+    public static IntPtr GetMainWindowHandle(int processId)
+    {
+      Process process = Process.GetProcessById(processId);
+      return process.MainWindowHandle;
     }
 
     public static VirtualKeyCode KeyCode(char ch)

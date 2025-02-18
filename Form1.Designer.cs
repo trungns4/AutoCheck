@@ -130,9 +130,9 @@
       this.m_AutoQ.CheckState = System.Windows.Forms.CheckState.Checked;
       this.m_AutoQ.Location = new System.Drawing.Point(133, 22);
       this.m_AutoQ.Name = "m_AutoQ";
-      this.m_AutoQ.Size = new System.Drawing.Size(59, 17);
+      this.m_AutoQ.Size = new System.Drawing.Size(48, 17);
       this.m_AutoQ.TabIndex = 6;
-      this.m_AutoQ.Text = "Auto Q";
+      this.m_AutoQ.Text = "Auto";
       this.m_AutoQ.UseVisualStyleBackColor = true;
       this.m_AutoQ.CheckedChanged += new System.EventHandler(this.OnAutoQCheckedChanged);
       // 
@@ -161,9 +161,9 @@
       this.m_AutoW.CheckState = System.Windows.Forms.CheckState.Checked;
       this.m_AutoW.Location = new System.Drawing.Point(133, 22);
       this.m_AutoW.Name = "m_AutoW";
-      this.m_AutoW.Size = new System.Drawing.Size(62, 17);
+      this.m_AutoW.Size = new System.Drawing.Size(48, 17);
       this.m_AutoW.TabIndex = 6;
-      this.m_AutoW.Text = "Auto W";
+      this.m_AutoW.Text = "Auto";
       this.m_AutoW.UseVisualStyleBackColor = true;
       this.m_AutoW.CheckedChanged += new System.EventHandler(this.OnAutoWCheckedChanged);
       // 

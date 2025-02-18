@@ -281,7 +281,8 @@ namespace AutoCheck
       {
         _flag.WaitOne();
         bool delay = true;
-        while (_settings._auto == true && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
+        while (_settings._auto && _settings._autoKey == true
+        && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
         {
           _is.Keyboard.KeyDown(_keyCode);
           Thread.Sleep(_settings._keyUpDelay);

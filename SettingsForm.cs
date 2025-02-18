@@ -21,30 +21,52 @@ namespace AutoCheck
     public SettingsForm(Settings settings)
     {
       InitializeComponent();
-      CollectAllNumericUpDowns();
+
       _settings = new Settings();
       _settings.CopyFrom(settings);
+
+      ShowData();
+
+      foreach(var numInput in CollectControls<NumericUpDown>(this))
+      {
+        numInput.ValueChanged += Input_ValueChanged;
+      }
+
+      foreach (var checkBox in CollectControls<CheckBox>(this))
+      {
+        checkBox.CheckedChanged += Input_ValueChanged;
+      }
     }
     //----------------------------------------------------------------------------------
     public Settings Settings
     {
       get { return _settings; }
     }
+
     //----------------------------------------------------------------------------------
-    private void CollectAllNumericUpDowns()
+    public List<T> CollectControls<T>(Control parentControl) where T : Control
     {
-      List<NumericUpDown> numericControls = this.Controls.OfType<NumericUpDown>().ToList();
+      List<T> collectedControls = new List<T>();
 
-      // If there are nested controls (inside panels, group boxes, etc.)
-      numericControls.AddRange(GetAllNumericUpDowns(this));
-
-      foreach (var numeric in numericControls)
+      foreach (Control control in parentControl.Controls)
       {
-        numeric.ValueChanged += Numeric_ValueChanged;
+        // If the control is of type T, add it to the list
+        if (control is T controlOfType)
+        {
+          collectedControls.Add(controlOfType);
+        }
+
+        // If the control has child controls, recurse through them
+        if (control.HasChildren)
+        {
+          collectedControls.AddRange(CollectControls<T>(control));
+        }
       }
+
+      return collectedControls;
     }
     //----------------------------------------------------------------------------------
-    private void Numeric_ValueChanged(object sender, EventArgs e)
+    private void Input_ValueChanged(object sender, EventArgs e)
     {
       _saved = false;
     }
@@ -71,6 +93,7 @@ namespace AutoCheck
     private void ShowData()
     {
       m_QAuto.Checked = _settings.Q._auto;
+      m_QAutoKey.Checked = _settings.Q._autoKey;
       m_QKeyUpDelay.Value = _settings.Q._keyUpDelay;
       m_QKeyDownDelay.Value = _settings.Q._keyDownDelay;
       m_QKeyThreadDelay.Value = _settings.Q._keyThreadDelay;
@@ -81,6 +104,7 @@ namespace AutoCheck
       m_QWarnVolume.Value = (decimal)(_settings.Q._warnVolume * 100);
 
       m_WAuto.Checked = _settings.W._auto;
+      m_WAutoKey.Checked = _settings.W._autoKey;
       m_WKeyUpDelay.Value = _settings.W._keyUpDelay;
       m_WKeyDownDelay.Value = _settings.W._keyDownDelay;
       m_WKeyThreadDelay.Value = _settings.W._keyThreadDelay;
@@ -111,6 +135,7 @@ namespace AutoCheck
     {
       // Save Q settings
       _settings.Q._auto = m_QAuto.Checked;
+      _settings.Q._autoKey= m_QAutoKey.Checked; 
       _settings.Q._keyUpDelay = (int)m_QKeyUpDelay.Value;
       _settings.Q._keyDownDelay = (int)m_QKeyDownDelay.Value;
       _settings.Q._keyThreadDelay = (int)m_QKeyThreadDelay.Value;
@@ -122,6 +147,7 @@ namespace AutoCheck
 
       // Save W settings
       _settings.W._auto = m_WAuto.Checked;
+      _settings.W._autoKey = m_WAutoKey.Checked;
       _settings.W._keyUpDelay = (int)m_WKeyUpDelay.Value;
       _settings.W._keyDownDelay = (int)m_WKeyDownDelay.Value;
       _settings.W._keyThreadDelay = (int)m_WKeyThreadDelay.Value;
@@ -190,9 +216,6 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void SettingsForm_Load(object sender, EventArgs e)
     {
-      _settings.LoadData();
-      ShowData();
-      _saved = true;
     }
     //----------------------------------------------------------------------------------
     private void m_DefaultButton_Click(object sender, EventArgs e)
