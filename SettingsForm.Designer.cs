@@ -29,6 +29,7 @@
     private void InitializeComponent()
     {
       this.g1 = new System.Windows.Forms.GroupBox();
+      this.m_QAutoKey = new System.Windows.Forms.CheckBox();
       this.m_QWarnVolume = new System.Windows.Forms.NumericUpDown();
       this.m_QWarnScale = new System.Windows.Forms.NumericUpDown();
       this.m_QScale = new System.Windows.Forms.NumericUpDown();
@@ -47,6 +48,7 @@
       this.label1 = new System.Windows.Forms.Label();
       this.m_QAuto = new System.Windows.Forms.CheckBox();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.m_WAutoKey = new System.Windows.Forms.CheckBox();
       this.m_WWarnVolume = new System.Windows.Forms.NumericUpDown();
       this.m_WWarnScale = new System.Windows.Forms.NumericUpDown();
       this.m_WScale = new System.Windows.Forms.NumericUpDown();
@@ -91,8 +93,12 @@
       this.m_CancelButton = new System.Windows.Forms.Button();
       this.m_OKButton = new System.Windows.Forms.Button();
       this._SaveButton = new System.Windows.Forms.Button();
-      this.m_QAutoKey = new System.Windows.Forms.CheckBox();
-      this.m_WAutoKey = new System.Windows.Forms.CheckBox();
+      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.label7 = new System.Windows.Forms.Label();
+      this._MRClickDelay = new System.Windows.Forms.NumericUpDown();
+      this.label26 = new System.Windows.Forms.Label();
+      this._MRThreadDelay = new System.Windows.Forms.NumericUpDown();
+      this._MRClick = new System.Windows.Forms.CheckBox();
       this.g1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.m_QWarnVolume)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.m_QWarnScale)).BeginInit();
@@ -121,6 +127,9 @@
       ((System.ComponentModel.ISupportInitialize)(this._qweQKeyThreadDelay)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this._qweQKeyDownDelay)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this._qweQKeyUpDelay)).BeginInit();
+      this.groupBox1.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this._MRClickDelay)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this._MRThreadDelay)).BeginInit();
       this.SuspendLayout();
       // 
       // g1
@@ -145,63 +154,73 @@
       this.g1.Controls.Add(this.m_QAuto);
       this.g1.Location = new System.Drawing.Point(12, 12);
       this.g1.Name = "g1";
-      this.g1.Size = new System.Drawing.Size(252, 255);
+      this.g1.Size = new System.Drawing.Size(268, 255);
       this.g1.TabIndex = 0;
       this.g1.TabStop = false;
       this.g1.Text = "Q";
       // 
+      // m_QAutoKey
+      // 
+      this.m_QAutoKey.AutoSize = true;
+      this.m_QAutoKey.Location = new System.Drawing.Point(113, 19);
+      this.m_QAutoKey.Name = "m_QAutoKey";
+      this.m_QAutoKey.Size = new System.Drawing.Size(69, 17);
+      this.m_QAutoKey.TabIndex = 3;
+      this.m_QAutoKey.Text = "Auto Key";
+      this.m_QAutoKey.UseVisualStyleBackColor = true;
+      // 
       // m_QWarnVolume
       // 
-      this.m_QWarnVolume.Location = new System.Drawing.Point(113, 216);
+      this.m_QWarnVolume.Location = new System.Drawing.Point(132, 216);
       this.m_QWarnVolume.Name = "m_QWarnVolume";
       this.m_QWarnVolume.Size = new System.Drawing.Size(120, 20);
       this.m_QWarnVolume.TabIndex = 2;
       // 
       // m_QWarnScale
       // 
-      this.m_QWarnScale.Location = new System.Drawing.Point(113, 191);
+      this.m_QWarnScale.Location = new System.Drawing.Point(132, 191);
       this.m_QWarnScale.Name = "m_QWarnScale";
       this.m_QWarnScale.Size = new System.Drawing.Size(120, 20);
       this.m_QWarnScale.TabIndex = 2;
       // 
       // m_QScale
       // 
-      this.m_QScale.Location = new System.Drawing.Point(113, 166);
+      this.m_QScale.Location = new System.Drawing.Point(132, 166);
       this.m_QScale.Name = "m_QScale";
       this.m_QScale.Size = new System.Drawing.Size(120, 20);
       this.m_QScale.TabIndex = 2;
       // 
       // m_QWarnThreadDelay
       // 
-      this.m_QWarnThreadDelay.Location = new System.Drawing.Point(113, 141);
+      this.m_QWarnThreadDelay.Location = new System.Drawing.Point(132, 141);
       this.m_QWarnThreadDelay.Name = "m_QWarnThreadDelay";
       this.m_QWarnThreadDelay.Size = new System.Drawing.Size(120, 20);
       this.m_QWarnThreadDelay.TabIndex = 2;
       // 
       // m_QMemThreadDelay
       // 
-      this.m_QMemThreadDelay.Location = new System.Drawing.Point(113, 116);
+      this.m_QMemThreadDelay.Location = new System.Drawing.Point(132, 116);
       this.m_QMemThreadDelay.Name = "m_QMemThreadDelay";
       this.m_QMemThreadDelay.Size = new System.Drawing.Size(120, 20);
       this.m_QMemThreadDelay.TabIndex = 2;
       // 
       // m_QKeyThreadDelay
       // 
-      this.m_QKeyThreadDelay.Location = new System.Drawing.Point(113, 91);
+      this.m_QKeyThreadDelay.Location = new System.Drawing.Point(132, 91);
       this.m_QKeyThreadDelay.Name = "m_QKeyThreadDelay";
       this.m_QKeyThreadDelay.Size = new System.Drawing.Size(120, 20);
       this.m_QKeyThreadDelay.TabIndex = 2;
       // 
       // m_QKeyDownDelay
       // 
-      this.m_QKeyDownDelay.Location = new System.Drawing.Point(113, 66);
+      this.m_QKeyDownDelay.Location = new System.Drawing.Point(132, 66);
       this.m_QKeyDownDelay.Name = "m_QKeyDownDelay";
       this.m_QKeyDownDelay.Size = new System.Drawing.Size(120, 20);
       this.m_QKeyDownDelay.TabIndex = 2;
       // 
       // m_QKeyUpDelay
       // 
-      this.m_QKeyUpDelay.Location = new System.Drawing.Point(113, 41);
+      this.m_QKeyUpDelay.Location = new System.Drawing.Point(132, 41);
       this.m_QKeyUpDelay.Name = "m_QKeyUpDelay";
       this.m_QKeyUpDelay.Size = new System.Drawing.Size(120, 20);
       this.m_QKeyUpDelay.TabIndex = 2;
@@ -308,12 +327,22 @@
       this.groupBox2.Controls.Add(this.label15);
       this.groupBox2.Controls.Add(this.label16);
       this.groupBox2.Controls.Add(this.m_WAuto);
-      this.groupBox2.Location = new System.Drawing.Point(270, 12);
+      this.groupBox2.Location = new System.Drawing.Point(286, 12);
       this.groupBox2.Name = "groupBox2";
       this.groupBox2.Size = new System.Drawing.Size(252, 255);
       this.groupBox2.TabIndex = 0;
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "W";
+      // 
+      // m_WAutoKey
+      // 
+      this.m_WAutoKey.AutoSize = true;
+      this.m_WAutoKey.Location = new System.Drawing.Point(113, 19);
+      this.m_WAutoKey.Name = "m_WAutoKey";
+      this.m_WAutoKey.Size = new System.Drawing.Size(69, 17);
+      this.m_WAutoKey.TabIndex = 3;
+      this.m_WAutoKey.Text = "Auto Key";
+      this.m_WAutoKey.UseVisualStyleBackColor = true;
       // 
       // m_WWarnVolume
       // 
@@ -478,7 +507,7 @@
       this.groupBox3.Controls.Add(this.label24);
       this.groupBox3.Location = new System.Drawing.Point(12, 273);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(285, 274);
+      this.groupBox3.Size = new System.Drawing.Size(268, 274);
       this.groupBox3.TabIndex = 0;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "QWE";
@@ -659,7 +688,7 @@
       // 
       // m_DefaultButton
       // 
-      this.m_DefaultButton.Location = new System.Drawing.Point(316, 292);
+      this.m_DefaultButton.Location = new System.Drawing.Point(12, 553);
       this.m_DefaultButton.Name = "m_DefaultButton";
       this.m_DefaultButton.Size = new System.Drawing.Size(75, 23);
       this.m_DefaultButton.TabIndex = 1;
@@ -669,7 +698,7 @@
       // 
       // m_ReloadButton
       // 
-      this.m_ReloadButton.Location = new System.Drawing.Point(316, 323);
+      this.m_ReloadButton.Location = new System.Drawing.Point(93, 553);
       this.m_ReloadButton.Name = "m_ReloadButton";
       this.m_ReloadButton.Size = new System.Drawing.Size(75, 23);
       this.m_ReloadButton.TabIndex = 1;
@@ -679,7 +708,7 @@
       // 
       // m_CancelButton
       // 
-      this.m_CancelButton.Location = new System.Drawing.Point(428, 514);
+      this.m_CancelButton.Location = new System.Drawing.Point(398, 553);
       this.m_CancelButton.Name = "m_CancelButton";
       this.m_CancelButton.Size = new System.Drawing.Size(75, 23);
       this.m_CancelButton.TabIndex = 1;
@@ -689,7 +718,7 @@
       // 
       // m_OKButton
       // 
-      this.m_OKButton.Location = new System.Drawing.Point(428, 484);
+      this.m_OKButton.Location = new System.Drawing.Point(317, 553);
       this.m_OKButton.Name = "m_OKButton";
       this.m_OKButton.Size = new System.Drawing.Size(75, 23);
       this.m_OKButton.TabIndex = 1;
@@ -699,7 +728,7 @@
       // 
       // _SaveButton
       // 
-      this._SaveButton.Location = new System.Drawing.Point(316, 352);
+      this._SaveButton.Location = new System.Drawing.Point(174, 553);
       this._SaveButton.Name = "_SaveButton";
       this._SaveButton.Size = new System.Drawing.Size(75, 23);
       this._SaveButton.TabIndex = 1;
@@ -707,31 +736,88 @@
       this._SaveButton.UseVisualStyleBackColor = true;
       this._SaveButton.Click += new System.EventHandler(this._SaveButton_Click);
       // 
-      // m_QAutoKey
+      // groupBox1
       // 
-      this.m_QAutoKey.AutoSize = true;
-      this.m_QAutoKey.Location = new System.Drawing.Point(113, 19);
-      this.m_QAutoKey.Name = "m_QAutoKey";
-      this.m_QAutoKey.Size = new System.Drawing.Size(69, 17);
-      this.m_QAutoKey.TabIndex = 3;
-      this.m_QAutoKey.Text = "Auto Key";
-      this.m_QAutoKey.UseVisualStyleBackColor = true;
+      this.groupBox1.Controls.Add(this._MRClick);
+      this.groupBox1.Controls.Add(this._MRClickDelay);
+      this.groupBox1.Controls.Add(this._MRThreadDelay);
+      this.groupBox1.Controls.Add(this.label7);
+      this.groupBox1.Controls.Add(this.label26);
+      this.groupBox1.Location = new System.Drawing.Point(286, 273);
+      this.groupBox1.Name = "groupBox1";
+      this.groupBox1.Size = new System.Drawing.Size(252, 274);
+      this.groupBox1.TabIndex = 2;
+      this.groupBox1.TabStop = false;
+      this.groupBox1.Text = "Mouse";
       // 
-      // m_WAutoKey
+      // label7
       // 
-      this.m_WAutoKey.AutoSize = true;
-      this.m_WAutoKey.Location = new System.Drawing.Point(113, 19);
-      this.m_WAutoKey.Name = "m_WAutoKey";
-      this.m_WAutoKey.Size = new System.Drawing.Size(69, 17);
-      this.m_WAutoKey.TabIndex = 3;
-      this.m_WAutoKey.Text = "Auto Key";
-      this.m_WAutoKey.UseVisualStyleBackColor = true;
+      this.label7.AutoSize = true;
+      this.label7.Location = new System.Drawing.Point(10, 53);
+      this.label7.Name = "label7";
+      this.label7.Size = new System.Drawing.Size(71, 13);
+      this.label7.TabIndex = 1;
+      this.label7.Text = "R Click Delay";
+      // 
+      // _MRClickDelay
+      // 
+      this._MRClickDelay.Location = new System.Drawing.Point(113, 46);
+      this._MRClickDelay.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+      this._MRClickDelay.Name = "_MRClickDelay";
+      this._MRClickDelay.Size = new System.Drawing.Size(120, 20);
+      this._MRClickDelay.TabIndex = 2;
+      this._MRClickDelay.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+      // 
+      // label26
+      // 
+      this.label26.AutoSize = true;
+      this.label26.Location = new System.Drawing.Point(9, 76);
+      this.label26.Name = "label26";
+      this.label26.Size = new System.Drawing.Size(71, 13);
+      this.label26.TabIndex = 1;
+      this.label26.Text = "Thread Delay";
+      // 
+      // _MRThreadDelay
+      // 
+      this._MRThreadDelay.Location = new System.Drawing.Point(112, 69);
+      this._MRThreadDelay.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+      this._MRThreadDelay.Name = "_MRThreadDelay";
+      this._MRThreadDelay.Size = new System.Drawing.Size(120, 20);
+      this._MRThreadDelay.TabIndex = 2;
+      this._MRThreadDelay.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+      // 
+      // _MRClick
+      // 
+      this._MRClick.AutoSize = true;
+      this._MRClick.Location = new System.Drawing.Point(112, 19);
+      this._MRClick.Name = "_MRClick";
+      this._MRClick.Size = new System.Drawing.Size(76, 17);
+      this._MRClick.TabIndex = 3;
+      this._MRClick.Text = "Right click";
+      this._MRClick.UseVisualStyleBackColor = true;
       // 
       // SettingsForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(536, 561);
+      this.ClientSize = new System.Drawing.Size(551, 589);
+      this.Controls.Add(this.groupBox1);
       this.Controls.Add(this.m_OKButton);
       this.Controls.Add(this.m_CancelButton);
       this.Controls.Add(this._SaveButton);
@@ -776,6 +862,10 @@
       ((System.ComponentModel.ISupportInitialize)(this._qweQKeyThreadDelay)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this._qweQKeyDownDelay)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this._qweQKeyUpDelay)).EndInit();
+      this.groupBox1.ResumeLayout(false);
+      this.groupBox1.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this._MRClickDelay)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this._MRThreadDelay)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -847,5 +937,11 @@
     private System.Windows.Forms.Button _SaveButton;
     private System.Windows.Forms.CheckBox m_QAutoKey;
     private System.Windows.Forms.CheckBox m_WAutoKey;
+    private System.Windows.Forms.GroupBox groupBox1;
+    private System.Windows.Forms.CheckBox _MRClick;
+    private System.Windows.Forms.NumericUpDown _MRClickDelay;
+    private System.Windows.Forms.NumericUpDown _MRThreadDelay;
+    private System.Windows.Forms.Label label7;
+    private System.Windows.Forms.Label label26;
   }
 }

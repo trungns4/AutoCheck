@@ -1,4 +1,5 @@
 ﻿using Binarysharp.MemoryManagement;
+using Binarysharp.MemoryManagement.Native;
 using log4net;
 using Newtonsoft.Json.Linq;
 using System;
@@ -31,6 +32,36 @@ namespace AutoCheck
 
     [DllImport("user32.dll")]
     public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+    [DllImport("user32.dll")]
+    public static extern bool GetCursorPos(out POINT lpPoint);
+
+    public struct POINT
+    {
+      public int X;
+      public int Y;
+    }
+
+    [DllImport("user32.dll")]
+    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT
+    {
+      public int Left;
+      public int Top;
+      public int Right;
+      public int Bottom;
+    }
+
+    public static void GetWindowRectangle(IntPtr hWnd, out int left, out int top, out int right, out int bottom)
+    {
+      GetWindowRect(hWnd, out RECT rect);
+      left = rect.Left;
+      top = rect.Top;
+      right = rect.Right;
+      bottom = rect.Bottom;
+    }
 
     public static MemorySharp CreateMemorySharp()
     {
@@ -75,7 +106,6 @@ namespace AutoCheck
         SetForegroundWindow(hwnd);
       }
     }
-
 
     public static IntPtr GetMainWindowHandle(int processId)
     {
@@ -155,6 +185,28 @@ namespace AutoCheck
       {
         log.WarnFormat($"Warning: Key '{key}' is missing. Using default value.");
         return defaultValue;
+      }
+    }
+
+    public static void GetMouse(out int x, out int y)
+    {
+      GetCursorPos(out POINT p);
+      x = p.X;
+      y = p.Y;
+    }
+
+    [DllImport("user32.dll")]
+    private static extern short GetAsyncKeyState(int vKey);
+
+    public static bool IsAlt()
+    {
+      if ((GetAsyncKeyState(0x12) & 0x8000) != 0) // 0x12 is VK_MENU (Alt key)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
       }
     }
   }

@@ -15,6 +15,21 @@ using System.Runtime;
 
 namespace AutoCheck
 {
+  public class MouseThreadSettings
+  {
+    public bool _auto { get; set; }
+    public int _clickDelay { get; set; }
+    public int _threadDelay { get; set; }
+
+
+    public MouseThreadSettings()
+    {
+      _auto = true;
+      _clickDelay = 32;
+      _threadDelay = 32;
+    }
+  }
+
   public class QWMemThreadSettings
   {
     public bool _auto { get; set; }
@@ -83,6 +98,7 @@ namespace AutoCheck
     public QWMemThreadSettings Q { get; set; }
     public QWMemThreadSettings W { get; set; }
     public QWEThreadSettings QWE { get; set; }
+    public MouseThreadSettings M { get; set; }
 
     public Settings()
     {
@@ -99,6 +115,11 @@ namespace AutoCheck
       };
 
       QWE = new QWEThreadSettings()
+      {
+
+      };
+
+      M = new MouseThreadSettings()
       {
 
       };
@@ -145,7 +166,7 @@ namespace AutoCheck
           if (tempSettings.W != null)
           {
             W._auto = tempSettings.W._auto;
-            W._autoKey = tempSettings.W._autoKey; 
+            W._autoKey = tempSettings.W._autoKey;
             W._keyUpDelay = tempSettings.W._keyUpDelay;
             W._keyDownDelay = tempSettings.W._keyDownDelay;
             W._keyThreadDelay = tempSettings.W._keyThreadDelay;
@@ -173,6 +194,13 @@ namespace AutoCheck
             QWE._keyUpDelayE = tempSettings.QWE._keyUpDelayE;
             QWE._keyDownDelayE = tempSettings.QWE._keyDownDelayE;
             QWE._threadDelayE = tempSettings.QWE._threadDelayE;
+          }
+
+          if (tempSettings.M != null)
+          {
+            M._auto = tempSettings.M._auto;
+            M._clickDelay = tempSettings.M._clickDelay;
+            M._threadDelay = tempSettings.M._threadDelay;
           }
         }
 
@@ -250,6 +278,12 @@ namespace AutoCheck
         QWE._keyUpDelayE = other.QWE._keyUpDelayE;
         QWE._keyDownDelayE = other.QWE._keyDownDelayE;
         QWE._threadDelayE = other.QWE._threadDelayE;
+      }
+      if (other.M != null)
+      {
+        M._clickDelay = other.M._clickDelay;
+        M._threadDelay = other.M._threadDelay;
+        M._auto = other.M._auto;
       }
     }
   }

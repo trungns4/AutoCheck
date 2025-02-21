@@ -72,11 +72,6 @@ namespace AutoCheck
       _settings = settings;
     }
     //---------------------------------------------------------------------------------------
-    public void ChangeSettings(QWMemThreadSettings settings)
-    {
-      _settings = settings;
-    }
-    //---------------------------------------------------------------------------------------
     public bool Start(MemorySharp sharp, long curAddr, long maxAddr)
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

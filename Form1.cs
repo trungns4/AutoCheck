@@ -30,9 +30,10 @@ namespace AutoCheck
 
     private long _addr = 0;
 
-    private AutoKeyThread _threadQ;
-    private AutoKeyThread _threadW;
+    private AutoKeyThread _threadQ = null;
+    private AutoKeyThread _threadW = null;
     private AutoQWEThread _qweThread = null;
+    private AutoMouseThread _mThread = null;
     private bool _starting = false;
 
     private System.Windows.Forms.Timer m_Timer;
@@ -58,6 +59,7 @@ namespace AutoCheck
       _threadW = new AutoKeyThread('w', _settings.W, new ProgressBarAdapter(m_WPBar));
 
       _qweThread = new AutoQWEThread(_settings.QWE, m_KeyCount);
+      _mThread = new AutoMouseThread(_settings.M);
 
       UpdateUIByData();
 
@@ -92,10 +94,19 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-      if (e.KeyCode == System.Windows.Forms.Keys.D0 && e.Control)
+      if (e.Control)
       {
-        ToggleStartStop();
-        e.Handled = true;
+        if (e.KeyCode == System.Windows.Forms.Keys.D0)
+        {
+          ToggleStartStop();
+          e.Handled = true;
+        }
+        if (e.KeyCode == System.Windows.Forms.Keys.A)
+        {
+          _settings.M._auto = !_settings.M._auto;
+          e.Handled = true;
+          m_AutoMouse.BeginInvoke((MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
+        }
       }
     }
 
@@ -234,11 +245,13 @@ namespace AutoCheck
 
         m_StartButton.Enabled = false;
         _starting = true;
-        if (_threadQ.IsRunning() || _threadW.IsRunning() || _qweThread.IsRunning())
+        if (_threadQ.IsRunning() || _threadW.IsRunning() || _qweThread.IsRunning() || _mThread.IsRunning())
         {
           _threadQ.Stop();
           _threadW.Stop();
           _qweThread.Stop();
+          _mThread.Stop();
+          _mThread.Stop();
           Stop();
         }
         else
@@ -248,6 +261,7 @@ namespace AutoCheck
             _threadQ.Start(_sharp, _addr, _addr + 16);
             _threadW.Start(_sharp, _addr + 8, _addr + 24);
             _qweThread.Start(_sharp);
+            _mThread.Start(_sharp);
           }
         }
       }
@@ -329,6 +343,8 @@ namespace AutoCheck
       m_VolumeCtrl.Minimum = 0;
       m_VolumeCtrl.Maximum = 100;
       m_VolumeCtrl.Value = (int)(Math.Min(_settings.Q._warnVolume, 1.0f) * 100f);
+
+      m_AutoMouse.Checked = _settings.M._auto;
     }
     //----------------------------------------------------------------------------------
     private void OnVolumeValueChanged(object sender, EventArgs e)
@@ -416,6 +432,11 @@ namespace AutoCheck
         _settings.CopyFrom(settingsForm.Settings);
         UpdateUIByData();
       }
+    }
+    //----------------------------------------------------------------------------------
+    private void m_AutoMouse_CheckedChanged(object sender, EventArgs e)
+    {
+      _settings.M._auto = m_AutoMouse.Checked;
     }
   }
 }

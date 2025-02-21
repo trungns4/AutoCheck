@@ -117,6 +117,7 @@
   <ItemGroup>
     <Compile Include="AutoFlags.cs" />
     <Compile Include="AutoKeyThread.cs" />
+    <Compile Include="AutoMouseThread.cs" />
     <Compile Include="AutoQWEThread.cs" />
     <Compile Include="AutoScanPortion.cs" />
     <Compile Include="ProgressBarAdapter.cs" />

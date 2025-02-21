@@ -27,7 +27,7 @@ namespace AutoCheck
 
       ShowData();
 
-      foreach(var numInput in CollectControls<NumericUpDown>(this))
+      foreach (var numInput in CollectControls<NumericUpDown>(this))
       {
         numInput.ValueChanged += Input_ValueChanged;
       }
@@ -129,13 +129,17 @@ namespace AutoCheck
       _qweEKeyUpDelay.Value = _settings.QWE._keyUpDelayE;
       _qweEKeyDownDelay.Value = _settings.QWE._keyDownDelayE;
       _qweEKeyThreadDelay.Value = _settings.QWE._threadDelayE;
+
+      _MRClick.Checked = _settings.M._auto;
+      _MRThreadDelay.Value = _settings.M._threadDelay;
+      _MRClickDelay.Value = _settings.M._clickDelay;
     }
     //----------------------------------------------------------------------------------
     private void UIToData()
     {
       // Save Q settings
       _settings.Q._auto = m_QAuto.Checked;
-      _settings.Q._autoKey= m_QAutoKey.Checked; 
+      _settings.Q._autoKey = m_QAutoKey.Checked;
       _settings.Q._keyUpDelay = (int)m_QKeyUpDelay.Value;
       _settings.Q._keyDownDelay = (int)m_QKeyDownDelay.Value;
       _settings.Q._keyThreadDelay = (int)m_QKeyThreadDelay.Value;
@@ -173,6 +177,10 @@ namespace AutoCheck
       _settings.QWE._keyUpDelayE = (int)_qweEKeyUpDelay.Value;
       _settings.QWE._keyDownDelayE = (int)_qweEKeyDownDelay.Value;
       _settings.QWE._threadDelayE = (int)_qweEKeyThreadDelay.Value;
+
+      _settings.M._auto = _MRClick.Checked;
+      _settings.M._threadDelay = (int)_MRThreadDelay.Value;
+      _settings.M._clickDelay = (int)_MRClickDelay.Value;
 
       _settings.SaveData();
 

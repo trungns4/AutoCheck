@@ -58,6 +58,7 @@
       this.m_QChk = new System.Windows.Forms.CheckBox();
       this._About = new System.Windows.Forms.Label();
       this._SettingsButton = new System.Windows.Forms.Button();
+      this.m_AutoMouse = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.m_VolumeCtrl)).BeginInit();
       this.groupBox2.SuspendLayout();
@@ -77,7 +78,7 @@
       // 
       // m_StartButton
       // 
-      this.m_StartButton.Location = new System.Drawing.Point(5, 355);
+      this.m_StartButton.Location = new System.Drawing.Point(5, 377);
       this.m_StartButton.Name = "m_StartButton";
       this.m_StartButton.Size = new System.Drawing.Size(75, 23);
       this.m_StartButton.TabIndex = 3;
@@ -238,7 +239,7 @@
       // 
       // m_CloseButton
       // 
-      this.m_CloseButton.Location = new System.Drawing.Point(121, 355);
+      this.m_CloseButton.Location = new System.Drawing.Point(121, 377);
       this.m_CloseButton.Name = "m_CloseButton";
       this.m_CloseButton.Size = new System.Drawing.Size(75, 23);
       this.m_CloseButton.TabIndex = 3;
@@ -254,7 +255,7 @@
       this.groupBox3.Controls.Add(this.m_QChk);
       this.groupBox3.Location = new System.Drawing.Point(5, 237);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(195, 112);
+      this.groupBox3.Size = new System.Drawing.Size(195, 100);
       this.groupBox3.TabIndex = 7;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Auto QWE";
@@ -264,7 +265,7 @@
       this.m_KeyCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.m_KeyCount.Location = new System.Drawing.Point(2, 60);
       this.m_KeyCount.Name = "m_KeyCount";
-      this.m_KeyCount.Size = new System.Drawing.Size(134, 44);
+      this.m_KeyCount.Size = new System.Drawing.Size(134, 31);
       this.m_KeyCount.TabIndex = 3;
       this.m_KeyCount.Text = "...";
       this.m_KeyCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -308,7 +309,7 @@
       // 
       this._About.AutoSize = true;
       this._About.ForeColor = System.Drawing.SystemColors.ControlDark;
-      this._About.Location = new System.Drawing.Point(12, 392);
+      this._About.Location = new System.Drawing.Point(12, 405);
       this._About.Name = "_About";
       this._About.Size = new System.Drawing.Size(13, 13);
       this._About.TabIndex = 8;
@@ -324,11 +325,25 @@
       this._SettingsButton.UseVisualStyleBackColor = true;
       this._SettingsButton.Click += new System.EventHandler(this._SettingsButton_Click_1);
       // 
+      // m_AutoMouse
+      // 
+      this.m_AutoMouse.AutoSize = true;
+      this.m_AutoMouse.Checked = true;
+      this.m_AutoMouse.CheckState = System.Windows.Forms.CheckState.Checked;
+      this.m_AutoMouse.Location = new System.Drawing.Point(4, 343);
+      this.m_AutoMouse.Name = "m_AutoMouse";
+      this.m_AutoMouse.Size = new System.Drawing.Size(120, 17);
+      this.m_AutoMouse.TabIndex = 10;
+      this.m_AutoMouse.Text = "Right Mouse (Ctrl-A)";
+      this.m_AutoMouse.UseVisualStyleBackColor = true;
+      this.m_AutoMouse.CheckedChanged += new System.EventHandler(this.m_AutoMouse_CheckedChanged);
+      // 
       // Form1
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(212, 414);
+      this.ClientSize = new System.Drawing.Size(212, 427);
+      this.Controls.Add(this.m_AutoMouse);
       this.Controls.Add(this._SettingsButton);
       this.Controls.Add(this._About);
       this.Controls.Add(this.m_ScanButton);
@@ -390,6 +405,7 @@
     private System.Windows.Forms.ProgressBar m_QPBar;
     private System.Windows.Forms.ProgressBar m_WPBar;
     private System.Windows.Forms.Button _SettingsButton;
+    private System.Windows.Forms.CheckBox m_AutoMouse;
   }
 }
 
