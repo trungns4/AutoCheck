@@ -99,12 +99,10 @@ namespace AutoCheck
         if (e.KeyCode == System.Windows.Forms.Keys.D0)
         {
           ToggleStartStop();
-          e.Handled = true;
         }
-        if (e.KeyCode == System.Windows.Forms.Keys.A)
+        else if (e.KeyCode == System.Windows.Forms.Keys.A)
         {
           _settings.M._auto = !_settings.M._auto;
-          e.Handled = true;
           m_AutoMouse.BeginInvoke((MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
         }
       }

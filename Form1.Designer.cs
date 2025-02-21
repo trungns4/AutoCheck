@@ -180,53 +180,52 @@
             this.toolStripSeparator2,
             this.m_CloseMenu});
       this.m_ContextMenu.Name = "m_ContextMenu";
-      this.m_ContextMenu.Size = new System.Drawing.Size(141, 132);
+      this.m_ContextMenu.Size = new System.Drawing.Size(181, 154);
       this.m_ContextMenu.Opened += new System.EventHandler(this.m_ContextMenu_Opened);
       // 
       // m_StartMenu
       // 
       this.m_StartMenu.Name = "m_StartMenu";
-      this.m_StartMenu.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-      this.m_StartMenu.Size = new System.Drawing.Size(140, 22);
+      this.m_StartMenu.Size = new System.Drawing.Size(180, 22);
       this.m_StartMenu.Text = "Start";
       // 
       // toolStripSeparator3
       // 
       this.toolStripSeparator3.Name = "toolStripSeparator3";
-      this.toolStripSeparator3.Size = new System.Drawing.Size(137, 6);
+      this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
       // 
       // m_ShowMenu
       // 
       this.m_ShowMenu.Name = "m_ShowMenu";
-      this.m_ShowMenu.Size = new System.Drawing.Size(140, 22);
+      this.m_ShowMenu.Size = new System.Drawing.Size(180, 22);
       this.m_ShowMenu.Text = "Show";
       // 
       // m_HideMenu
       // 
       this.m_HideMenu.Name = "m_HideMenu";
-      this.m_HideMenu.Size = new System.Drawing.Size(140, 22);
+      this.m_HideMenu.Size = new System.Drawing.Size(180, 22);
       this.m_HideMenu.Text = "Hide";
       // 
       // toolStripSeparator1
       // 
       this.toolStripSeparator1.Name = "toolStripSeparator1";
-      this.toolStripSeparator1.Size = new System.Drawing.Size(137, 6);
+      this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
       // 
       // m_AutoHideMenu
       // 
       this.m_AutoHideMenu.Name = "m_AutoHideMenu";
-      this.m_AutoHideMenu.Size = new System.Drawing.Size(140, 22);
+      this.m_AutoHideMenu.Size = new System.Drawing.Size(180, 22);
       this.m_AutoHideMenu.Text = "Auto Hide";
       // 
       // toolStripSeparator2
       // 
       this.toolStripSeparator2.Name = "toolStripSeparator2";
-      this.toolStripSeparator2.Size = new System.Drawing.Size(137, 6);
+      this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
       // 
       // m_CloseMenu
       // 
       this.m_CloseMenu.Name = "m_CloseMenu";
-      this.m_CloseMenu.Size = new System.Drawing.Size(140, 22);
+      this.m_CloseMenu.Size = new System.Drawing.Size(180, 22);
       this.m_CloseMenu.Text = "Close";
       // 
       // m_NotifyIcon

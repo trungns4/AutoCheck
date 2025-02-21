@@ -25,8 +25,8 @@ namespace AutoCheck
     public MouseThreadSettings()
     {
       _auto = true;
-      _clickDelay = 100;
-      _threadDelay = 100;
+      _clickDelay = 50;
+      _threadDelay = 50;
     }
   }
 

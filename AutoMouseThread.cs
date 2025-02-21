@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -72,7 +73,6 @@ namespace AutoCheck
         _is.Mouse.RightButtonUp();
       }
     }
-
     //---------------------------------------------------------------------------------------
     private void Run()
     {
@@ -94,21 +94,24 @@ namespace AutoCheck
         {
           if (Utils.IsAlt())
           {
-            CheckToFireUp();   
+            CheckToFireUp();
             Thread.Sleep(_settings._threadDelay);
-          }
-
-          Utils.GetMouse(out int x, out int y);
-          if (x >= _left && x <= _right && y >= _top && y <= _bottom)
-          {
-            _is.Mouse.RightButtonDown();
-            _up = false;
-            Thread.Sleep(_settings._clickDelay);
+            continue;
           }
           else
           {
-            CheckToFireUp();
-            Thread.Sleep(_settings._threadDelay);
+            Utils.GetMouse(out int x, out int y);
+            if (x >= _left && x <= _right && y >= _top && y <= _bottom)
+            {
+              _is.Mouse.RightButtonDown();
+              _up = false;
+              Thread.Sleep(_settings._clickDelay);
+            }
+            else
+            {
+              CheckToFireUp();
+              Thread.Sleep(_settings._threadDelay);
+            }
           }
         }
         else
@@ -139,6 +142,19 @@ namespace AutoCheck
     public bool IsRunning()
     {
       return _isRunning;
+    }
+    //---------------------------------------------------------------------------------------
+    public void Pause(int time)
+    {
+      var running = _isRunning;
+      _isRunning = false;
+      Thread.Sleep(10);
+      var sw = Stopwatch.StartNew();
+      while (sw.ElapsedMilliseconds < time)
+      {
+        Thread.Sleep(time / 10);
+      }
+      _isRunning = running;
     }
   }
 }
