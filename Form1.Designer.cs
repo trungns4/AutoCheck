@@ -28,350 +28,376 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this.components = new System.ComponentModel.Container();
+      components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-      this.m_ScanButton = new System.Windows.Forms.Button();
-      this.m_StartButton = new System.Windows.Forms.Button();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.m_QPBar = new System.Windows.Forms.ProgressBar();
-      this.label1 = new System.Windows.Forms.Label();
-      this.m_VolumeCtrl = new System.Windows.Forms.TrackBar();
-      this.m_AutoQ = new System.Windows.Forms.CheckBox();
-      this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.m_WPBar = new System.Windows.Forms.ProgressBar();
-      this.m_AutoW = new System.Windows.Forms.CheckBox();
-      this.m_ContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-      this.m_StartMenu = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-      this.m_ShowMenu = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_HideMenu = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-      this.m_AutoHideMenu = new System.Windows.Forms.ToolStripMenuItem();
-      this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-      this.m_CloseMenu = new System.Windows.Forms.ToolStripMenuItem();
-      this.m_NotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-      this.m_CloseButton = new System.Windows.Forms.Button();
-      this.groupBox3 = new System.Windows.Forms.GroupBox();
-      this.m_KeyCount = new System.Windows.Forms.Label();
-      this.m_EChk = new System.Windows.Forms.CheckBox();
-      this.m_WChk = new System.Windows.Forms.CheckBox();
-      this.m_QChk = new System.Windows.Forms.CheckBox();
-      this._About = new System.Windows.Forms.Label();
-      this._SettingsButton = new System.Windows.Forms.Button();
-      this.m_AutoMouse = new System.Windows.Forms.CheckBox();
-      this.groupBox1.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.m_VolumeCtrl)).BeginInit();
-      this.groupBox2.SuspendLayout();
-      this.m_ContextMenu.SuspendLayout();
-      this.groupBox3.SuspendLayout();
-      this.SuspendLayout();
+      m_ScanButton = new System.Windows.Forms.Button();
+      m_StartButton = new System.Windows.Forms.Button();
+      groupBox1 = new System.Windows.Forms.GroupBox();
+      m_QPBar = new System.Windows.Forms.ProgressBar();
+      label1 = new System.Windows.Forms.Label();
+      m_VolumeCtrl = new System.Windows.Forms.TrackBar();
+      m_AutoQ = new System.Windows.Forms.CheckBox();
+      groupBox2 = new System.Windows.Forms.GroupBox();
+      m_WPBar = new System.Windows.Forms.ProgressBar();
+      m_AutoW = new System.Windows.Forms.CheckBox();
+      m_ContextMenu = new System.Windows.Forms.ContextMenuStrip(components);
+      m_StartMenu = new System.Windows.Forms.ToolStripMenuItem();
+      toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+      m_ShowMenu = new System.Windows.Forms.ToolStripMenuItem();
+      m_HideMenu = new System.Windows.Forms.ToolStripMenuItem();
+      toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+      m_AutoHideMenu = new System.Windows.Forms.ToolStripMenuItem();
+      toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+      m_CloseMenu = new System.Windows.Forms.ToolStripMenuItem();
+      m_NotifyIcon = new System.Windows.Forms.NotifyIcon(components);
+      m_CloseButton = new System.Windows.Forms.Button();
+      groupBox3 = new System.Windows.Forms.GroupBox();
+      m_KeyCount = new System.Windows.Forms.Label();
+      m_EChk = new System.Windows.Forms.CheckBox();
+      m_WChk = new System.Windows.Forms.CheckBox();
+      m_QChk = new System.Windows.Forms.CheckBox();
+      _About = new System.Windows.Forms.Label();
+      _SettingsButton = new System.Windows.Forms.Button();
+      m_AutoMouse = new System.Windows.Forms.CheckBox();
+      label2 = new System.Windows.Forms.Label();
+      groupBox1.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)m_VolumeCtrl).BeginInit();
+      groupBox2.SuspendLayout();
+      m_ContextMenu.SuspendLayout();
+      groupBox3.SuspendLayout();
+      SuspendLayout();
       // 
       // m_ScanButton
       // 
-      this.m_ScanButton.Location = new System.Drawing.Point(5, 203);
-      this.m_ScanButton.Name = "m_ScanButton";
-      this.m_ScanButton.Size = new System.Drawing.Size(75, 23);
-      this.m_ScanButton.TabIndex = 0;
-      this.m_ScanButton.Text = "Scan...";
-      this.m_ScanButton.UseVisualStyleBackColor = true;
-      this.m_ScanButton.Click += new System.EventHandler(this.OnScanClicked);
+      m_ScanButton.Location = new System.Drawing.Point(6, 234);
+      m_ScanButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_ScanButton.Name = "m_ScanButton";
+      m_ScanButton.Size = new System.Drawing.Size(88, 27);
+      m_ScanButton.TabIndex = 0;
+      m_ScanButton.Text = "Scan...";
+      m_ScanButton.UseVisualStyleBackColor = true;
+      m_ScanButton.Click += OnScanClicked;
       // 
       // m_StartButton
       // 
-      this.m_StartButton.Location = new System.Drawing.Point(5, 377);
-      this.m_StartButton.Name = "m_StartButton";
-      this.m_StartButton.Size = new System.Drawing.Size(75, 23);
-      this.m_StartButton.TabIndex = 3;
-      this.m_StartButton.Text = "Start";
-      this.m_StartButton.UseVisualStyleBackColor = true;
-      this.m_StartButton.Click += new System.EventHandler(this.OnStartButtonClicked);
+      m_StartButton.Location = new System.Drawing.Point(6, 435);
+      m_StartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_StartButton.Name = "m_StartButton";
+      m_StartButton.Size = new System.Drawing.Size(88, 27);
+      m_StartButton.TabIndex = 3;
+      m_StartButton.Text = "Start";
+      m_StartButton.UseVisualStyleBackColor = true;
+      m_StartButton.Click += OnStartButtonClicked;
       // 
       // groupBox1
       // 
-      this.groupBox1.Controls.Add(this.m_QPBar);
-      this.groupBox1.Controls.Add(this.label1);
-      this.groupBox1.Controls.Add(this.m_VolumeCtrl);
-      this.groupBox1.Controls.Add(this.m_AutoQ);
-      this.groupBox1.Location = new System.Drawing.Point(4, 13);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(196, 121);
-      this.groupBox1.TabIndex = 6;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "HP";
+      groupBox1.Controls.Add(m_QPBar);
+      groupBox1.Controls.Add(label1);
+      groupBox1.Controls.Add(m_VolumeCtrl);
+      groupBox1.Controls.Add(m_AutoQ);
+      groupBox1.Location = new System.Drawing.Point(5, 15);
+      groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      groupBox1.Name = "groupBox1";
+      groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      groupBox1.Size = new System.Drawing.Size(229, 140);
+      groupBox1.TabIndex = 6;
+      groupBox1.TabStop = false;
+      groupBox1.Text = "HP";
       // 
       // m_QPBar
       // 
-      this.m_QPBar.Location = new System.Drawing.Point(7, 24);
-      this.m_QPBar.Name = "m_QPBar";
-      this.m_QPBar.Size = new System.Drawing.Size(120, 15);
-      this.m_QPBar.TabIndex = 9;
+      m_QPBar.Location = new System.Drawing.Point(8, 28);
+      m_QPBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_QPBar.Name = "m_QPBar";
+      m_QPBar.Size = new System.Drawing.Size(140, 17);
+      m_QPBar.TabIndex = 9;
       // 
       // label1
       // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(3, 51);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(85, 13);
-      this.label1.TabIndex = 8;
-      this.label1.Text = "Warning Volume";
+      label1.AutoSize = true;
+      label1.Location = new System.Drawing.Point(4, 59);
+      label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      label1.Name = "label1";
+      label1.Size = new System.Drawing.Size(95, 15);
+      label1.TabIndex = 8;
+      label1.Text = "Warning Volume";
       // 
       // m_VolumeCtrl
       // 
-      this.m_VolumeCtrl.Location = new System.Drawing.Point(6, 69);
-      this.m_VolumeCtrl.Name = "m_VolumeCtrl";
-      this.m_VolumeCtrl.Size = new System.Drawing.Size(186, 45);
-      this.m_VolumeCtrl.TabIndex = 7;
-      this.m_VolumeCtrl.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-      this.m_VolumeCtrl.ValueChanged += new System.EventHandler(this.OnVolumeValueChanged);
+      m_VolumeCtrl.Location = new System.Drawing.Point(7, 80);
+      m_VolumeCtrl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_VolumeCtrl.Name = "m_VolumeCtrl";
+      m_VolumeCtrl.Size = new System.Drawing.Size(217, 45);
+      m_VolumeCtrl.TabIndex = 7;
+      m_VolumeCtrl.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+      m_VolumeCtrl.ValueChanged += OnVolumeValueChanged;
       // 
       // m_AutoQ
       // 
-      this.m_AutoQ.AutoSize = true;
-      this.m_AutoQ.Checked = true;
-      this.m_AutoQ.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoQ.Location = new System.Drawing.Point(133, 22);
-      this.m_AutoQ.Name = "m_AutoQ";
-      this.m_AutoQ.Size = new System.Drawing.Size(48, 17);
-      this.m_AutoQ.TabIndex = 6;
-      this.m_AutoQ.Text = "Auto";
-      this.m_AutoQ.UseVisualStyleBackColor = true;
-      this.m_AutoQ.CheckedChanged += new System.EventHandler(this.OnAutoQCheckedChanged);
+      m_AutoQ.AutoSize = true;
+      m_AutoQ.Checked = true;
+      m_AutoQ.CheckState = System.Windows.Forms.CheckState.Checked;
+      m_AutoQ.Location = new System.Drawing.Point(155, 27);
+      m_AutoQ.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_AutoQ.Name = "m_AutoQ";
+      m_AutoQ.Size = new System.Drawing.Size(52, 19);
+      m_AutoQ.TabIndex = 6;
+      m_AutoQ.Text = "Auto";
+      m_AutoQ.UseVisualStyleBackColor = true;
+      m_AutoQ.CheckedChanged += OnAutoQCheckedChanged;
       // 
       // groupBox2
       // 
-      this.groupBox2.Controls.Add(this.m_WPBar);
-      this.groupBox2.Controls.Add(this.m_AutoW);
-      this.groupBox2.Location = new System.Drawing.Point(5, 140);
-      this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(195, 57);
-      this.groupBox2.TabIndex = 6;
-      this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Mana";
+      groupBox2.Controls.Add(m_WPBar);
+      groupBox2.Controls.Add(m_AutoW);
+      groupBox2.Location = new System.Drawing.Point(6, 162);
+      groupBox2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      groupBox2.Name = "groupBox2";
+      groupBox2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      groupBox2.Size = new System.Drawing.Size(227, 66);
+      groupBox2.TabIndex = 6;
+      groupBox2.TabStop = false;
+      groupBox2.Text = "Mana";
       // 
       // m_WPBar
       // 
-      this.m_WPBar.Location = new System.Drawing.Point(6, 24);
-      this.m_WPBar.Name = "m_WPBar";
-      this.m_WPBar.Size = new System.Drawing.Size(120, 15);
-      this.m_WPBar.TabIndex = 9;
+      m_WPBar.Location = new System.Drawing.Point(7, 28);
+      m_WPBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_WPBar.Name = "m_WPBar";
+      m_WPBar.Size = new System.Drawing.Size(140, 17);
+      m_WPBar.TabIndex = 9;
       // 
       // m_AutoW
       // 
-      this.m_AutoW.AutoSize = true;
-      this.m_AutoW.Checked = true;
-      this.m_AutoW.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoW.Location = new System.Drawing.Point(133, 22);
-      this.m_AutoW.Name = "m_AutoW";
-      this.m_AutoW.Size = new System.Drawing.Size(48, 17);
-      this.m_AutoW.TabIndex = 6;
-      this.m_AutoW.Text = "Auto";
-      this.m_AutoW.UseVisualStyleBackColor = true;
-      this.m_AutoW.CheckedChanged += new System.EventHandler(this.OnAutoWCheckedChanged);
+      m_AutoW.AutoSize = true;
+      m_AutoW.Checked = true;
+      m_AutoW.CheckState = System.Windows.Forms.CheckState.Checked;
+      m_AutoW.Location = new System.Drawing.Point(155, 27);
+      m_AutoW.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_AutoW.Name = "m_AutoW";
+      m_AutoW.Size = new System.Drawing.Size(52, 19);
+      m_AutoW.TabIndex = 6;
+      m_AutoW.Text = "Auto";
+      m_AutoW.UseVisualStyleBackColor = true;
+      m_AutoW.CheckedChanged += OnAutoWCheckedChanged;
       // 
       // m_ContextMenu
       // 
-      this.m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_StartMenu,
-            this.toolStripSeparator3,
-            this.m_ShowMenu,
-            this.m_HideMenu,
-            this.toolStripSeparator1,
-            this.m_AutoHideMenu,
-            this.toolStripSeparator2,
-            this.m_CloseMenu});
-      this.m_ContextMenu.Name = "m_ContextMenu";
-      this.m_ContextMenu.Size = new System.Drawing.Size(181, 154);
-      this.m_ContextMenu.Opened += new System.EventHandler(this.m_ContextMenu_Opened);
+      m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { m_StartMenu, toolStripSeparator3, m_ShowMenu, m_HideMenu, toolStripSeparator1, m_AutoHideMenu, toolStripSeparator2, m_CloseMenu });
+      m_ContextMenu.Name = "m_ContextMenu";
+      m_ContextMenu.Size = new System.Drawing.Size(129, 132);
+      m_ContextMenu.Opened += m_ContextMenu_Opened;
       // 
       // m_StartMenu
       // 
-      this.m_StartMenu.Name = "m_StartMenu";
-      this.m_StartMenu.Size = new System.Drawing.Size(180, 22);
-      this.m_StartMenu.Text = "Start";
+      m_StartMenu.Name = "m_StartMenu";
+      m_StartMenu.Size = new System.Drawing.Size(128, 22);
+      m_StartMenu.Text = "Start";
       // 
       // toolStripSeparator3
       // 
-      this.toolStripSeparator3.Name = "toolStripSeparator3";
-      this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+      toolStripSeparator3.Name = "toolStripSeparator3";
+      toolStripSeparator3.Size = new System.Drawing.Size(125, 6);
       // 
       // m_ShowMenu
       // 
-      this.m_ShowMenu.Name = "m_ShowMenu";
-      this.m_ShowMenu.Size = new System.Drawing.Size(180, 22);
-      this.m_ShowMenu.Text = "Show";
+      m_ShowMenu.Name = "m_ShowMenu";
+      m_ShowMenu.Size = new System.Drawing.Size(128, 22);
+      m_ShowMenu.Text = "Show";
       // 
       // m_HideMenu
       // 
-      this.m_HideMenu.Name = "m_HideMenu";
-      this.m_HideMenu.Size = new System.Drawing.Size(180, 22);
-      this.m_HideMenu.Text = "Hide";
+      m_HideMenu.Name = "m_HideMenu";
+      m_HideMenu.Size = new System.Drawing.Size(128, 22);
+      m_HideMenu.Text = "Hide";
       // 
       // toolStripSeparator1
       // 
-      this.toolStripSeparator1.Name = "toolStripSeparator1";
-      this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+      toolStripSeparator1.Name = "toolStripSeparator1";
+      toolStripSeparator1.Size = new System.Drawing.Size(125, 6);
       // 
       // m_AutoHideMenu
       // 
-      this.m_AutoHideMenu.Name = "m_AutoHideMenu";
-      this.m_AutoHideMenu.Size = new System.Drawing.Size(180, 22);
-      this.m_AutoHideMenu.Text = "Auto Hide";
+      m_AutoHideMenu.Name = "m_AutoHideMenu";
+      m_AutoHideMenu.Size = new System.Drawing.Size(128, 22);
+      m_AutoHideMenu.Text = "Auto Hide";
       // 
       // toolStripSeparator2
       // 
-      this.toolStripSeparator2.Name = "toolStripSeparator2";
-      this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+      toolStripSeparator2.Name = "toolStripSeparator2";
+      toolStripSeparator2.Size = new System.Drawing.Size(125, 6);
       // 
       // m_CloseMenu
       // 
-      this.m_CloseMenu.Name = "m_CloseMenu";
-      this.m_CloseMenu.Size = new System.Drawing.Size(180, 22);
-      this.m_CloseMenu.Text = "Close";
+      m_CloseMenu.Name = "m_CloseMenu";
+      m_CloseMenu.Size = new System.Drawing.Size(128, 22);
+      m_CloseMenu.Text = "Close";
       // 
       // m_NotifyIcon
       // 
-      this.m_NotifyIcon.ContextMenuStrip = this.m_ContextMenu;
-      this.m_NotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("m_NotifyIcon.Icon")));
-      this.m_NotifyIcon.Text = "AutoCheck";
-      this.m_NotifyIcon.Visible = true;
-      this.m_NotifyIcon.Click += new System.EventHandler(this.m_NotifyIcon_Click);
+      m_NotifyIcon.ContextMenuStrip = m_ContextMenu;
+      m_NotifyIcon.Icon = (System.Drawing.Icon)resources.GetObject("m_NotifyIcon.Icon");
+      m_NotifyIcon.Text = "AutoCheck";
+      m_NotifyIcon.Visible = true;
+      m_NotifyIcon.Click += m_NotifyIcon_Click;
       // 
       // m_CloseButton
       // 
-      this.m_CloseButton.Location = new System.Drawing.Point(121, 377);
-      this.m_CloseButton.Name = "m_CloseButton";
-      this.m_CloseButton.Size = new System.Drawing.Size(75, 23);
-      this.m_CloseButton.TabIndex = 3;
-      this.m_CloseButton.Text = "Close";
-      this.m_CloseButton.UseVisualStyleBackColor = true;
-      this.m_CloseButton.Click += new System.EventHandler(this.m_CloseButton_Click);
+      m_CloseButton.Location = new System.Drawing.Point(145, 435);
+      m_CloseButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_CloseButton.Name = "m_CloseButton";
+      m_CloseButton.Size = new System.Drawing.Size(88, 27);
+      m_CloseButton.TabIndex = 3;
+      m_CloseButton.Text = "Close";
+      m_CloseButton.UseVisualStyleBackColor = true;
+      m_CloseButton.Click += m_CloseButton_Click;
       // 
       // groupBox3
       // 
-      this.groupBox3.Controls.Add(this.m_KeyCount);
-      this.groupBox3.Controls.Add(this.m_EChk);
-      this.groupBox3.Controls.Add(this.m_WChk);
-      this.groupBox3.Controls.Add(this.m_QChk);
-      this.groupBox3.Location = new System.Drawing.Point(5, 237);
-      this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(195, 100);
-      this.groupBox3.TabIndex = 7;
-      this.groupBox3.TabStop = false;
-      this.groupBox3.Text = "Auto QWE";
+      groupBox3.Controls.Add(m_KeyCount);
+      groupBox3.Controls.Add(m_EChk);
+      groupBox3.Controls.Add(m_WChk);
+      groupBox3.Controls.Add(m_QChk);
+      groupBox3.Location = new System.Drawing.Point(6, 273);
+      groupBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      groupBox3.Name = "groupBox3";
+      groupBox3.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      groupBox3.Size = new System.Drawing.Size(227, 115);
+      groupBox3.TabIndex = 7;
+      groupBox3.TabStop = false;
+      groupBox3.Text = "Auto QWE";
       // 
       // m_KeyCount
       // 
-      this.m_KeyCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.m_KeyCount.Location = new System.Drawing.Point(2, 60);
-      this.m_KeyCount.Name = "m_KeyCount";
-      this.m_KeyCount.Size = new System.Drawing.Size(134, 31);
-      this.m_KeyCount.TabIndex = 3;
-      this.m_KeyCount.Text = "...";
-      this.m_KeyCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      m_KeyCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
+      m_KeyCount.Location = new System.Drawing.Point(41, 66);
+      m_KeyCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      m_KeyCount.Name = "m_KeyCount";
+      m_KeyCount.Size = new System.Drawing.Size(144, 34);
+      m_KeyCount.TabIndex = 3;
+      m_KeyCount.Text = "...";
+      m_KeyCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
       // m_EChk
       // 
-      this.m_EChk.AutoSize = true;
-      this.m_EChk.Location = new System.Drawing.Point(103, 29);
-      this.m_EChk.Name = "m_EChk";
-      this.m_EChk.Size = new System.Drawing.Size(33, 17);
-      this.m_EChk.TabIndex = 1;
-      this.m_EChk.Text = "E";
-      this.m_EChk.UseVisualStyleBackColor = true;
-      this.m_EChk.CheckStateChanged += new System.EventHandler(this.OnEChkChanged);
+      m_EChk.AutoSize = true;
+      m_EChk.Location = new System.Drawing.Point(173, 33);
+      m_EChk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_EChk.Name = "m_EChk";
+      m_EChk.Size = new System.Drawing.Size(32, 19);
+      m_EChk.TabIndex = 1;
+      m_EChk.Text = "E";
+      m_EChk.UseVisualStyleBackColor = true;
+      m_EChk.CheckStateChanged += OnEChkChanged;
       // 
       // m_WChk
       // 
-      this.m_WChk.AutoSize = true;
-      this.m_WChk.Location = new System.Drawing.Point(50, 29);
-      this.m_WChk.Name = "m_WChk";
-      this.m_WChk.Size = new System.Drawing.Size(37, 17);
-      this.m_WChk.TabIndex = 1;
-      this.m_WChk.Text = "W";
-      this.m_WChk.UseVisualStyleBackColor = true;
-      this.m_WChk.CheckedChanged += new System.EventHandler(this.OnWChkChanged);
+      m_WChk.AutoSize = true;
+      m_WChk.Location = new System.Drawing.Point(89, 33);
+      m_WChk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_WChk.Name = "m_WChk";
+      m_WChk.Size = new System.Drawing.Size(37, 19);
+      m_WChk.TabIndex = 1;
+      m_WChk.Text = "W";
+      m_WChk.UseVisualStyleBackColor = true;
+      m_WChk.CheckedChanged += OnWChkChanged;
       // 
       // m_QChk
       // 
-      this.m_QChk.AutoSize = true;
-      this.m_QChk.Checked = true;
-      this.m_QChk.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_QChk.Location = new System.Drawing.Point(6, 29);
-      this.m_QChk.Name = "m_QChk";
-      this.m_QChk.Size = new System.Drawing.Size(34, 17);
-      this.m_QChk.TabIndex = 1;
-      this.m_QChk.Text = "Q";
-      this.m_QChk.UseVisualStyleBackColor = true;
-      this.m_QChk.CheckedChanged += new System.EventHandler(this.OnQChkChanged);
+      m_QChk.AutoSize = true;
+      m_QChk.Checked = true;
+      m_QChk.CheckState = System.Windows.Forms.CheckState.Checked;
+      m_QChk.Location = new System.Drawing.Point(7, 33);
+      m_QChk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_QChk.Name = "m_QChk";
+      m_QChk.Size = new System.Drawing.Size(35, 19);
+      m_QChk.TabIndex = 1;
+      m_QChk.Text = "Q";
+      m_QChk.UseVisualStyleBackColor = true;
+      m_QChk.CheckedChanged += OnQChkChanged;
       // 
       // _About
       // 
-      this._About.AutoSize = true;
-      this._About.ForeColor = System.Drawing.SystemColors.ControlDark;
-      this._About.Location = new System.Drawing.Point(12, 405);
-      this._About.Name = "_About";
-      this._About.Size = new System.Drawing.Size(13, 13);
-      this._About.TabIndex = 8;
-      this._About.Text = "..";
+      _About.AutoSize = true;
+      _About.ForeColor = System.Drawing.SystemColors.ControlDark;
+      _About.Location = new System.Drawing.Point(14, 467);
+      _About.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      _About.Name = "_About";
+      _About.Size = new System.Drawing.Size(13, 15);
+      _About.TabIndex = 8;
+      _About.Text = "..";
       // 
       // _SettingsButton
       // 
-      this._SettingsButton.Location = new System.Drawing.Point(121, 203);
-      this._SettingsButton.Name = "_SettingsButton";
-      this._SettingsButton.Size = new System.Drawing.Size(75, 23);
-      this._SettingsButton.TabIndex = 9;
-      this._SettingsButton.Text = "Settings...";
-      this._SettingsButton.UseVisualStyleBackColor = true;
-      this._SettingsButton.Click += new System.EventHandler(this._SettingsButton_Click_1);
+      _SettingsButton.Location = new System.Drawing.Point(145, 234);
+      _SettingsButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _SettingsButton.Name = "_SettingsButton";
+      _SettingsButton.Size = new System.Drawing.Size(88, 27);
+      _SettingsButton.TabIndex = 9;
+      _SettingsButton.Text = "Settings...";
+      _SettingsButton.UseVisualStyleBackColor = true;
+      _SettingsButton.Click += _SettingsButton_Click_1;
       // 
       // m_AutoMouse
       // 
-      this.m_AutoMouse.AutoSize = true;
-      this.m_AutoMouse.Checked = true;
-      this.m_AutoMouse.CheckState = System.Windows.Forms.CheckState.Checked;
-      this.m_AutoMouse.Location = new System.Drawing.Point(4, 343);
-      this.m_AutoMouse.Name = "m_AutoMouse";
-      this.m_AutoMouse.Size = new System.Drawing.Size(120, 17);
-      this.m_AutoMouse.TabIndex = 10;
-      this.m_AutoMouse.Text = "Right Mouse (Ctrl-A)";
-      this.m_AutoMouse.UseVisualStyleBackColor = true;
-      this.m_AutoMouse.CheckedChanged += new System.EventHandler(this.m_AutoMouse_CheckedChanged);
+      m_AutoMouse.AutoSize = true;
+      m_AutoMouse.Checked = true;
+      m_AutoMouse.CheckState = System.Windows.Forms.CheckState.Checked;
+      m_AutoMouse.Location = new System.Drawing.Point(6, 396);
+      m_AutoMouse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_AutoMouse.Name = "m_AutoMouse";
+      m_AutoMouse.Size = new System.Drawing.Size(136, 19);
+      m_AutoMouse.TabIndex = 10;
+      m_AutoMouse.Text = "Right Mouse (Ctrl-A)";
+      m_AutoMouse.UseVisualStyleBackColor = true;
+      m_AutoMouse.CheckedChanged += m_AutoMouse_CheckedChanged;
+      // 
+      // label2
+      // 
+      label2.AutoSize = true;
+      label2.Location = new System.Drawing.Point(100, 441);
+      label2.Name = "label2";
+      label2.Size = new System.Drawing.Size(37, 15);
+      label2.TabIndex = 4;
+      label2.Text = "Ctrl-0";
       // 
       // Form1
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(212, 427);
-      this.Controls.Add(this.m_AutoMouse);
-      this.Controls.Add(this._SettingsButton);
-      this.Controls.Add(this._About);
-      this.Controls.Add(this.m_ScanButton);
-      this.Controls.Add(this.groupBox3);
-      this.Controls.Add(this.groupBox2);
-      this.Controls.Add(this.groupBox1);
-      this.Controls.Add(this.m_CloseButton);
-      this.Controls.Add(this.m_StartButton);
-      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-      this.Location = new System.Drawing.Point(2, 250);
-      this.MaximizeBox = false;
-      this.Name = "Form1";
-      this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-      this.Text = "AutoCheck";
-      this.TopMost = true;
-      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
-      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
-      this.Load += new System.EventHandler(this.OnFormLoad);
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.m_VolumeCtrl)).EndInit();
-      this.groupBox2.ResumeLayout(false);
-      this.groupBox2.PerformLayout();
-      this.m_ContextMenu.ResumeLayout(false);
-      this.groupBox3.ResumeLayout(false);
-      this.groupBox3.PerformLayout();
-      this.ResumeLayout(false);
-      this.PerformLayout();
-
+      AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+      AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      ClientSize = new System.Drawing.Size(247, 493);
+      Controls.Add(label2);
+      Controls.Add(m_AutoMouse);
+      Controls.Add(_SettingsButton);
+      Controls.Add(_About);
+      Controls.Add(m_ScanButton);
+      Controls.Add(groupBox3);
+      Controls.Add(groupBox2);
+      Controls.Add(groupBox1);
+      Controls.Add(m_CloseButton);
+      Controls.Add(m_StartButton);
+      FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+      Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+      Location = new System.Drawing.Point(2, 250);
+      Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      MaximizeBox = false;
+      Name = "Form1";
+      StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+      Text = "AutoCheck";
+      TopMost = true;
+      FormClosing += OnFormClosing;
+      FormClosed += OnFormClosed;
+      Load += OnFormLoad;
+      groupBox1.ResumeLayout(false);
+      groupBox1.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)m_VolumeCtrl).EndInit();
+      groupBox2.ResumeLayout(false);
+      groupBox2.PerformLayout();
+      m_ContextMenu.ResumeLayout(false);
+      groupBox3.ResumeLayout(false);
+      groupBox3.PerformLayout();
+      ResumeLayout(false);
+      PerformLayout();
     }
 
     #endregion
@@ -405,6 +431,7 @@
     private System.Windows.Forms.ProgressBar m_WPBar;
     private System.Windows.Forms.Button _SettingsButton;
     private System.Windows.Forms.CheckBox m_AutoMouse;
+    private System.Windows.Forms.Label label2;
   }
 }
 

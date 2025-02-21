@@ -99,7 +99,7 @@ namespace AutoCheck
     private void UpdateLabel()
     {
       if (_label.InvokeRequired)
-        _label.BeginInvoke((MethodInvoker)(() => _label.Text = _count.ToString()));
+        _label.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => _label.Text = _count.ToString()));
       else
         _label.Text = _count.ToString();
     }

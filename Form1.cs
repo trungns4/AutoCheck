@@ -54,7 +54,7 @@ namespace AutoCheck
     {
       LoadData();
 
-      _About.Text = this.GetType().Assembly.GetName().Version.ToString();
+      _About.Text = this.GetType().Assembly.GetName().Version.ToString() + " © by Alex";
       _threadQ = new AutoKeyThread('q', _settings.Q, new ProgressBarAdapter(m_QPBar));
       _threadW = new AutoKeyThread('w', _settings.W, new ProgressBarAdapter(m_WPBar));
 
@@ -103,7 +103,7 @@ namespace AutoCheck
         else if (e.KeyCode == System.Windows.Forms.Keys.A)
         {
           _settings.M._auto = !_settings.M._auto;
-          m_AutoMouse.BeginInvoke((MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
+          m_AutoMouse.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
         }
       }
     }
@@ -197,12 +197,6 @@ namespace AutoCheck
       if (_sharp == null)
       {
         MessageBox.Show("Could not read the memory", Resources.MsgBoxCaption);
-        return false;
-      }
-
-      if (_addr == 0)
-      {
-        MessageBox.Show("Address is invalid. Perform a scanning first", Resources.MsgBoxCaption);
         return false;
       }
 
