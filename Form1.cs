@@ -177,6 +177,7 @@ namespace AutoCheck
       if (f.ShowDialog() == DialogResult.OK)
       {
         _addr = f.GetAddress();
+        SaveAddress();
       }
     }
     //----------------------------------------------------------------------------------
@@ -211,8 +212,7 @@ namespace AutoCheck
       m_StartMenu.Text = "Stop";
       _SettingsButton.Enabled = false;
 
-      var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-      while (stopwatch.ElapsedMilliseconds < 10) { /* Do nothing */ }
+      Thread.Sleep(50);
       return true;
     }
     //----------------------------------------------------------------------------------
