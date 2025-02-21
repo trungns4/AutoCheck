@@ -49,10 +49,14 @@ namespace AutoCheck
       _count = 0;
       _qThread.Start();
 
+      Thread.Sleep(500);
+
       _wThread = new Thread(() => Run('w'));
       _wThread.IsBackground = true;
       _wThread.Priority = ThreadPriority.Normal;
       _wThread.Start();
+
+      Thread.Sleep(500);
 
       _eThread = new Thread(() => Run('e'));
       _eThread.IsBackground = true;

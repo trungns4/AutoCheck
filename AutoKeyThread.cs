@@ -98,8 +98,10 @@ namespace AutoCheck
       _isRunning = true;
       _thread = new Thread(RunMemoryCheck);
       _thread.IsBackground = true;
-      _thread.Priority = ThreadPriority.Highest;
+      _thread.Priority = ThreadPriority.Normal;
       _thread.Start();
+
+      Thread.Sleep(50);
 
       _keyThread = new Thread(RunKeyCheck);
       _keyThread.IsBackground = true;

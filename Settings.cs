@@ -25,8 +25,8 @@ namespace AutoCheck
     public MouseThreadSettings()
     {
       _auto = true;
-      _clickDelay = 32;
-      _threadDelay = 32;
+      _clickDelay = 100;
+      _threadDelay = 100;
     }
   }
 
@@ -47,11 +47,11 @@ namespace AutoCheck
     {
       _auto = true;
       _autoKey = true;
-      _keyUpDelay = 16;
-      _keyDownDelay = 16;
+      _keyUpDelay = 32;
+      _keyDownDelay = 32;
       _keyThreadDelay = 32;
-      _memThreadDelay = 16;
-      _warnThreadDelay = 16;
+      _memThreadDelay = 32;
+      _warnThreadDelay = 32;
       _scale = 0.99f;
       _warnScale = 0.96f;
       _warnVolume = 0.5f;
@@ -79,17 +79,17 @@ namespace AutoCheck
       _w = false;
       _e = false;
 
-      _keyUpDelayQ = 16;
-      _keyDownDelayQ = 16;
-      _threadDelayQ = 16;
+      _keyUpDelayQ = 32;
+      _keyDownDelayQ = 32;
+      _threadDelayQ = 32;
 
-      _keyUpDelayW = 16;
-      _keyDownDelayW = 16;
-      _threadDelayW = 16;
+      _keyUpDelayW = 28;
+      _keyDownDelayW = 28;
+      _threadDelayW = 28;
 
-      _keyUpDelayE = 16;
-      _keyDownDelayE = 16;
-      _threadDelayE = 16;
+      _keyUpDelayE = 30;
+      _keyDownDelayE = 30;
+      _threadDelayE = 30;
     }
   }
 
