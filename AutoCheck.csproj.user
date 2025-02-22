@@ -4,16 +4,16 @@
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="Form1.cs">
+    <Compile Update="UI\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="ScanHPForm.cs">
+    <Compile Update="UI\ScanHPForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="ScanPortionForm.cs">
+    <Compile Update="UI\ScanPortionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="SettingsForm.cs">
+    <Compile Update="UI\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

@@ -12,16 +12,7 @@ namespace AutoCheck
   {
     static Mutex mutex = new Mutex(true, "_AUTOCHECK_");
 
-    [DllImport("user32.dll")]
-    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
-    [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-    [DllImport("user32.dll")]
-    private static extern bool SetForegroundWindow(IntPtr hWnd);
-
-    private const int SW_RESTORE = 9;
 
     /// <summary>
     /// The main entry point for the application.
@@ -44,11 +35,11 @@ namespace AutoCheck
       else
       {
         // Bring existing instance to the foreground
-        IntPtr hWnd = FindWindow(null, "AutoCheck"); 
+        IntPtr hWnd = Utils.FindWindow("AutoCheck"); 
         if (hWnd != IntPtr.Zero)
         {
-          ShowWindow(hWnd, SW_RESTORE);
-          SetForegroundWindow(hWnd);
+          Utils.ShowWindow(hWnd);
+          Utils.SetForegroundWindow(hWnd);
         }
       }
     }

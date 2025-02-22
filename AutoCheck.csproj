@@ -23,11 +23,17 @@
     <NoWarn>1701;1702;CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="AutoCheckPlus\**" />
     <Compile Remove="Driver\**" />
+    <Compile Remove="Misc\**" />
     <Compile Remove="packages\**" />
+    <EmbeddedResource Remove="AutoCheckPlus\**" />
     <EmbeddedResource Remove="Driver\**" />
+    <EmbeddedResource Remove="Misc\**" />
     <EmbeddedResource Remove="packages\**" />
+    <None Remove="AutoCheckPlus\**" />
     <None Remove="Driver\**" />
+    <None Remove="Misc\**" />
     <None Remove="packages\**" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +75,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Update="alarm2.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

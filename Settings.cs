@@ -21,7 +21,6 @@ namespace AutoCheck
     public int _clickDelay { get; set; }
     public int _threadDelay { get; set; }
 
-
     public MouseThreadSettings()
     {
       _auto = true;
@@ -29,6 +28,7 @@ namespace AutoCheck
       _threadDelay = 50;
     }
   }
+
 
   public class QWMemThreadSettings
   {
@@ -95,10 +95,10 @@ namespace AutoCheck
 
   public class Settings
   {
-    public QWMemThreadSettings Q { get; set; }
-    public QWMemThreadSettings W { get; set; }
-    public QWEThreadSettings QWE { get; set; }
-    public MouseThreadSettings M { get; set; }
+    public QWMemThreadSettings Q { get; }
+    public QWMemThreadSettings W { get; }
+    public QWEThreadSettings QWE { get; }
+    public MouseThreadSettings M { get; }
 
     public Settings()
     {
@@ -146,63 +146,7 @@ namespace AutoCheck
         // Deserialize into a temporary object
         Settings tempSettings = JsonConvert.DeserializeObject<Settings>(json);
 
-        if (tempSettings != null)
-        {
-          // Update complex nested objects by copying values
-          if (tempSettings.Q != null)
-          {
-            Q._auto = tempSettings.Q._auto;
-            Q._autoKey = tempSettings.Q._autoKey;
-            Q._keyUpDelay = tempSettings.Q._keyUpDelay;
-            Q._keyDownDelay = tempSettings.Q._keyDownDelay;
-            Q._keyThreadDelay = tempSettings.Q._keyThreadDelay;
-            Q._memThreadDelay = tempSettings.Q._memThreadDelay;
-            Q._warnThreadDelay = tempSettings.Q._warnThreadDelay;
-            Q._scale = tempSettings.Q._scale;
-            Q._warnScale = tempSettings.Q._warnScale;
-            Q._warnVolume = tempSettings.Q._warnVolume;
-          }
-
-          if (tempSettings.W != null)
-          {
-            W._auto = tempSettings.W._auto;
-            W._autoKey = tempSettings.W._autoKey;
-            W._keyUpDelay = tempSettings.W._keyUpDelay;
-            W._keyDownDelay = tempSettings.W._keyDownDelay;
-            W._keyThreadDelay = tempSettings.W._keyThreadDelay;
-            W._memThreadDelay = tempSettings.W._memThreadDelay;
-            W._warnThreadDelay = tempSettings.W._warnThreadDelay;
-            W._scale = tempSettings.W._scale;
-            W._warnScale = tempSettings.W._warnScale;
-            W._warnVolume = tempSettings.W._warnVolume;
-          }
-
-          if (tempSettings.QWE != null)
-          {
-            QWE._q = tempSettings.QWE._q;
-            QWE._w = tempSettings.QWE._w;
-            QWE._e = tempSettings.QWE._e;
-
-            QWE._keyUpDelayQ = tempSettings.QWE._keyUpDelayQ;
-            QWE._keyDownDelayQ = tempSettings.QWE._keyDownDelayQ;
-            QWE._threadDelayQ = tempSettings.QWE._threadDelayQ;
-
-            QWE._keyUpDelayW = tempSettings.QWE._keyUpDelayW;
-            QWE._keyDownDelayW = tempSettings.QWE._keyDownDelayW;
-            QWE._threadDelayW = tempSettings.QWE._threadDelayW;
-
-            QWE._keyUpDelayE = tempSettings.QWE._keyUpDelayE;
-            QWE._keyDownDelayE = tempSettings.QWE._keyDownDelayE;
-            QWE._threadDelayE = tempSettings.QWE._threadDelayE;
-          }
-
-          if (tempSettings.M != null)
-          {
-            M._auto = tempSettings.M._auto;
-            M._clickDelay = tempSettings.M._clickDelay;
-            M._threadDelay = tempSettings.M._threadDelay;
-          }
-        }
+        CopyFrom(tempSettings);
 
         return true;
       }

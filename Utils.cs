@@ -57,6 +57,11 @@ namespace AutoCheck
       public int Bottom;
     }
 
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    private const int SW_RESTORE = 9;
+
     public static void GetWindowRectangle(IntPtr hWnd, out int left, out int top, out int right, out int bottom)
     {
       GetWindowRect(hWnd, out RECT rect);
@@ -211,6 +216,12 @@ namespace AutoCheck
       }
     }
     //----------------------------------------------------------------------------------
+    public static bool IsKeyHeld(char key)
+    {
+      int vKey = char.ToUpper(key); // Convert to uppercase to match virtual key codes
+      return (GetAsyncKeyState(vKey) & 0x8000) != 0;
+    }
+    //----------------------------------------------------------------------------------
     public static void CloseApps()
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -238,6 +249,17 @@ namespace AutoCheck
           }
         }
       }
+    }
+
+    //----------------------------------------------------------------------------------
+    public static void ShowWindow(IntPtr hWnd)
+    {
+      ShowWindow(hWnd, SW_RESTORE);
+    }
+    //----------------------------------------------------------------------------------
+    public static IntPtr FindWindow(string lpWindowName)
+    {
+      return FindWindow(null, lpWindowName);
     }
   }
 }

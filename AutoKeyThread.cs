@@ -13,6 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsInput;
 using WindowsInput.Native;
@@ -52,13 +53,7 @@ namespace AutoCheck
 
     private bool _isRunning = false;
     private bool _full = false;
-
-    //warning
-    private string _warnSound = "alarm.mp3";
-
-    private WaveOutEvent m_outputDevice;
-    private AudioFileReader m_audioFile;
-
+    private SoundPlayer _player;
     private VirtualKeyCode _keyCode;
 
     //---------------------------------------------------------------------------------------
@@ -69,6 +64,7 @@ namespace AutoCheck
       _key = key;
       _keyCode = Utils.KeyCode(_key);
       _settings = settings;
+      _player = new SoundPlayer("alarm2.mp3", _settings._warnVolume);
     }
     //---------------------------------------------------------------------------------------
     public bool Start(MemorySharp sharp, long curAddr, long maxAddr)
@@ -78,17 +74,13 @@ namespace AutoCheck
       _curAdr = curAddr;
       _maxAdr = maxAddr;
 
-      //if this thread needs warning ==> load mp3 player
       if (_settings._warnScale != 0)
       {
-        string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        string file = Path.Combine(exeDirectory, _warnSound);
-        m_outputDevice = new WaveOutEvent();
-        m_audioFile = new AudioFileReader(file)
-        {
-          Volume = 1.0f
-        };
-        m_outputDevice.Init(m_audioFile);
+        _player.Volume = _settings._warnVolume;
+      }
+      else
+      {
+        _player.Volume = 0;
       }
 
       _curVal = 0;
@@ -156,14 +148,7 @@ namespace AutoCheck
         _warnThread = null;
       }
 
-      if (m_outputDevice != null)
-      {
-        m_outputDevice.Dispose();
-        m_audioFile.Dispose();
-
-        m_outputDevice = null;
-        m_audioFile = null;
-      }
+      _player.Stop();
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       log.Info($"Thread {_key} stopped");
@@ -186,25 +171,13 @@ namespace AutoCheck
     //---------------------------------------------------------------------------------------
     private void PlayAlarm(bool play)
     {
-      if (play == true)
+      if (play)
       {
-        if (m_outputDevice != null && m_outputDevice.PlaybackState != PlaybackState.Playing)
-        {
-          m_outputDevice.Volume = _settings._warnVolume;
-
-          if ((m_audioFile.TotalTime - m_audioFile.CurrentTime).TotalMilliseconds <= 100)
-          {
-            m_audioFile.CurrentTime = new TimeSpan();
-          }
-          m_outputDevice.Play();
-        }
+        Task.Run(() => _player.Play(TimeSpan.FromSeconds(10000)));
       }
       else
       {
-        if (m_outputDevice != null && m_outputDevice.PlaybackState == PlaybackState.Playing)
-        {
-          m_outputDevice.Stop();
-        }
+        _player.Stop();
       }
     }
     //---------------------------------------------------------------------------------------
