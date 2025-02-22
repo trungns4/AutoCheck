@@ -36,10 +36,7 @@ namespace AutoCheck
     private AutoMouseThread _mThread = null;
     private bool _starting = false;
 
-    private System.Windows.Forms.Timer m_Timer;
     private bool m_bForcingClose = false;
-    private bool m_bAutoHide = false;
-    private string m_window = "";
 
     private IKeyboardMouseEvents m_GlobalHook;
     private Settings _settings = new Settings();
@@ -74,14 +71,7 @@ namespace AutoCheck
       m_CloseMenu.Click += OnCloseMenu_Click;
       m_HideMenu.Click += OnHideMenu_Click;
       m_ShowMenu.Click += OnShowMenu_Click;
-      m_AutoHideMenu.Click += OnAutoHideMenu_Click;
       m_StartMenu.Click += OnStartMenuClick;
-
-      m_window = System.Configuration.ConfigurationManager.AppSettings["window"].ToUpper();
-      m_Timer = new System.Windows.Forms.Timer();
-      m_Timer.Interval = 3000;
-      m_Timer.Tick += OnTimer_Tick;
-      m_Timer.Start();
     }
     //----------------------------------------------------------------------------------
     private void OnKeyUp(object sender, KeyEventArgs e)
@@ -114,17 +104,6 @@ namespace AutoCheck
       ToggleStartStop();
     }
     //----------------------------------------------------------------------------------
-    private void OnAutoHideMenu_Click(object sender, EventArgs e)
-    {
-      m_bAutoHide = !m_bAutoHide;
-      m_AutoHideMenu.Checked = m_bAutoHide;
-    }
-    //----------------------------------------------------------------------------------
-    private void OnTimer_Tick(object sender, EventArgs e)
-    {
-      CheckWindows();
-    }
-    //----------------------------------------------------------------------------------
     private void OnShowMenu_Click(object sender, EventArgs e)
     {
       ShowMe(true);
@@ -143,7 +122,6 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void m_ContextMenu_Opened(object sender, EventArgs e)
     {
-      m_AutoHideMenu.Checked = m_bAutoHide;
     }
     //----------------------------------------------------------------------------------
     private void OnFormClosing(object sender, FormClosingEventArgs e)
@@ -166,9 +144,6 @@ namespace AutoCheck
 
       SaveData();
       Stop();
-
-      m_Timer.Tick -= OnTimer_Tick;
-      m_Timer.Stop();
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
@@ -350,21 +325,7 @@ namespace AutoCheck
     {
       _settings.Q._warnVolume = (float)m_VolumeCtrl.Value / (float)m_VolumeCtrl.Maximum;
     }
-    //--------------------------------------------------------------------------------------------
-    private void CheckWindows()
-    {
-      if (m_bAutoHide == false)
-      {
-        return;
-      }
-
-      if (m_window == "*" || FindWindow(m_window) == true)
-      {
-        return;
-      }
-
-      ShowMe(false);
-    }
+  
     //----------------------------------------------------------------------------------
     private void ShowMe(bool show)
     {
@@ -380,21 +341,6 @@ namespace AutoCheck
         m_ShowMenu.Visible = true;
         m_HideMenu.Visible = false;
       }
-    }
-    //----------------------------------------------------------------------------------
-    private bool FindWindow(string name)
-    {
-      foreach (Process process in Process.GetProcesses())
-      {
-        if (!String.IsNullOrEmpty(process.MainWindowTitle))
-        {
-          if (process.MainWindowTitle.ToUpper().Contains(name.ToUpper()))
-          {
-            return true;
-          }
-        }
-      }
-      return false;
     }
     //----------------------------------------------------------------------------------
     private void m_CloseButton_Click(object sender, EventArgs e)

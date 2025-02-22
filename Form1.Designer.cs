@@ -46,7 +46,6 @@
       m_ShowMenu = new System.Windows.Forms.ToolStripMenuItem();
       m_HideMenu = new System.Windows.Forms.ToolStripMenuItem();
       toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-      m_AutoHideMenu = new System.Windows.Forms.ToolStripMenuItem();
       toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
       m_CloseMenu = new System.Windows.Forms.ToolStripMenuItem();
       m_NotifyIcon = new System.Windows.Forms.NotifyIcon(components);
@@ -183,54 +182,48 @@
       // 
       // m_ContextMenu
       // 
-      m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { m_StartMenu, toolStripSeparator3, m_ShowMenu, m_HideMenu, toolStripSeparator1, m_AutoHideMenu, toolStripSeparator2, m_CloseMenu });
+      m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { m_StartMenu, toolStripSeparator3, m_ShowMenu, m_HideMenu, toolStripSeparator1, toolStripSeparator2, m_CloseMenu });
       m_ContextMenu.Name = "m_ContextMenu";
-      m_ContextMenu.Size = new System.Drawing.Size(129, 132);
+      m_ContextMenu.Size = new System.Drawing.Size(181, 132);
       m_ContextMenu.Opened += m_ContextMenu_Opened;
       // 
       // m_StartMenu
       // 
       m_StartMenu.Name = "m_StartMenu";
-      m_StartMenu.Size = new System.Drawing.Size(128, 22);
+      m_StartMenu.Size = new System.Drawing.Size(180, 22);
       m_StartMenu.Text = "Start";
       // 
       // toolStripSeparator3
       // 
       toolStripSeparator3.Name = "toolStripSeparator3";
-      toolStripSeparator3.Size = new System.Drawing.Size(125, 6);
+      toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
       // 
       // m_ShowMenu
       // 
       m_ShowMenu.Name = "m_ShowMenu";
-      m_ShowMenu.Size = new System.Drawing.Size(128, 22);
+      m_ShowMenu.Size = new System.Drawing.Size(180, 22);
       m_ShowMenu.Text = "Show";
       // 
       // m_HideMenu
       // 
       m_HideMenu.Name = "m_HideMenu";
-      m_HideMenu.Size = new System.Drawing.Size(128, 22);
+      m_HideMenu.Size = new System.Drawing.Size(180, 22);
       m_HideMenu.Text = "Hide";
       // 
       // toolStripSeparator1
       // 
       toolStripSeparator1.Name = "toolStripSeparator1";
-      toolStripSeparator1.Size = new System.Drawing.Size(125, 6);
-      // 
-      // m_AutoHideMenu
-      // 
-      m_AutoHideMenu.Name = "m_AutoHideMenu";
-      m_AutoHideMenu.Size = new System.Drawing.Size(128, 22);
-      m_AutoHideMenu.Text = "Auto Hide";
+      toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
       // 
       // toolStripSeparator2
       // 
       toolStripSeparator2.Name = "toolStripSeparator2";
-      toolStripSeparator2.Size = new System.Drawing.Size(125, 6);
+      toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
       // 
       // m_CloseMenu
       // 
       m_CloseMenu.Name = "m_CloseMenu";
-      m_CloseMenu.Size = new System.Drawing.Size(128, 22);
+      m_CloseMenu.Size = new System.Drawing.Size(180, 22);
       m_CloseMenu.Text = "Close";
       // 
       // m_NotifyIcon
@@ -410,7 +403,6 @@
     private System.Windows.Forms.CheckBox m_AutoW;
     private System.Windows.Forms.TrackBar m_VolumeCtrl;
     private System.Windows.Forms.ContextMenuStrip m_ContextMenu;
-    private System.Windows.Forms.ToolStripMenuItem m_AutoHideMenu;
     private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     private System.Windows.Forms.ToolStripMenuItem m_ShowMenu;
     private System.Windows.Forms.ToolStripMenuItem m_HideMenu;
