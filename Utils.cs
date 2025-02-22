@@ -1,6 +1,7 @@
 ﻿using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Native;
 using log4net;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -27,23 +28,25 @@ namespace AutoCheck
     private static extern IntPtr GetForegroundWindow();
 
     [DllImport("user32.dll")]
-    public static extern short VkKeyScan(char ch);
-
-
-    [DllImport("user32.dll")]
     public static extern bool SetForegroundWindow(IntPtr hWnd);
 
     [DllImport("user32.dll")]
+    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+    [DllImport("user32.dll")]
     public static extern bool GetCursorPos(out POINT lpPoint);
+
+    [DllImport("user32.dll")]
+    public static extern short VkKeyScan(char ch);
+
+    [DllImport("user32.dll")]
+    private static extern short GetAsyncKeyState(int vKey);
 
     public struct POINT
     {
       public int X;
       public int Y;
     }
-
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT
@@ -62,7 +65,7 @@ namespace AutoCheck
       right = rect.Right;
       bottom = rect.Bottom;
     }
-
+    //----------------------------------------------------------------------------------
     public static MemorySharp CreateMemorySharp()
     {
       var processId = GetProcessId();
@@ -72,10 +75,10 @@ namespace AutoCheck
       }
       return new MemorySharp(processId.Value);
     }
-
+    //----------------------------------------------------------------------------------
     public static int? GetProcessId()
     {
-      var windowName = System.Configuration.ConfigurationManager.AppSettings["window"].ToUpper();
+      var windowName = GetConfigString("window").ToUpper();
 
       IntPtr hWnd = FindWindow(null, windowName);
       if (hWnd == IntPtr.Zero)
@@ -92,12 +95,12 @@ namespace AutoCheck
 
       return (int)processId;
     }
-
+    //----------------------------------------------------------------------------------
     public static bool IsWindowActive(int id)
     {
       return (GetWindowThreadProcessId(GetForegroundWindow(), out uint pid), pid == id).Item2;
     }
-
+    //----------------------------------------------------------------------------------
     public static void SetWindowActive(int processId)
     {
       IntPtr hwnd = GetMainWindowHandle(processId);
@@ -106,19 +109,19 @@ namespace AutoCheck
         SetForegroundWindow(hwnd);
       }
     }
-
+    //----------------------------------------------------------------------------------
     public static IntPtr GetMainWindowHandle(int processId)
     {
       Process process = Process.GetProcessById(processId);
       return process.MainWindowHandle;
     }
-
+    //----------------------------------------------------------------------------------
     public static VirtualKeyCode KeyCode(char ch)
     {
       short vkey = VkKeyScan(ch);
       return (VirtualKeyCode)(vkey & 0xFF);
     }
-
+    //----------------------------------------------------------------------------------
     public static int GetConfigInt(string name, int def = 0)
     {
       if (System.Configuration.ConfigurationManager.AppSettings.AllKeys.Contains(name))
@@ -130,7 +133,7 @@ namespace AutoCheck
       }
       return def;
     }
-
+    //----------------------------------------------------------------------------------
     public static double GetConfigDouble(string name, double def = 0)
     {
       if (System.Configuration.ConfigurationManager.AppSettings.AllKeys.Contains(name))
@@ -142,7 +145,7 @@ namespace AutoCheck
       }
       return def;
     }
-
+    //----------------------------------------------------------------------------------
     public static string GetConfigString(string name, string def = "")
     {
       if (System.Configuration.ConfigurationManager.AppSettings.AllKeys.Contains(name))
@@ -151,14 +154,14 @@ namespace AutoCheck
       }
       return def;
     }
-
+    //----------------------------------------------------------------------------------
     public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
     {
       if (value.CompareTo(min) < 0) return min;
       if (value.CompareTo(max) > 0) return max;
       return value;
     }
-
+    //----------------------------------------------------------------------------------
     public static T Get<T>(JObject settings, string key, T defaultValue)
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -187,7 +190,7 @@ namespace AutoCheck
         return defaultValue;
       }
     }
-
+    //----------------------------------------------------------------------------------
     public static void GetMouse(out int x, out int y)
     {
       GetCursorPos(out POINT p);
@@ -195,9 +198,7 @@ namespace AutoCheck
       y = p.Y;
     }
 
-    [DllImport("user32.dll")]
-    private static extern short GetAsyncKeyState(int vKey);
-
+    //----------------------------------------------------------------------------------
     public static bool IsAlt()
     {
       if ((GetAsyncKeyState(0x12) & 0x8000) != 0) // 0x12 is VK_MENU (Alt key)
@@ -207,6 +208,35 @@ namespace AutoCheck
       else
       {
         return false;
+      }
+    }
+    //----------------------------------------------------------------------------------
+    public static void CloseApps()
+    {
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+      var apps = GetConfigString("closeApps").Split(";");
+
+      foreach (var app in apps)
+      {
+        var processes = Process.GetProcesses()
+                                   .Where(p => p.ProcessName.StartsWith(app, StringComparison.OrdinalIgnoreCase))
+                                   .ToList();
+
+        if (processes.Count > 0)
+        {
+          foreach (Process process in processes)
+          {
+            try
+            {
+              process.Kill();
+              process.WaitForExit();
+              log.InfoFormat("Terminated app {0}", app);
+            }
+            catch
+            {
+            }
+          }
+        }
       }
     }
   }

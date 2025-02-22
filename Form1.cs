@@ -195,6 +195,7 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private bool Start()
     {
+      Utils.CloseApps();
       _sharp = Utils.CreateMemorySharp();
       if (_sharp == null)
       {
