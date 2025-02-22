@@ -28,154 +28,150 @@
     /// </summary>
     private void InitializeComponent()
     {
-      this._OKButton = new System.Windows.Forms.Button();
-      this._CancelButton = new System.Windows.Forms.Button();
-      this.label1 = new System.Windows.Forms.Label();
-      this._InputBox = new System.Windows.Forms.TextBox();
-      this._ProgBar = new System.Windows.Forms.ProgressBar();
-      this._ScanButton = new System.Windows.Forms.Button();
-      this._AdrBox = new System.Windows.Forms.TextBox();
-      this._StopButton = new System.Windows.Forms.Button();
-      this.m_OffsetBox = new System.Windows.Forms.NumericUpDown();
-      this.label2 = new System.Windows.Forms.Label();
-      ((System.ComponentModel.ISupportInitialize)(this.m_OffsetBox)).BeginInit();
-      this.SuspendLayout();
+      _OKButton = new System.Windows.Forms.Button();
+      _CancelButton = new System.Windows.Forms.Button();
+      label1 = new System.Windows.Forms.Label();
+      _InputBox = new System.Windows.Forms.TextBox();
+      _ProgBar = new System.Windows.Forms.ProgressBar();
+      _ScanButton = new System.Windows.Forms.Button();
+      _AdrBox = new System.Windows.Forms.TextBox();
+      _StopButton = new System.Windows.Forms.Button();
+      m_OffsetBox = new System.Windows.Forms.NumericUpDown();
+      label2 = new System.Windows.Forms.Label();
+      ((System.ComponentModel.ISupportInitialize)m_OffsetBox).BeginInit();
+      SuspendLayout();
       // 
       // _OKButton
       // 
-      this._OKButton.Location = new System.Drawing.Point(183, 77);
-      this._OKButton.Name = "_OKButton";
-      this._OKButton.Size = new System.Drawing.Size(75, 23);
-      this._OKButton.TabIndex = 0;
-      this._OKButton.Text = "OK";
-      this._OKButton.UseVisualStyleBackColor = true;
-      this._OKButton.Click += new System.EventHandler(this._OKButton_Click);
+      _OKButton.Location = new System.Drawing.Point(214, 89);
+      _OKButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _OKButton.Name = "_OKButton";
+      _OKButton.Size = new System.Drawing.Size(88, 27);
+      _OKButton.TabIndex = 0;
+      _OKButton.Text = "OK";
+      _OKButton.UseVisualStyleBackColor = true;
+      _OKButton.Click += _OKButton_Click;
       // 
       // _CancelButton
       // 
-      this._CancelButton.Location = new System.Drawing.Point(264, 77);
-      this._CancelButton.Name = "_CancelButton";
-      this._CancelButton.Size = new System.Drawing.Size(75, 23);
-      this._CancelButton.TabIndex = 1;
-      this._CancelButton.Text = "Cancel";
-      this._CancelButton.UseVisualStyleBackColor = true;
-      this._CancelButton.Click += new System.EventHandler(this._CancelButton_Click);
+      _CancelButton.Location = new System.Drawing.Point(308, 89);
+      _CancelButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _CancelButton.Name = "_CancelButton";
+      _CancelButton.Size = new System.Drawing.Size(88, 27);
+      _CancelButton.TabIndex = 1;
+      _CancelButton.Text = "Cancel";
+      _CancelButton.UseVisualStyleBackColor = true;
+      _CancelButton.Click += _CancelButton_Click;
       // 
       // label1
       // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(21, 7);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(22, 13);
-      this.label1.TabIndex = 2;
-      this.label1.Text = "HP";
-      this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      label1.AutoSize = true;
+      label1.Location = new System.Drawing.Point(24, 8);
+      label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      label1.Name = "label1";
+      label1.Size = new System.Drawing.Size(23, 15);
+      label1.TabIndex = 2;
+      label1.Text = "HP";
+      label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // _InputBox
       // 
-      this._InputBox.Location = new System.Drawing.Point(21, 23);
-      this._InputBox.Name = "_InputBox";
-      this._InputBox.Size = new System.Drawing.Size(98, 20);
-      this._InputBox.TabIndex = 3;
+      _InputBox.Location = new System.Drawing.Point(24, 27);
+      _InputBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _InputBox.Name = "_InputBox";
+      _InputBox.Size = new System.Drawing.Size(114, 23);
+      _InputBox.TabIndex = 3;
       // 
       // _ProgBar
       // 
-      this._ProgBar.Location = new System.Drawing.Point(21, 49);
-      this._ProgBar.Name = "_ProgBar";
-      this._ProgBar.Size = new System.Drawing.Size(320, 13);
-      this._ProgBar.TabIndex = 4;
-      this._ProgBar.Visible = false;
+      _ProgBar.Location = new System.Drawing.Point(24, 57);
+      _ProgBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _ProgBar.Name = "_ProgBar";
+      _ProgBar.Size = new System.Drawing.Size(373, 15);
+      _ProgBar.TabIndex = 4;
+      _ProgBar.Visible = false;
       // 
       // _ScanButton
       // 
-      this._ScanButton.Location = new System.Drawing.Point(21, 77);
-      this._ScanButton.Name = "_ScanButton";
-      this._ScanButton.Size = new System.Drawing.Size(75, 23);
-      this._ScanButton.TabIndex = 5;
-      this._ScanButton.Text = "Scan";
-      this._ScanButton.UseVisualStyleBackColor = true;
-      this._ScanButton.Click += new System.EventHandler(this._Scan_Click);
+      _ScanButton.Location = new System.Drawing.Point(24, 89);
+      _ScanButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _ScanButton.Name = "_ScanButton";
+      _ScanButton.Size = new System.Drawing.Size(88, 27);
+      _ScanButton.TabIndex = 5;
+      _ScanButton.Text = "Scan";
+      _ScanButton.UseVisualStyleBackColor = true;
+      _ScanButton.Click += _Scan_Click;
       // 
       // _AdrBox
       // 
-      this._AdrBox.Location = new System.Drawing.Point(243, 23);
-      this._AdrBox.Name = "_AdrBox";
-      this._AdrBox.ReadOnly = true;
-      this._AdrBox.Size = new System.Drawing.Size(98, 20);
-      this._AdrBox.TabIndex = 6;
+      _AdrBox.Location = new System.Drawing.Point(284, 27);
+      _AdrBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _AdrBox.Name = "_AdrBox";
+      _AdrBox.ReadOnly = true;
+      _AdrBox.Size = new System.Drawing.Size(114, 23);
+      _AdrBox.TabIndex = 6;
       // 
       // _StopButton
       // 
-      this._StopButton.Location = new System.Drawing.Point(102, 77);
-      this._StopButton.Name = "_StopButton";
-      this._StopButton.Size = new System.Drawing.Size(75, 23);
-      this._StopButton.TabIndex = 7;
-      this._StopButton.Text = "Stop";
-      this._StopButton.UseVisualStyleBackColor = true;
+      _StopButton.Location = new System.Drawing.Point(119, 89);
+      _StopButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _StopButton.Name = "_StopButton";
+      _StopButton.Size = new System.Drawing.Size(88, 27);
+      _StopButton.TabIndex = 7;
+      _StopButton.Text = "Stop";
+      _StopButton.UseVisualStyleBackColor = true;
       // 
       // m_OffsetBox
       // 
-      this.m_OffsetBox.Location = new System.Drawing.Point(132, 23);
-      this.m_OffsetBox.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-      this.m_OffsetBox.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-      this.m_OffsetBox.Name = "m_OffsetBox";
-      this.m_OffsetBox.Size = new System.Drawing.Size(98, 20);
-      this.m_OffsetBox.TabIndex = 8;
-      this.m_OffsetBox.Value = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
+      m_OffsetBox.Location = new System.Drawing.Point(154, 27);
+      m_OffsetBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      m_OffsetBox.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
+      m_OffsetBox.Name = "m_OffsetBox";
+      m_OffsetBox.Size = new System.Drawing.Size(114, 23);
+      m_OffsetBox.TabIndex = 8;
       // 
       // label2
       // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(132, 7);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(52, 13);
-      this.label2.TabIndex = 2;
-      this.label2.Text = "Offset (%)";
-      this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      label2.AutoSize = true;
+      label2.Location = new System.Drawing.Point(154, 8);
+      label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+      label2.Name = "label2";
+      label2.Size = new System.Drawing.Size(39, 15);
+      label2.TabIndex = 2;
+      label2.Text = "Offset";
+      label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // ScanHPForm
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-      this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(365, 117);
-      this.Controls.Add(this.m_OffsetBox);
-      this.Controls.Add(this.label1);
-      this.Controls.Add(this._CancelButton);
-      this.Controls.Add(this._StopButton);
-      this.Controls.Add(this._OKButton);
-      this.Controls.Add(this.label2);
-      this.Controls.Add(this._InputBox);
-      this.Controls.Add(this._AdrBox);
-      this.Controls.Add(this._ProgBar);
-      this.Controls.Add(this._ScanButton);
-      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-      this.Location = new System.Drawing.Point(2, 250);
-      this.MaximizeBox = false;
-      this.MinimizeBox = false;
-      this.Name = "ScanHPForm";
-      this.ShowInTaskbar = false;
-      this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-      this.Text = "Scan HP";
-      this.TopMost = true;
-      this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ScanHPForm_FormClosing);
-      this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ScanHPForm_FormClosed);
-      this.Load += new System.EventHandler(this.ScanHPForm_Load);
-      ((System.ComponentModel.ISupportInitialize)(this.m_OffsetBox)).EndInit();
-      this.ResumeLayout(false);
-      this.PerformLayout();
-
+      AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+      AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+      ClientSize = new System.Drawing.Size(426, 135);
+      Controls.Add(m_OffsetBox);
+      Controls.Add(label1);
+      Controls.Add(_CancelButton);
+      Controls.Add(_StopButton);
+      Controls.Add(_OKButton);
+      Controls.Add(label2);
+      Controls.Add(_InputBox);
+      Controls.Add(_AdrBox);
+      Controls.Add(_ProgBar);
+      Controls.Add(_ScanButton);
+      FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+      Location = new System.Drawing.Point(2, 250);
+      Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      MaximizeBox = false;
+      MinimizeBox = false;
+      Name = "ScanHPForm";
+      ShowInTaskbar = false;
+      StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+      Text = "Scan HP";
+      TopMost = true;
+      FormClosing += ScanHPForm_FormClosing;
+      FormClosed += ScanHPForm_FormClosed;
+      Load += ScanHPForm_Load;
+      ((System.ComponentModel.ISupportInitialize)m_OffsetBox).EndInit();
+      ResumeLayout(false);
+      PerformLayout();
     }
 
     #endregion

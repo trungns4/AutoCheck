@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Threading;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AutoCheck
 {
@@ -26,10 +27,9 @@ namespace AutoCheck
     }
 
     //--------------------------------------------------------------------------------------------
-    private long TotalBytes(MemorySharp sharp, out List<RemoteRegion> errRegions)
+    public long TotalBytes(MemorySharp sharp)
     {
       long totalBytes = 0;
-      errRegions = new List<RemoteRegion>();
       foreach (var region in sharp.Memory.Regions)
       {
         try
@@ -39,7 +39,6 @@ namespace AutoCheck
         }
         catch
         {
-          errRegions.Add(region);
         }
       }
       return totalBytes;
@@ -77,7 +76,7 @@ namespace AutoCheck
       _stopFlag = true;
     }
     //--------------------------------------------------------------------------------------------
-    public bool Scan(int hp, int offset, Action<long> totalFunc, Action<long> progress, Action<long, int> done)
+    public bool Scan(int hp, int offset, Action<long> totalFunc, Action<long> progressFunc, Action<long, int> doneFunc)
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -87,33 +86,29 @@ namespace AutoCheck
         return false;
       }
 
-      var total = TotalBytes(sharp, out List<RemoteRegion> errRegions);
+      var total = TotalBytes(sharp);
       totalFunc(total);
       _stopFlag = false;
 
       Task.Run(() =>
       {
         int current = 0;
-        double percelOffset = offset;
+        int regionIndex = 0;
         foreach (var region in sharp.Memory.Regions)
         {
           try
           {
-            if (errRegions.Contains(region))
-            {
-              continue;
-            }
-
             if (_stopFlag)
             {
-              done(0, 0);
+              log.InfoFormat("Scanning stopped");
+              doneFunc(0, 0);
               return;
             }
 
-            progress(current);
+            progressFunc(current);
             var rs = region.Information.RegionSize;
 
-            if (((double)current) < (double)(total * percelOffset / 100.0))
+            if (regionIndex < offset)
             {
               current += rs;
               continue;
@@ -125,19 +120,29 @@ namespace AutoCheck
             int adr = Find(buffer, hp);
             if (adr >= 0)
             {
-              _address = region.BaseAddress.ToInt64() + adr;
-              _offset = (int)((double)(current) / (double)(total) * 100) - 10;
-              _offset = Math.Min(Math.Max(1, _offset), 99);
+              log.InfoFormat("Found address at {0}", regionIndex);
 
-              done(_address, _offset);
+              _address = region.BaseAddress.ToInt64() + adr;
+              _offset = (regionIndex / 100) * 100;
+              doneFunc(_address, _offset);
               return;
             }
           }
-          catch { }
+          catch
+          {
+
+          }
+          finally
+          {
+            regionIndex++;
+          }
         }
+
+        log.InfoFormat("Not found");
+        doneFunc(0, 0);
       });
 
-      return true;
+      return false;
     }
   }
 }

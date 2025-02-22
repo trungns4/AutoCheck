@@ -92,6 +92,13 @@ namespace AutoCheck
     //--------------------------------------------------------------------------------------------
     private void LoadData()
     {
+      int maxOffset = 9999;
+      MemorySharp sharp = Utils.CreateMemorySharp();
+      if (sharp != null)
+      {
+        maxOffset = (int)(sharp.Memory.Regions.Count() - 1);
+      }
+
       var offset = 1;
       _InputBox.Text = "";
       string file = GetDataFile();
@@ -107,7 +114,7 @@ namespace AutoCheck
         {
           if (int.TryParse(data["OFFSET"], out int number))
           {
-            offset = Math.Min(99, Math.Max(1, number));
+            offset = Math.Min(maxOffset, Math.Max(0, number));
           }
         }
       }
@@ -121,7 +128,6 @@ namespace AutoCheck
         return;
       }
 
-
       try
       {
         _scanning = true;
@@ -131,7 +137,7 @@ namespace AutoCheck
           return;
         }
 
-        if (false == int.TryParse(m_OffsetBox.Text, out int offset) || offset <= 0 || offset >= 100)
+        if (false == int.TryParse(m_OffsetBox.Text, out int offset))
         {
           MessageBox.Show("Please enter offset", Resources.MsgBoxCaption);
           return;

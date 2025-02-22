@@ -49,14 +49,14 @@ namespace AutoCheck
       _count = 0;
       _qThread.Start();
 
-      Thread.Sleep(500);
+      Thread.Sleep(50);
 
       _wThread = new Thread(() => Run('w'));
       _wThread.IsBackground = true;
       _wThread.Priority = ThreadPriority.Normal;
       _wThread.Start();
 
-      Thread.Sleep(500);
+      Thread.Sleep(50);
 
       _eThread = new Thread(() => Run('e'));
       _eThread.IsBackground = true;
@@ -74,7 +74,7 @@ namespace AutoCheck
     public void Stop()
     {
       _isRunning = false;
-      Thread.Sleep(200);
+      Thread.Sleep(100);
       _count = 0;
 
       if (_qThread != null && _qThread.IsAlive)
@@ -132,8 +132,7 @@ namespace AutoCheck
             UpdateUIAndSleep(_settings._keyUpDelayQ);
           }
         }
-
-        if (key == 'w')
+        else if (key == 'w')
         {
           if (_settings._w)
           {
@@ -144,8 +143,7 @@ namespace AutoCheck
             UpdateUIAndSleep(_settings._keyUpDelayW);
           }
         }
-
-        if (key == 'e')
+        else if (key == 'e')
         {
           if (_settings._e)
           {

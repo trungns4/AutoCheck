@@ -46,7 +46,7 @@ namespace AutoCheck
     private Thread _thread;
     private Thread _keyThread;
     private Thread _warnThread;
-    private ManualResetEvent _flag = new ManualResetEvent(false);
+    private ManualResetEvent _keyFlag = new ManualResetEvent(false);
 
     private IValuesDisplay _ValuesDisplay;
 
@@ -138,7 +138,7 @@ namespace AutoCheck
       }
 
       //to stop the key thread
-      _flag.Set();
+      _keyFlag.Set();
 
       Thread.Sleep(10);
 
@@ -246,16 +246,16 @@ namespace AutoCheck
             double cv = _curVal;
             double mv = _maxVal;
 
-            //normal
+
             if (cv <= (mv * _settings._scale))
             {
               _full = false;
-              _flag.Set();
+              _keyFlag.Set();
             }
             else
             {
               _full = true;
-              _flag.Reset();
+              _keyFlag.Reset();
             }
           }
         }
@@ -276,7 +276,7 @@ namespace AutoCheck
     {
       while (_isRunning)
       {
-        _flag.WaitOne();
+        _keyFlag.WaitOne();
         bool delay = true;
         while (_settings._auto && _settings._autoKey == true
         && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)

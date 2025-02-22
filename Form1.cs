@@ -42,8 +42,8 @@ namespace AutoCheck
     private string m_window = "";
 
     private IKeyboardMouseEvents m_GlobalHook;
-
     private Settings _settings = new Settings();
+    private bool _enableStart = true;
 
     public Form1()
     {
@@ -173,12 +173,14 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
     {
+      _enableStart = false;
       ScanHPForm f = new ScanHPForm();
       if (f.ShowDialog() == DialogResult.OK)
       {
         _addr = f.GetAddress();
         SaveAddress();
       }
+      _enableStart = true;
     }
     //----------------------------------------------------------------------------------
     private void OnAutoWCheckedChanged(object sender, EventArgs e)
@@ -228,6 +230,10 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void ToggleStartStop()
     {
+      if (_enableStart == false)
+      {
+        return;
+      }
       try
       {
         if (_starting == true)
@@ -418,12 +424,14 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private void _SettingsButton_Click_1(object sender, EventArgs e)
     {
+      _enableStart = false;
       SettingsForm settingsForm = new SettingsForm(_settings);
       if (settingsForm.ShowDialog() == DialogResult.OK)
       {
         _settings.CopyFrom(settingsForm.Settings);
         UpdateUIByData();
       }
+      _enableStart = true;
     }
     //----------------------------------------------------------------------------------
     private void m_AutoMouse_CheckedChanged(object sender, EventArgs e)
