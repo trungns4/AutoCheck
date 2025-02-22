@@ -59,7 +59,6 @@ namespace AutoCheck
     private WaveOutEvent m_outputDevice;
     private AudioFileReader m_audioFile;
 
-    private InputSimulator _is = new InputSimulator();
     private VirtualKeyCode _keyCode;
 
     //---------------------------------------------------------------------------------------
@@ -135,6 +134,7 @@ namespace AutoCheck
       if (_thread != null && _thread.IsAlive)
       {
         _thread.Join();
+        _thread = null;
       }
 
       //to stop the key thread
@@ -145,6 +145,7 @@ namespace AutoCheck
       if (_keyThread != null && _keyThread.IsAlive)
       {
         _keyThread.Join();
+        _keyThread = null;
       }
 
       Thread.Sleep(10);
@@ -152,6 +153,7 @@ namespace AutoCheck
       if (_warnThread != null && _warnThread.IsAlive)
       {
         _warnThread.Join();
+        _warnThread = null;
       }
 
       if (m_outputDevice != null)
@@ -278,13 +280,16 @@ namespace AutoCheck
       {
         _keyFlag.WaitOne();
         bool delay = true;
+
+        var si = Input.Simulator;
+
         while (_settings._auto && _settings._autoKey == true
         && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
         {
-          _is.Keyboard.KeyDown(_keyCode);
+          si.Keyboard.KeyDown(_keyCode);
           Thread.Sleep(_settings._keyUpDelay);
 
-          _is.Keyboard.KeyUp(_keyCode);
+          si.Keyboard.KeyUp(_keyCode);
           Thread.Sleep(_settings._keyDownDelay);
 
           delay = false;

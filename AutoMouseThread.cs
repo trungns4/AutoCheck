@@ -19,7 +19,6 @@ namespace AutoCheck
     private Thread _thread;
     private MemorySharp _sharp;
     private bool _isRunning = false;
-    private InputSimulator _is = new InputSimulator();
 
     private int _left = 0, _right = 0, _top = 0, _bottom = 0;
     private bool _up = false;
@@ -39,7 +38,7 @@ namespace AutoCheck
         _right = wnd.X + wnd.Width;
         _top = wnd.Y;
         _bottom = wnd.Y + wnd.Height;
-        log.DebugFormat($"Window is {_left} {_top} {_right} {_bottom}");
+        log.InfoFormat($"Target Window: {_left} {_top} {_right} {_bottom}");
         return true;
       }
       else
@@ -70,7 +69,7 @@ namespace AutoCheck
       if (_up == false)
       {
         _up = true;
-        _is.Mouse.RightButtonUp();
+        Input.Simulator.Mouse.RightButtonUp();
       }
     }
     //---------------------------------------------------------------------------------------
@@ -103,7 +102,7 @@ namespace AutoCheck
             Utils.GetMouse(out int x, out int y);
             if (x >= _left && x <= _right && y >= _top && y <= _bottom)
             {
-              _is.Mouse.RightButtonDown();
+              Input.Simulator.Mouse.RightButtonDown();
               _up = false;
               Thread.Sleep(_settings._clickDelay);
             }
@@ -130,12 +129,13 @@ namespace AutoCheck
       if (_thread != null && _thread.IsAlive)
       {
         _thread.Join();
+        _thread = null;
       }
 
-      _is.Mouse.RightButtonUp();
+      Input.Simulator.Mouse.RightButtonUp();
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.DebugFormat("Mouse Thread stopped");
+      log.DebugFormat("Mouse Click Thread stopped");
     }
 
     //---------------------------------------------------------------------------------------

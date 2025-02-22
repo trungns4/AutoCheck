@@ -25,7 +25,6 @@ namespace AutoCheck
     private bool _isRunning = false;
     private System.Windows.Forms.Label _label;
     private long _count = 0;
-    private InputSimulator _is = new InputSimulator();
 
     private QWEThreadSettings _settings;
 
@@ -64,8 +63,7 @@ namespace AutoCheck
       _eThread.Start();
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.DebugFormat("Auto Key Threads started");
-
+      log.InfoFormat("Auto Key Threads started");
       log.InfoFormat($"Q: {_settings._q} W: {_settings._w} E: {_settings._e}");
 
       return true;
@@ -80,20 +78,23 @@ namespace AutoCheck
       if (_qThread != null && _qThread.IsAlive)
       {
         _qThread.Join();
+        _qThread = null;
       }
 
       if (_wThread != null && _wThread.IsAlive)
       {
         _wThread.Join();
+        _wThread = null;
       }
 
       if (_eThread != null && _eThread.IsAlive)
       {
         _eThread.Join();
+        _eThread = null;
       }
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.DebugFormat("Auto Key Thread stopped");
+      log.DebugFormat("Auto Key Threads stopped");
     }
     //---------------------------------------------------------------------------------------
     private void UpdateLabel()
@@ -121,14 +122,16 @@ namespace AutoCheck
           continue;
         }
 
+        var si = Input.Simulator;
+
         if (key == 'q')
         {
           if (_settings._q)
           {
-            _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
+            si.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
             Thread.Sleep(_settings._keyDownDelayQ);
 
-            _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
+            si.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
             UpdateUIAndSleep(_settings._keyUpDelayQ);
           }
         }
@@ -136,10 +139,10 @@ namespace AutoCheck
         {
           if (_settings._w)
           {
-            _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_W);
+            si.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_W);
             Thread.Sleep(_settings._keyDownDelayW);
 
-            _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_W);
+            si.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_W);
             UpdateUIAndSleep(_settings._keyUpDelayW);
           }
         }
@@ -147,10 +150,10 @@ namespace AutoCheck
         {
           if (_settings._e)
           {
-            _is.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_E);
+            si.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_E);
             Thread.Sleep(_settings._keyDownDelayE);
 
-            _is.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_E);
+            si.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_E);
             UpdateUIAndSleep(_settings._keyUpDelayE);
           }
         }

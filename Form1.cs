@@ -190,15 +190,11 @@ namespace AutoCheck
     //----------------------------------------------------------------------------------
     private bool Stop()
     {
-      _threadQ.Stop();
-      _threadW.Stop();
-
       m_StartButton.Text = "Start";
       m_ScanButton.Enabled = true;
 
       m_StartMenu.Text = "Start";
       _SettingsButton.Enabled = true;
-
 
       _sharp?.Dispose();
       return true;
@@ -224,7 +220,6 @@ namespace AutoCheck
           _threadQ.Stop();
           _threadW.Stop();
           _qweThread.Stop();
-          _mThread.Stop();
           _mThread.Stop();
           Stop();
         }

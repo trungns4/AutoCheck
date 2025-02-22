@@ -75,7 +75,6 @@ namespace AutoCheck
 
       int portionCount = portion - 1;
 
-      InputSimulator isl = new InputSimulator();
       log.InfoFormat("Found {0} addresses", addresses.Count);
 
       while (addresses.Count > 0 && portionCount > 0)
@@ -92,10 +91,10 @@ namespace AutoCheck
         if (Utils.IsWindowActive(sharp.Pid))
         {
 
-          isl.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
+          Input.Simulator.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
           Thread.Sleep(32);
 
-          isl.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
+          Input.Simulator.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
           Thread.Sleep(32);
 
           addresses.RemoveAll(x => Read(sharp, x) != portionCount);
