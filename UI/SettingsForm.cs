@@ -29,6 +29,11 @@ namespace MXTools
       {
         checkBox.CheckedChanged += Input_ValueChanged;
       }
+
+      foreach (var checkBox in CollectControls<TextBox>(this))
+      {
+        checkBox.TextChanged += Input_ValueChanged;
+      }
     }
     //----------------------------------------------------------------------------------
     public Settings Settings
@@ -183,7 +188,7 @@ namespace MXTools
       _settings.M._clickDelay = (int)_MRClickDelay.Value;
 
       _settings.T._auto = _WarnAuto.Checked;
-      _settings.T._interval = (int)_WarnInterval.Value;
+      _settings.T._interval = (float)_WarnInterval.Value;
       _settings.T._duration = (int)_WarnDuration.Value;
       _settings.T._volume = (float)_WarnVolume.Value / 100;
       _settings.T._timerInterval = (int)_WarnTimer.Value;

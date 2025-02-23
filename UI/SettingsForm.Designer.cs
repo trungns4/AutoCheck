@@ -998,6 +998,7 @@
       // 
       // _WarnInterval
       // 
+      _WarnInterval.DecimalPlaces = 2;
       _WarnInterval.Location = new System.Drawing.Point(131, 47);
       _WarnInterval.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _WarnInterval.Maximum = new decimal(new int[] { 15, 0, 0, 0 });
