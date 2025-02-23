@@ -121,6 +121,49 @@ namespace MXTools
       m_OffsetBox.Value = offset;
     }
     //--------------------------------------------------------------------------------------------
+    private void OnStart(long total)
+    {
+      var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
+      foreach (var item in buttons)
+      {
+        item.Enabled = false;
+      }
+
+      _ProgBar.Visible = true;
+      _ProgBar.Minimum = 0;
+      _ProgBar.Maximum = (int)(total + 1);
+    }
+    //--------------------------------------------------------------------------------------------
+    private void OnProgress(long progress)
+    {
+      _ProgBar.Value = Math.Min((int)progress, _ProgBar.Maximum);
+      _AdrBox.Text = "Scanning...";
+      _ProgBar.Refresh();
+    }
+    //--------------------------------------------------------------------------------------------
+    private void OnDone(long adr, int ofs, EventHandler handler)
+    {
+      if (adr > 0 & ofs >= 0)
+      {
+        _AdrBox.Text = adr.ToString("X");
+        m_OffsetBox.Text = ofs.ToString();
+      }
+      else
+      {
+        _AdrBox.Text = "Not found";
+      }
+      _ProgBar.Visible = false;
+
+      var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
+      foreach (var item in buttons)
+      {
+        item.Enabled = true;
+      }
+
+      _StopButton.Click -= handler;
+      _scanning = false;
+    }
+    //--------------------------------------------------------------------------------------------
     private void Scan()
     {
       if (_scanning)
@@ -153,46 +196,16 @@ namespace MXTools
         scan.Scan(val, offset,
         total =>
         {
-          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Visible = true));
-          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Minimum = 0));
-          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Maximum = (int)(total + 1)));
-
-          var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
-          foreach (var item in buttons)
-          {
-            item.Enabled = false;
-          }
+          BeginInvoke(() => OnStart(total));
         },
         progress =>
         {
-          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Value = Math.Min((int)progress, _ProgBar.Maximum)));
-          _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = "Scanning..."));
-          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Refresh()));
+          BeginInvoke(() => OnProgress(progress));
         },
         (adr, ofs) =>
         {
-          if (adr > 0 & ofs > 0)
-          {
-            _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = adr.ToString("X")));
-            m_OffsetBox.BeginInvoke(new Action(() => m_OffsetBox.Text = ofs.ToString()));
-          }
-          else
-          {
-            _AdrBox.BeginInvoke(new Action(() => _AdrBox.Text = "Not found"));
-          }
-
-          _ProgBar.BeginInvoke(new Action(() => _ProgBar.Visible = false));
-
-          var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
-          foreach (var item in buttons)
-          {
-            item.BeginInvoke(new Action(() => item.Enabled = true));
-          }
-
-          _StopButton.Click -= stopButtonClickHandler;
-          _scanning = false;
-        }
-        );
+          BeginInvoke(() => OnDone(adr, ofs, stopButtonClickHandler));
+        });
       }
       finally
       {

@@ -94,6 +94,7 @@ namespace MXTools
       {
         int current = 0;
         int regionIndex = 0;
+        bool found = false;
         foreach (var region in sharp.Memory.Regions)
         {
           try
@@ -125,23 +126,25 @@ namespace MXTools
               _address = region.BaseAddress.ToInt64() + adr;
               _offset = (regionIndex / 100) * 100;
               doneFunc(_address, _offset);
-              return;
+              found = true;
+              break;
             }
           }
           catch
           {
-
+            log.Error($"Region {regionIndex} could not accessed");
           }
           finally
           {
             regionIndex++;
           }
         }
-
-        log.InfoFormat("Not found");
-        doneFunc(0, 0);
+        if (found == false)
+        {
+          log.InfoFormat("Not found");
+          doneFunc(0, 0);
+        }
       });
-
       return false;
     }
   }

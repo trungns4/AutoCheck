@@ -106,15 +106,15 @@ namespace MXTools
       _auto = true;
 
       //in minutes
-      _interval = 2.0f;
+      _interval = 3.0f;
 
       //20 seconds
-      _duration = 20;
+      _duration = 30;
 
       _volume = 0.7f;
 
       //1 seconds
-      _timerInterval = 1000;
+      _timerInterval = 300;
 
       _dismiss = "56S";
     }

@@ -1,23 +1,10 @@
-﻿using MXTools.Properties;
-using Binarysharp.MemoryManagement;
-using Binarysharp.MemoryManagement.Memory;
-using log4net;
-using NAudio.Wave;
-using Newtonsoft.Json.Linq;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
+﻿using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using WindowsInput;
+using Binarysharp.MemoryManagement;
+using log4net;
 using WindowsInput.Native;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MXTools
 {
