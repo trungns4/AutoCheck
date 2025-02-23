@@ -566,7 +566,7 @@
       groupBox3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       groupBox3.Name = "groupBox3";
       groupBox3.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-      groupBox3.Size = new System.Drawing.Size(313, 334);
+      groupBox3.Size = new System.Drawing.Size(313, 316);
       groupBox3.TabIndex = 0;
       groupBox3.TabStop = false;
       groupBox3.Text = "QWE";
@@ -768,7 +768,7 @@
       // 
       // m_DefaultButton
       // 
-      m_DefaultButton.Location = new System.Drawing.Point(17, 659);
+      m_DefaultButton.Location = new System.Drawing.Point(17, 637);
       m_DefaultButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_DefaultButton.Name = "m_DefaultButton";
       m_DefaultButton.Size = new System.Drawing.Size(88, 27);
@@ -779,7 +779,7 @@
       // 
       // m_ReloadButton
       // 
-      m_ReloadButton.Location = new System.Drawing.Point(111, 659);
+      m_ReloadButton.Location = new System.Drawing.Point(111, 637);
       m_ReloadButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_ReloadButton.Name = "m_ReloadButton";
       m_ReloadButton.Size = new System.Drawing.Size(88, 27);
@@ -790,7 +790,7 @@
       // 
       // m_CancelButton
       // 
-      m_CancelButton.Location = new System.Drawing.Point(467, 659);
+      m_CancelButton.Location = new System.Drawing.Point(467, 637);
       m_CancelButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_CancelButton.Name = "m_CancelButton";
       m_CancelButton.Size = new System.Drawing.Size(88, 27);
@@ -801,7 +801,7 @@
       // 
       // m_OKButton
       // 
-      m_OKButton.Location = new System.Drawing.Point(373, 659);
+      m_OKButton.Location = new System.Drawing.Point(373, 637);
       m_OKButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_OKButton.Name = "m_OKButton";
       m_OKButton.Size = new System.Drawing.Size(88, 27);
@@ -812,7 +812,7 @@
       // 
       // _SaveButton
       // 
-      _SaveButton.Location = new System.Drawing.Point(206, 659);
+      _SaveButton.Location = new System.Drawing.Point(206, 637);
       _SaveButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _SaveButton.Name = "_SaveButton";
       _SaveButton.Size = new System.Drawing.Size(88, 27);
@@ -832,7 +832,7 @@
       groupBox1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       groupBox1.Name = "groupBox1";
       groupBox1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-      groupBox1.Size = new System.Drawing.Size(294, 126);
+      groupBox1.Size = new System.Drawing.Size(294, 112);
       groupBox1.TabIndex = 2;
       groupBox1.TabStop = false;
       groupBox1.Text = "Mouse";
@@ -850,7 +850,7 @@
       // 
       // _MRClickDelay
       // 
-      _MRClickDelay.Location = new System.Drawing.Point(132, 53);
+      _MRClickDelay.Location = new System.Drawing.Point(132, 45);
       _MRClickDelay.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _MRClickDelay.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
       _MRClickDelay.Name = "_MRClickDelay";
@@ -860,7 +860,7 @@
       // 
       // _MRThreadDelay
       // 
-      _MRThreadDelay.Location = new System.Drawing.Point(131, 80);
+      _MRThreadDelay.Location = new System.Drawing.Point(131, 74);
       _MRThreadDelay.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _MRThreadDelay.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
       _MRThreadDelay.Name = "_MRThreadDelay";
@@ -901,9 +901,9 @@
       groupBox4.Controls.Add(label27);
       groupBox4.Controls.Add(_WarnInterval);
       groupBox4.Controls.Add(label6);
-      groupBox4.Location = new System.Drawing.Point(334, 447);
+      groupBox4.Location = new System.Drawing.Point(334, 433);
       groupBox4.Name = "groupBox4";
-      groupBox4.Size = new System.Drawing.Size(294, 202);
+      groupBox4.Size = new System.Drawing.Size(294, 198);
       groupBox4.TabIndex = 3;
       groupBox4.TabStop = false;
       groupBox4.Text = "Timer";
@@ -1021,7 +1021,7 @@
       // 
       AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
       AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      ClientSize = new System.Drawing.Size(643, 699);
+      ClientSize = new System.Drawing.Size(643, 671);
       Controls.Add(groupBox4);
       Controls.Add(groupBox1);
       Controls.Add(m_OKButton);

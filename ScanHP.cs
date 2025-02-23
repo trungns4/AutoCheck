@@ -115,24 +115,29 @@ namespace MXTools
               continue;
             }
 
+            if (rs < 24)
+            {
+              log.InfoFormat("Ignored small region size {0} {1}", regionIndex, rs);
+              continue;
+            }
+
             byte[] buffer = sharp.Read<byte>(region.BaseAddress, rs, false);
             current += rs;
 
             int adr = Find(buffer, hp);
             if (adr >= 0)
             {
-              log.InfoFormat("Found address at {0}", regionIndex);
-
               _address = region.BaseAddress.ToInt64() + adr;
               _offset = (regionIndex / 100) * 100;
               doneFunc(_address, _offset);
               found = true;
+              log.InfoFormat("Found address {0} at {1} offset {2}", _address, regionIndex, _offset);
               break;
             }
           }
           catch
           {
-            log.Error($"Region {regionIndex} could not accessed");
+            //log.Error($"Region {regionIndex} could not accessed");
           }
           finally
           {
