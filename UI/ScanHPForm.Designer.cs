@@ -1,4 +1,4 @@
-﻿namespace AutoCheck
+﻿namespace MXTools
 {
   partial class ScanHPForm
   {

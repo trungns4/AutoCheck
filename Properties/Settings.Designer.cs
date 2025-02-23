@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AutoCheck.Properties {
+namespace MXTools.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

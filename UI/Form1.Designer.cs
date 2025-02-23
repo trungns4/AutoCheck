@@ -1,4 +1,4 @@
-﻿namespace AutoCheck
+﻿namespace MXTools
 {
   partial class Form1
   {
@@ -59,6 +59,7 @@
       _SettingsButton = new System.Windows.Forms.Button();
       m_AutoMouse = new System.Windows.Forms.CheckBox();
       label2 = new System.Windows.Forms.Label();
+      _WarnTime = new System.Windows.Forms.Label();
       groupBox1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)m_VolumeCtrl).BeginInit();
       groupBox2.SuspendLayout();
@@ -79,7 +80,7 @@
       // 
       // m_StartButton
       // 
-      m_StartButton.Location = new System.Drawing.Point(6, 435);
+      m_StartButton.Location = new System.Drawing.Point(7, 463);
       m_StartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_StartButton.Name = "m_StartButton";
       m_StartButton.Size = new System.Drawing.Size(88, 27);
@@ -184,46 +185,46 @@
       // 
       m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { m_StartMenu, toolStripSeparator3, m_ShowMenu, m_HideMenu, toolStripSeparator1, toolStripSeparator2, m_CloseMenu });
       m_ContextMenu.Name = "m_ContextMenu";
-      m_ContextMenu.Size = new System.Drawing.Size(181, 132);
+      m_ContextMenu.Size = new System.Drawing.Size(104, 110);
       m_ContextMenu.Opened += m_ContextMenu_Opened;
       // 
       // m_StartMenu
       // 
       m_StartMenu.Name = "m_StartMenu";
-      m_StartMenu.Size = new System.Drawing.Size(180, 22);
+      m_StartMenu.Size = new System.Drawing.Size(103, 22);
       m_StartMenu.Text = "Start";
       // 
       // toolStripSeparator3
       // 
       toolStripSeparator3.Name = "toolStripSeparator3";
-      toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+      toolStripSeparator3.Size = new System.Drawing.Size(100, 6);
       // 
       // m_ShowMenu
       // 
       m_ShowMenu.Name = "m_ShowMenu";
-      m_ShowMenu.Size = new System.Drawing.Size(180, 22);
+      m_ShowMenu.Size = new System.Drawing.Size(103, 22);
       m_ShowMenu.Text = "Show";
       // 
       // m_HideMenu
       // 
       m_HideMenu.Name = "m_HideMenu";
-      m_HideMenu.Size = new System.Drawing.Size(180, 22);
+      m_HideMenu.Size = new System.Drawing.Size(103, 22);
       m_HideMenu.Text = "Hide";
       // 
       // toolStripSeparator1
       // 
       toolStripSeparator1.Name = "toolStripSeparator1";
-      toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+      toolStripSeparator1.Size = new System.Drawing.Size(100, 6);
       // 
       // toolStripSeparator2
       // 
       toolStripSeparator2.Name = "toolStripSeparator2";
-      toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+      toolStripSeparator2.Size = new System.Drawing.Size(100, 6);
       // 
       // m_CloseMenu
       // 
       m_CloseMenu.Name = "m_CloseMenu";
-      m_CloseMenu.Size = new System.Drawing.Size(180, 22);
+      m_CloseMenu.Size = new System.Drawing.Size(103, 22);
       m_CloseMenu.Text = "Close";
       // 
       // m_NotifyIcon
@@ -236,7 +237,7 @@
       // 
       // m_CloseButton
       // 
-      m_CloseButton.Location = new System.Drawing.Point(145, 435);
+      m_CloseButton.Location = new System.Drawing.Point(146, 463);
       m_CloseButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_CloseButton.Name = "m_CloseButton";
       m_CloseButton.Size = new System.Drawing.Size(88, 27);
@@ -313,7 +314,7 @@
       // 
       _About.AutoSize = true;
       _About.ForeColor = System.Drawing.SystemColors.ControlDark;
-      _About.Location = new System.Drawing.Point(14, 467);
+      _About.Location = new System.Drawing.Point(13, 498);
       _About.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       _About.Name = "_About";
       _About.Size = new System.Drawing.Size(13, 15);
@@ -348,17 +349,29 @@
       // label2
       // 
       label2.AutoSize = true;
-      label2.Location = new System.Drawing.Point(100, 441);
+      label2.Location = new System.Drawing.Point(101, 469);
       label2.Name = "label2";
       label2.Size = new System.Drawing.Size(37, 15);
       label2.TabIndex = 4;
       label2.Text = "Ctrl-0";
       // 
+      // _WarnTime
+      // 
+      _WarnTime.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+      _WarnTime.ForeColor = System.Drawing.Color.Red;
+      _WarnTime.Location = new System.Drawing.Point(9, 423);
+      _WarnTime.Name = "_WarnTime";
+      _WarnTime.Size = new System.Drawing.Size(220, 27);
+      _WarnTime.TabIndex = 11;
+      _WarnTime.Text = "...";
+      _WarnTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      // 
       // Form1
       // 
       AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
       AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      ClientSize = new System.Drawing.Size(247, 493);
+      ClientSize = new System.Drawing.Size(247, 528);
+      Controls.Add(_WarnTime);
       Controls.Add(label2);
       Controls.Add(m_AutoMouse);
       Controls.Add(_SettingsButton);
@@ -376,7 +389,7 @@
       MaximizeBox = false;
       Name = "Form1";
       StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-      Text = "AutoCheck";
+      Text = "MXTools";
       TopMost = true;
       FormClosing += OnFormClosing;
       FormClosed += OnFormClosed;
@@ -424,6 +437,7 @@
     private System.Windows.Forms.Button _SettingsButton;
     private System.Windows.Forms.CheckBox m_AutoMouse;
     private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.Label _WarnTime;
   }
 }
 

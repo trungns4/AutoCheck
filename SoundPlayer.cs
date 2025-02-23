@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using log4net;
 using NAudio.Wave;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal class SoundPlayer : IDisposable
   {

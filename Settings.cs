@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
-using AutoCheck.Properties;
+using MXTools.Properties;
 using NAudio.Gui;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
@@ -13,7 +13,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Runtime;
 
-namespace AutoCheck
+namespace MXTools
 {
   public class MouseThreadSettings
   {
@@ -28,7 +28,6 @@ namespace AutoCheck
       _threadDelay = 50;
     }
   }
-
 
   public class QWMemThreadSettings
   {
@@ -93,19 +92,45 @@ namespace AutoCheck
     }
   }
 
+  public class TimeWarningSettings
+  {
+    public bool _auto { get; set; }
+    public float _interval { get; set; }
+    public int _timerInterval { get; set; }
+    public int _duration { get; set; }
+    public float _volume { get; set; }
+    public string _dismiss { get; set; }
+
+    public TimeWarningSettings()
+    {
+      _auto = true;
+
+      //in minutes
+      _interval = 2.0f;
+
+      //20 seconds
+      _duration = 20;
+
+      _volume = 0.7f;
+
+      //1 seconds
+      _timerInterval = 1000;
+
+      _dismiss = "56S";
+    }
+  }
+
   public class Settings
   {
     public QWMemThreadSettings Q { get; }
     public QWMemThreadSettings W { get; }
     public QWEThreadSettings QWE { get; }
     public MouseThreadSettings M { get; }
+    public TimeWarningSettings T { get; }
 
     public Settings()
     {
-      Q = new QWMemThreadSettings()
-      {
-
-      };
+      Q = new QWMemThreadSettings() { };
 
       W = new QWMemThreadSettings()
       {
@@ -114,15 +139,11 @@ namespace AutoCheck
         _scale = 0.9f
       };
 
-      QWE = new QWEThreadSettings()
-      {
+      QWE = new QWEThreadSettings() { };
 
-      };
+      M = new MouseThreadSettings() { };
 
-      M = new MouseThreadSettings()
-      {
-
-      };
+      T = new TimeWarningSettings() { };
     }
     //----------------------------------------------------------------------------------
     private static string GetDataFile()
@@ -223,11 +244,22 @@ namespace AutoCheck
         QWE._keyDownDelayE = other.QWE._keyDownDelayE;
         QWE._threadDelayE = other.QWE._threadDelayE;
       }
+
       if (other.M != null)
       {
         M._clickDelay = other.M._clickDelay;
         M._threadDelay = other.M._threadDelay;
         M._auto = other.M._auto;
+      }
+
+      if (other.T != null)
+      {
+        T._auto = other.T._auto;
+        T._interval = other.T._interval;
+        T._duration = other.T._duration;
+        T._volume = other.T._volume;
+        T._timerInterval = other.T._timerInterval;
+        T._dismiss = other.T._dismiss;
       }
     }
   }

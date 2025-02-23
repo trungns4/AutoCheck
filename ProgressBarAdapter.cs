@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal class ProgressBarAdapter : IValuesDisplay
   {

@@ -12,13 +12,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AutoCheck.Properties;
+using MXTools.Properties;
 using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
 using Newtonsoft.Json;
 using WindowsInput;
 
-namespace AutoCheck
+namespace MXTools
 {
   public partial class ScanHPForm : Form
   {

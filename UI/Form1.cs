@@ -1,4 +1,4 @@
-﻿using AutoCheck.Properties;
+﻿using MXTools.Properties;
 using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
 using Binarysharp.MemoryManagement.Modules;
@@ -21,8 +21,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using log4net;
 
-namespace AutoCheck
+namespace MXTools
 {
   public partial class Form1 : Form
   {
@@ -34,7 +35,7 @@ namespace AutoCheck
     private AutoKeyThread _threadW = null;
     private AutoQWEThread _qweThread = null;
     private AutoMouseThread _mThread = null;
-
+    private TimeWarning _timerWarning = null;
     private bool _starting = false;
 
     private bool m_bForcingClose = false;
@@ -42,6 +43,7 @@ namespace AutoCheck
     private IKeyboardMouseEvents m_GlobalHook;
     private Settings _settings = new Settings();
     private bool _enableStart = true;
+
 
     public Form1()
     {
@@ -58,6 +60,9 @@ namespace AutoCheck
 
       _qweThread = new AutoQWEThread(_settings.QWE, m_KeyCount);
       _mThread = new AutoMouseThread(_settings.M);
+      _timerWarning = new TimeWarning(_settings.T);
+
+      _timerWarning.Update = UpdateTimerRemain;
 
       UpdateUIByData();
 
@@ -216,12 +221,13 @@ namespace AutoCheck
 
         m_StartButton.Enabled = false;
         _starting = true;
-        if (_threadQ.IsRunning() || _threadW.IsRunning() || _qweThread.IsRunning() || _mThread.IsRunning())
+        if (_threadQ.IsRunning())
         {
           _threadQ.Stop();
           _threadW.Stop();
           _qweThread.Stop();
           _mThread.Stop();
+          _timerWarning.Stop();
           Stop();
         }
         else
@@ -232,6 +238,7 @@ namespace AutoCheck
             _threadW.Start(_sharp, _addr + 8, _addr + 24);
             _qweThread.Start(_sharp);
             _mThread.Start(_sharp);
+            _timerWarning.Start();
           }
         }
       }
@@ -321,7 +328,7 @@ namespace AutoCheck
     {
       _settings.Q._warnVolume = (float)m_VolumeCtrl.Value / (float)m_VolumeCtrl.Maximum;
     }
-  
+
     //----------------------------------------------------------------------------------
     private void ShowMe(bool show)
     {
@@ -380,6 +387,13 @@ namespace AutoCheck
     private void m_AutoMouse_CheckedChanged(object sender, EventArgs e)
     {
       _settings.M._auto = m_AutoMouse.Checked;
+    }
+    //----------------------------------------------------------------------------------
+    private void UpdateTimerRemain(int rmain)
+    {
+      var ts = TimeSpan.FromSeconds(rmain);
+      _WarnTime.BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
+      Thread.Sleep(32);
     }
   }
 }

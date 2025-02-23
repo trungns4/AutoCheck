@@ -11,7 +11,7 @@ using Binarysharp.MemoryManagement;
 using log4net;
 using WindowsInput;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal class AutoMouseThread
   {

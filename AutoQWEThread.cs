@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AutoCheck.Properties;
+using MXTools.Properties;
 using Binarysharp.MemoryManagement;
 using log4net;
 using Newtonsoft.Json.Linq;
 using WindowsInput;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal class AutoQWEThread
   {

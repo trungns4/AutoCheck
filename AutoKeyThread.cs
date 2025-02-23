@@ -1,4 +1,4 @@
-﻿using AutoCheck.Properties;
+﻿using MXTools.Properties;
 using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
 using log4net;
@@ -19,7 +19,7 @@ using WindowsInput;
 using WindowsInput.Native;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace AutoCheck
+namespace MXTools
 {
   interface IValuesDisplay
   {

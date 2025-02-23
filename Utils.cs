@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Web;
 using WindowsInput.Native;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal class Utils
 

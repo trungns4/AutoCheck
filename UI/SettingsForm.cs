@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using AutoCheck.Properties;
+using MXTools.Properties;
 
-namespace AutoCheck
+namespace MXTools
 {
   public partial class SettingsForm : Form
   {
@@ -126,6 +126,13 @@ namespace AutoCheck
       _MRClick.Checked = _settings.M._auto;
       _MRThreadDelay.Value = _settings.M._threadDelay;
       _MRClickDelay.Value = _settings.M._clickDelay;
+
+      _WarnAuto.Checked = _settings.T._auto;
+      _WarnInterval.Value = (decimal)_settings.T._interval;
+      _WarnDuration.Value = (decimal)_settings.T._duration;
+      _WarnVolume.Value = (decimal)_settings.T._volume * 100;
+      _WarnTimer.Value = (decimal)_settings.T._timerInterval;
+      _WarnDismiss.Text = _settings.T._dismiss;
     }
     //----------------------------------------------------------------------------------
     private void UIToData()
@@ -174,6 +181,13 @@ namespace AutoCheck
       _settings.M._auto = _MRClick.Checked;
       _settings.M._threadDelay = (int)_MRThreadDelay.Value;
       _settings.M._clickDelay = (int)_MRClickDelay.Value;
+
+      _settings.T._auto = _WarnAuto.Checked;
+      _settings.T._interval = (int)_WarnInterval.Value;
+      _settings.T._duration = (int)_WarnDuration.Value;
+      _settings.T._volume = (float)_WarnVolume.Value / 100;
+      _settings.T._timerInterval = (int)_WarnTimer.Value;
+      _settings.T._dismiss = _WarnDismiss.Text;
 
       _settings.SaveData();
 

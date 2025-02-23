@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using log4net;
 using log4net.Config;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal static class Program
   {
@@ -35,7 +35,7 @@ namespace AutoCheck
       else
       {
         // Bring existing instance to the foreground
-        IntPtr hWnd = Utils.FindWindow("AutoCheck"); 
+        IntPtr hWnd = Utils.FindWindow("MXTools"); 
         if (hWnd != IntPtr.Zero)
         {
           Utils.ShowWindow(hWnd);

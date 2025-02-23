@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WindowsInput;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal class Input
   {

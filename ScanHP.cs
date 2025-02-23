@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Binarysharp.MemoryManagement.Memory;
 using Binarysharp.MemoryManagement;
-using AutoCheck.Properties;
+using MXTools.Properties;
 using log4net;
 using System.Reflection;
 using System.Windows.Forms;
@@ -13,7 +13,7 @@ using System.Threading;
 using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AutoCheck
+namespace MXTools
 {
   internal class ScanHP
   {
