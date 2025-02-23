@@ -384,10 +384,11 @@
       Controls.Add(m_StartButton);
       FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
       Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
-      Location = new System.Drawing.Point(2, 250);
+      Location = new System.Drawing.Point(2, 320);
       Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       MaximizeBox = false;
       Name = "Form1";
+      SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
       StartPosition = System.Windows.Forms.FormStartPosition.Manual;
       Text = "MXTools";
       TopMost = true;
