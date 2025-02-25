@@ -35,7 +35,7 @@ namespace MXTools
       else
       {
         // Bring existing instance to the foreground
-        IntPtr hWnd = Utils.FindWindow("MXTools"); 
+        IntPtr hWnd = Utils.FindWindowByTitle(new Form1().Text); 
         if (hWnd != IntPtr.Zero)
         {
           Utils.ShowWindow(hWnd);

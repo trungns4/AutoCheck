@@ -22,6 +22,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using log4net;
+using WindowsInput.Native;
+using System.Collections;
 
 namespace MXTools
 {
@@ -90,20 +92,38 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Control)
+      try
       {
-        if (e.KeyCode == System.Windows.Forms.Keys.D0)
+        if (e.KeyCode == System.Windows.Forms.Keys.D0 && e.Control)
         {
           ToggleStartStop();
         }
-        else if (e.KeyCode == System.Windows.Forms.Keys.A)
+        else if (e.KeyCode == System.Windows.Forms.Keys.A && e.Control)
         {
           _settings.M._auto = !_settings.M._auto;
           m_AutoMouse.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
         }
+        else if (e.KeyCode == System.Windows.Forms.Keys.Multiply && e.Control)
+        {
+          var sharp = Utils.CreateMemorySharp();
+          if (sharp != null && sharp.Windows.MainWindow != null)
+          {
+            WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
+          }
+        }
+        else if(e.KeyCode == System.Windows.Forms.Keys.Oem3 && e.Control)
+        {
+          var sharp = Utils.CreateMemorySharp();
+          if (sharp != null && sharp.Windows.MainWindow != null)
+          {
+            WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
+          }
+        }
+      }
+      finally
+      {
       }
     }
-
     //----------------------------------------------------------------------------------
     private void OnStartMenuClick(object sender, EventArgs e)
     {
@@ -184,7 +204,8 @@ namespace MXTools
         return false;
       }
 
-      m_StartButton.Text = "Stop";
+      //m_StartButton.Text = "Stop";
+      m_StartButton.Image = Resources.stop_16;
       m_ScanButton.Enabled = false;
 
       m_StartMenu.Text = "Stop";
@@ -196,7 +217,8 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private bool Stop()
     {
-      m_StartButton.Text = "Start";
+      //m_StartButton.Text = "Start";
+      m_StartButton.Image = Resources.play_16;
       m_ScanButton.Enabled = true;
 
       m_StartMenu.Text = "Start";

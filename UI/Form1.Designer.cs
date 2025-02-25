@@ -69,23 +69,23 @@
       // 
       // m_ScanButton
       // 
+      m_ScanButton.Image = Properties.Resources.scan_16;
       m_ScanButton.Location = new System.Drawing.Point(6, 234);
       m_ScanButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_ScanButton.Name = "m_ScanButton";
-      m_ScanButton.Size = new System.Drawing.Size(88, 27);
+      m_ScanButton.Size = new System.Drawing.Size(67, 27);
       m_ScanButton.TabIndex = 0;
-      m_ScanButton.Text = "Scan...";
       m_ScanButton.UseVisualStyleBackColor = true;
       m_ScanButton.Click += OnScanClicked;
       // 
       // m_StartButton
       // 
+      m_StartButton.Image = Properties.Resources.play_16;
       m_StartButton.Location = new System.Drawing.Point(7, 463);
       m_StartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_StartButton.Name = "m_StartButton";
-      m_StartButton.Size = new System.Drawing.Size(88, 27);
+      m_StartButton.Size = new System.Drawing.Size(67, 27);
       m_StartButton.TabIndex = 3;
-      m_StartButton.Text = "Start";
       m_StartButton.UseVisualStyleBackColor = true;
       m_StartButton.Click += OnStartButtonClicked;
       // 
@@ -185,47 +185,47 @@
       // 
       m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { m_StartMenu, toolStripSeparator3, m_ShowMenu, m_HideMenu, toolStripSeparator1, toolStripSeparator2, m_CloseMenu });
       m_ContextMenu.Name = "m_ContextMenu";
-      m_ContextMenu.Size = new System.Drawing.Size(104, 110);
+      m_ContextMenu.Size = new System.Drawing.Size(181, 132);
       m_ContextMenu.Opened += m_ContextMenu_Opened;
       // 
       // m_StartMenu
       // 
       m_StartMenu.Name = "m_StartMenu";
-      m_StartMenu.Size = new System.Drawing.Size(103, 22);
+      m_StartMenu.Size = new System.Drawing.Size(180, 22);
       m_StartMenu.Text = "Start";
       // 
       // toolStripSeparator3
       // 
       toolStripSeparator3.Name = "toolStripSeparator3";
-      toolStripSeparator3.Size = new System.Drawing.Size(100, 6);
+      toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
       // 
       // m_ShowMenu
       // 
       m_ShowMenu.Name = "m_ShowMenu";
-      m_ShowMenu.Size = new System.Drawing.Size(103, 22);
+      m_ShowMenu.Size = new System.Drawing.Size(180, 22);
       m_ShowMenu.Text = "Show";
       // 
       // m_HideMenu
       // 
       m_HideMenu.Name = "m_HideMenu";
-      m_HideMenu.Size = new System.Drawing.Size(103, 22);
+      m_HideMenu.Size = new System.Drawing.Size(180, 22);
       m_HideMenu.Text = "Hide";
       // 
       // toolStripSeparator1
       // 
       toolStripSeparator1.Name = "toolStripSeparator1";
-      toolStripSeparator1.Size = new System.Drawing.Size(100, 6);
+      toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
       // 
       // toolStripSeparator2
       // 
       toolStripSeparator2.Name = "toolStripSeparator2";
-      toolStripSeparator2.Size = new System.Drawing.Size(100, 6);
+      toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
       // 
       // m_CloseMenu
       // 
       m_CloseMenu.Name = "m_CloseMenu";
-      m_CloseMenu.Size = new System.Drawing.Size(103, 22);
-      m_CloseMenu.Text = "Close";
+      m_CloseMenu.Size = new System.Drawing.Size(180, 22);
+      m_CloseMenu.Text = "Quit";
       // 
       // m_NotifyIcon
       // 
@@ -237,12 +237,12 @@
       // 
       // m_CloseButton
       // 
-      m_CloseButton.Location = new System.Drawing.Point(146, 463);
+      m_CloseButton.Image = Properties.Resources.quit_16;
+      m_CloseButton.Location = new System.Drawing.Point(166, 463);
       m_CloseButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_CloseButton.Name = "m_CloseButton";
-      m_CloseButton.Size = new System.Drawing.Size(88, 27);
+      m_CloseButton.Size = new System.Drawing.Size(67, 27);
       m_CloseButton.TabIndex = 3;
-      m_CloseButton.Text = "Close";
       m_CloseButton.UseVisualStyleBackColor = true;
       m_CloseButton.Click += m_CloseButton_Click;
       // 
@@ -323,12 +323,12 @@
       // 
       // _SettingsButton
       // 
-      _SettingsButton.Location = new System.Drawing.Point(145, 234);
+      _SettingsButton.Image = Properties.Resources.settings_16;
+      _SettingsButton.Location = new System.Drawing.Point(166, 234);
       _SettingsButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _SettingsButton.Name = "_SettingsButton";
-      _SettingsButton.Size = new System.Drawing.Size(88, 27);
+      _SettingsButton.Size = new System.Drawing.Size(67, 27);
       _SettingsButton.TabIndex = 9;
-      _SettingsButton.Text = "Settings...";
       _SettingsButton.UseVisualStyleBackColor = true;
       _SettingsButton.Click += _SettingsButton_Click_1;
       // 
@@ -349,7 +349,7 @@
       // label2
       // 
       label2.AutoSize = true;
-      label2.Location = new System.Drawing.Point(101, 469);
+      label2.Location = new System.Drawing.Point(83, 469);
       label2.Name = "label2";
       label2.Size = new System.Drawing.Size(37, 15);
       label2.TabIndex = 4;
