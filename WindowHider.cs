@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using MXTools;
 
 class WindowHider
 {
@@ -48,6 +50,29 @@ class WindowHider
     public int Left, Top, Right, Bottom;
   }
 
+  [DllImport("user32.dll")]
+  private static extern bool SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, IntPtr lParam);
+
+  private const int GCL_HICON = -14;  // Large Icon
+  private const int GCL_HICONSM = -34; // Small Icon
+  private const int WM_SETICON = 0x80;
+
+  [DllImport("user32.dll", EntryPoint = "SetClassLong")]
+  private static extern int SetClassLong32(IntPtr hWnd, int nIndex, int dwNewLong);
+
+  [DllImport("user32.dll", EntryPoint = "SetClassLongPtr")]
+  private static extern IntPtr SetClassLong64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+
+  [DllImport("user32.dll")]
+  public static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, uint flags);
+
+  // RedrawWindow Flags
+  private const uint RDW_INVALIDATE = 0x0001;
+  private const uint RDW_INTERNALPAINT = 0x0002;
+  private const uint RDW_UPDATENOW = 0x0100;
+  private const uint RDW_FRAME = 0x0400;
+
   public static void HideWindow(IntPtr hWnd)
   {
     SetWindowPos(hWnd, IntPtr.Zero, -10000, -10000, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
@@ -81,8 +106,10 @@ class WindowHider
     style |= WS_EX_APPWINDOW;
     style &= ~WS_EX_TOOLWINDOW;
     SetWindowLong(hWnd, GWL_EXSTYLE, style);
-  }
 
+    SetIcon(hWnd);
+  }
+  //----------------------------------------------------------------------------------
   public static void ToggleWindow(IntPtr hWnd)
   {
     int style = GetWindowLong(hWnd, GWL_EXSTYLE);
@@ -94,5 +121,29 @@ class WindowHider
     {
       HideWindow(hWnd);
     }
+  }
+
+  //----------------------------------------------------------------------------------
+  private static IntPtr SetClassLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
+  {
+    if (IntPtr.Size == 4) // 32-bit
+      return (IntPtr)SetClassLong32(hWnd, nIndex, (int)dwNewLong);
+    else // 64-bit
+      return SetClassLong64(hWnd, nIndex, dwNewLong);
+  }
+  //----------------------------------------------------------------------------------
+  private static void SetIcon(IntPtr hWnd)
+  {
+    // Load the icon from Resources
+    Icon newIcon = MXTools.Properties.Resources.db;
+    IntPtr iconHandle = newIcon.Handle;
+
+    // Change the title bar and Alt+Tab icon
+    SendMessage(hWnd, WM_SETICON, (IntPtr)0, iconHandle); // Small icon
+    SendMessage(hWnd, WM_SETICON, (IntPtr)1, iconHandle); // Large icon
+
+    // Change the taskbar icon by modifying the class icon
+    SetClassLongPtr(hWnd, GCL_HICON, iconHandle);    // Large taskbar icon
+    SetClassLongPtr(hWnd, GCL_HICONSM, iconHandle);  // Small taskbar icon
   }
 }

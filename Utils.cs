@@ -1,10 +1,12 @@
 ﻿using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Native;
 using log4net;
+using MXTools.Properties;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -165,35 +167,13 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     public static string GetConfigString(string name, string def = "")
     {
-      return System.Configuration.ConfigurationManager.AppSettings[name] ?? def;
+      return GlobalSettings.Instance.GetConfigString(name) ?? def;
     }
 
     //----------------------------------------------------------------------------------
     public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
     {
       return value.CompareTo(min) < 0 ? min : value.CompareTo(max) > 0 ? max : value;
-    }
-
-    //----------------------------------------------------------------------------------
-    public static T Get<T>(JObject settings, string key, T defaultValue)
-    {
-      if (settings.TryGetValue(key, out JToken value))
-      {
-        try
-        {
-          return value.Type == JTokenType.Null ? defaultValue : value.Value<T>();
-        }
-        catch
-        {
-          log.Warn($"Warning: Failed to convert key '{key}' to {typeof(T).Name}. Using default value.");
-          return defaultValue;
-        }
-      }
-      else
-      {
-        log.Warn($"Warning: Key '{key}' is missing. Using default value.");
-        return defaultValue;
-      }
     }
 
     //----------------------------------------------------------------------------------
@@ -243,19 +223,16 @@ namespace MXTools
         }
       }
     }
-
     //----------------------------------------------------------------------------------
     public static void ShowWindow(IntPtr hWnd)
     {
       ShowWindow(hWnd, SW_RESTORE);
     }
-
     //----------------------------------------------------------------------------------
     public static IntPtr FindWindowByTitle(string lpWindowName)
     {
       return FindWindow(null, lpWindowName);
     }
-
     //----------------------------------------------------------------------------------
     public static void ToggleWindow(IntPtr hwnd)
     {
@@ -263,5 +240,6 @@ namespace MXTools
 
       ShowWindow(hwnd, IsWindowVisible(hwnd) ? SW_HIDE : SW_SHOW);
     }
+   
   }
 }
