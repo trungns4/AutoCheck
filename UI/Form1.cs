@@ -46,7 +46,6 @@ namespace MXTools
     private Settings _settings = new Settings();
     private bool _enableStart = true;
 
-
     public Form1()
     {
       InitializeComponent();
@@ -57,14 +56,39 @@ namespace MXTools
       LoadData();
 
       _About.Text = this.GetType().Assembly.GetName().Version.ToString() + " © by Alex";
-      _threadQ = new AutoKeyThread('q', _settings.Q, new ProgressBarAdapter(m_QPBar));
-      _threadW = new AutoKeyThread('w', _settings.W, new ProgressBarAdapter(m_WPBar));
+      _threadQ = new AutoKeyThread('q', _settings.Q, (current, max) =>
+      {
+        BeginInvoke(() =>
+        {
+          m_QPBar.Maximum = max;
+          m_QPBar.Minimum = 0;
+          m_QPBar.Value = Math.Min(current, max);
+        });
+      });
+      _threadW = new AutoKeyThread('w', _settings.W, (current, max) =>
+      {
+        BeginInvoke(() =>
+        {
+          m_WPBar.Maximum = max;
+          m_WPBar.Minimum = 0;
+          m_WPBar.Value = Math.Min(current, max);
+        });
+      });
 
-      _qweThread = new AutoQWEThread(_settings.QWE, m_KeyCount);
+      _qweThread = new AutoQWEThread(_settings.QWE, (count) =>
+      {
+        BeginInvoke(() => m_KeyCount.Text = count.ToString());
+      });
+
       _mThread = new AutoMouseThread(_settings.M);
       _timerWarning = new TimeWarning(_settings.T);
 
-      _timerWarning.Update = UpdateTimerRemain;
+      _timerWarning.Update = (rmain) =>
+      {
+        var ts = TimeSpan.FromSeconds(rmain);
+        BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
+        Thread.Sleep(32);
+      };
 
       UpdateUIByData();
 
@@ -94,7 +118,8 @@ namespace MXTools
     {
       try
       {
-        if (e.KeyCode == System.Windows.Forms.Keys.D0 && e.Control)
+        if ((e.KeyCode == System.Windows.Forms.Keys.D0 ||
+        e.KeyCode == System.Windows.Forms.Keys.Divide) && e.Control)
         {
           ToggleStartStop();
         }
@@ -108,15 +133,15 @@ namespace MXTools
           var sharp = Utils.CreateMemorySharp();
           if (sharp != null && sharp.Windows.MainWindow != null)
           {
-            WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
+            WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
           }
         }
-        else if(e.KeyCode == System.Windows.Forms.Keys.Oem3 && e.Control)
+        else if (e.KeyCode == System.Windows.Forms.Keys.Oem3 && e.Control)
         {
           var sharp = Utils.CreateMemorySharp();
           if (sharp != null && sharp.Windows.MainWindow != null)
           {
-            WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
+            WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
           }
         }
       }
@@ -409,13 +434,6 @@ namespace MXTools
     private void m_AutoMouse_CheckedChanged(object sender, EventArgs e)
     {
       _settings.M._auto = m_AutoMouse.Checked;
-    }
-    //----------------------------------------------------------------------------------
-    private void UpdateTimerRemain(int rmain)
-    {
-      var ts = TimeSpan.FromSeconds(rmain);
-      _WarnTime.BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
-      Thread.Sleep(32);
     }
   }
 }

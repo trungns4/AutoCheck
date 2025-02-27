@@ -8,15 +8,6 @@ using WindowsInput.Native;
 
 namespace MXTools
 {
-  interface IValuesDisplay
-  {
-    int MaxValue { get; set; }
-    int CurValue { get; set; }
-
-    IAsyncResult BeginInvoke(Delegate method, params object[] args);
-    bool InvokeRequired { get; }
-  }
-
   internal class AutoKeyThread
   {
     private char _key;
@@ -36,22 +27,34 @@ namespace MXTools
     private Thread _warnThread;
     private ManualResetEvent _keyFlag = new ManualResetEvent(false);
 
-    private IValuesDisplay _ValuesDisplay;
-
     private bool _isRunning = false;
     private bool _full = false;
     private SoundPlayer _player;
     private VirtualKeyCode _keyCode;
 
+    private Action<int, int> _display;
+
     //---------------------------------------------------------------------------------------
-    public AutoKeyThread(char key, QWMemThreadSettings settings, IValuesDisplay displayBox)
+    public AutoKeyThread(char key, QWMemThreadSettings settings, Action<int, int> display)
     {
       _sharp = null;
-      _ValuesDisplay = displayBox;
       _key = key;
       _keyCode = Utils.KeyCode(_key);
       _settings = settings;
       _player = new SoundPlayer("alarm2.mp3", _settings._warnVolume);
+      _display = display;
+    }
+    //---------------------------------------------------------------------------------------
+    public Action<int, int> Dislplay
+    {
+      get
+      {
+        return _display;
+      }
+      set
+      {
+        _display = value;
+      }
     }
     //---------------------------------------------------------------------------------------
     public bool Start(MemorySharp sharp, long curAddr, long maxAddr)
@@ -279,18 +282,9 @@ namespace MXTools
     //---------------------------------------------------------------------------------------
     private void DisplayValues(int current, int max)
     {
-      if (_ValuesDisplay.InvokeRequired)
+      if (_display != null)
       {
-        _ValuesDisplay.BeginInvoke(new Action(() =>
-        {
-          _ValuesDisplay.MaxValue = max;
-          _ValuesDisplay.CurValue = current;
-        }));
-      }
-      else
-      {
-        _ValuesDisplay.MaxValue = max;
-        _ValuesDisplay.CurValue = current;
+        Task.Run(() => _display(current, max));
       }
     }
   }

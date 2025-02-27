@@ -14,14 +14,7 @@
     <AssemblyVersion>1.1.0.*</AssemblyVersion>
     <InformationalVersion>1.1.0.0</InformationalVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <NoWarn>1701;1702;CA1416</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <NoWarn>1701;1702;CA1416</NoWarn>
-  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="AutoCheckPlus\**" />
     <Compile Remove="Driver\**" />
@@ -92,13 +85,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <ApplicationIcon>Resources\play.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;CA1416</NoWarn>
-  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NoWarn>1701;1702;CA1416</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;CA1416</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

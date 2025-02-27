@@ -23,20 +23,31 @@ namespace MXTools
     private Thread _eThread;
 
     private bool _isRunning = false;
-    private System.Windows.Forms.Label _label;
     private long _count = 0;
-
     private QWEThreadSettings _settings;
+    private Action<long> _display;
 
-    public AutoQWEThread(QWEThreadSettings settings, System.Windows.Forms.Label label)
+    public AutoQWEThread(QWEThreadSettings settings, Action<long> display)
     {
-      _label = label;
+      _display = display;
       _settings = settings;
     }
     //---------------------------------------------------------------------------------------
     public bool IsRunning()
     {
       return _isRunning;
+    }
+    //---------------------------------------------------------------------------------------
+    public Action<long> Dislplay
+    {
+      get
+      {
+        return _display;
+      }
+      set
+      {
+        _display = value;
+      }
     }
     //---------------------------------------------------------------------------------------
     public bool Start(MemorySharp sharp)
@@ -97,18 +108,21 @@ namespace MXTools
       log.DebugFormat("Auto Key Threads stopped");
     }
     //---------------------------------------------------------------------------------------
-    private void UpdateLabel()
+    private void DisplayCountNumber()
     {
-      if (_label.InvokeRequired)
-        _label.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => _label.Text = _count.ToString()));
-      else
-        _label.Text = _count.ToString();
+      if (_display != null)
+      {
+        Task.Run(() =>
+        {
+          _display(_count);
+        });
+      }
     }
     //---------------------------------------------------------------------------------------
     private void UpdateUIAndSleep(int sleep)
     {
       Interlocked.Increment(ref _count);
-      UpdateLabel();
+      DisplayCountNumber();
       Thread.Sleep(sleep);
     }
     //---------------------------------------------------------------------------------------
@@ -160,7 +174,7 @@ namespace MXTools
 
         if (_settings._q == false && _settings._w == false && _settings._e == false)
         {
-          UpdateLabel();
+          DisplayCountNumber();
           Thread.Sleep(Math.Min(_settings._threadDelayQ, Math.Min(_settings._threadDelayW, _settings._threadDelayE)));
         }
       }
