@@ -87,7 +87,6 @@ namespace MXTools
       {
         var ts = TimeSpan.FromSeconds(rmain);
         BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
-        Thread.Sleep(32);
       };
 
       UpdateUIByData();
@@ -195,6 +194,8 @@ namespace MXTools
 
       SaveData();
       Stop();
+
+      m_NotifyIcon.Dispose();
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)

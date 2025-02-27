@@ -185,41 +185,41 @@
       m_ContextMenu.ImageScalingSize = new System.Drawing.Size(18, 18);
       m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { m_StartMenu, toolStripSeparator3, m_ShowMenu, m_HideMenu, toolStripSeparator2, m_CloseMenu });
       m_ContextMenu.Name = "m_ContextMenu";
-      m_ContextMenu.Size = new System.Drawing.Size(193, 128);
+      m_ContextMenu.Size = new System.Drawing.Size(108, 104);
       m_ContextMenu.Opened += m_ContextMenu_Opened;
       // 
       // m_StartMenu
       // 
       m_StartMenu.Name = "m_StartMenu";
-      m_StartMenu.Size = new System.Drawing.Size(192, 22);
+      m_StartMenu.Size = new System.Drawing.Size(107, 22);
       m_StartMenu.Text = "Start";
       // 
       // toolStripSeparator3
       // 
       toolStripSeparator3.Name = "toolStripSeparator3";
-      toolStripSeparator3.Size = new System.Drawing.Size(189, 6);
+      toolStripSeparator3.Size = new System.Drawing.Size(104, 6);
       // 
       // m_ShowMenu
       // 
       m_ShowMenu.Name = "m_ShowMenu";
-      m_ShowMenu.Size = new System.Drawing.Size(192, 22);
+      m_ShowMenu.Size = new System.Drawing.Size(107, 22);
       m_ShowMenu.Text = "Show";
       // 
       // m_HideMenu
       // 
       m_HideMenu.Name = "m_HideMenu";
-      m_HideMenu.Size = new System.Drawing.Size(192, 22);
+      m_HideMenu.Size = new System.Drawing.Size(107, 22);
       m_HideMenu.Text = "Hide";
       // 
       // toolStripSeparator2
       // 
       toolStripSeparator2.Name = "toolStripSeparator2";
-      toolStripSeparator2.Size = new System.Drawing.Size(189, 6);
+      toolStripSeparator2.Size = new System.Drawing.Size(104, 6);
       // 
       // m_CloseMenu
       // 
       m_CloseMenu.Name = "m_CloseMenu";
-      m_CloseMenu.Size = new System.Drawing.Size(192, 22);
+      m_CloseMenu.Size = new System.Drawing.Size(107, 22);
       m_CloseMenu.Text = "Quit";
       // 
       // m_NotifyIcon
