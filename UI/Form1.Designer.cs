@@ -59,7 +59,7 @@
       // m_ScanButton
       // 
       m_ScanButton.Image = Properties.Resources.scan_16;
-      m_ScanButton.Location = new System.Drawing.Point(5, 236);
+      m_ScanButton.Location = new System.Drawing.Point(445, 8);
       m_ScanButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_ScanButton.Name = "m_ScanButton";
       m_ScanButton.Size = new System.Drawing.Size(67, 31);
@@ -70,7 +70,7 @@
       // m_StartButton
       // 
       m_StartButton.Image = Properties.Resources.play_16;
-      m_StartButton.Location = new System.Drawing.Point(74, 236);
+      m_StartButton.Location = new System.Drawing.Point(445, 45);
       m_StartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_StartButton.Name = "m_StartButton";
       m_StartButton.Size = new System.Drawing.Size(67, 31);
@@ -86,9 +86,9 @@
       m_AutoQ.Location = new System.Drawing.Point(5, 12);
       m_AutoQ.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_AutoQ.Name = "m_AutoQ";
-      m_AutoQ.Size = new System.Drawing.Size(112, 21);
+      m_AutoQ.Size = new System.Drawing.Size(43, 21);
       m_AutoQ.TabIndex = 6;
-      m_AutoQ.Text = "Auto Check HP";
+      m_AutoQ.Text = "HP";
       m_AutoQ.UseVisualStyleBackColor = true;
       m_AutoQ.CheckedChanged += OnAutoQCheckedChanged;
       // 
@@ -97,12 +97,12 @@
       m_AutoW.AutoSize = true;
       m_AutoW.Checked = true;
       m_AutoW.CheckState = System.Windows.Forms.CheckState.Checked;
-      m_AutoW.Location = new System.Drawing.Point(5, 48);
+      m_AutoW.Location = new System.Drawing.Point(5, 45);
       m_AutoW.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_AutoW.Name = "m_AutoW";
-      m_AutoW.Size = new System.Drawing.Size(129, 21);
+      m_AutoW.Size = new System.Drawing.Size(60, 21);
       m_AutoW.TabIndex = 6;
-      m_AutoW.Text = "Auto Check Mana";
+      m_AutoW.Text = "Mana";
       m_AutoW.UseVisualStyleBackColor = true;
       m_AutoW.CheckedChanged += OnAutoWCheckedChanged;
       // 
@@ -159,7 +159,7 @@
       // m_CloseButton
       // 
       m_CloseButton.Image = Properties.Resources.quit_16;
-      m_CloseButton.Location = new System.Drawing.Point(74, 273);
+      m_CloseButton.Location = new System.Drawing.Point(520, 45);
       m_CloseButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_CloseButton.Name = "m_CloseButton";
       m_CloseButton.Size = new System.Drawing.Size(67, 31);
@@ -169,8 +169,8 @@
       // 
       // m_KeyCount
       // 
-      m_KeyCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-      m_KeyCount.Location = new System.Drawing.Point(5, 117);
+      m_KeyCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.2264156F);
+      m_KeyCount.Location = new System.Drawing.Point(158, 39);
       m_KeyCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       m_KeyCount.Name = "m_KeyCount";
       m_KeyCount.Size = new System.Drawing.Size(136, 39);
@@ -181,7 +181,7 @@
       // m_EChk
       // 
       m_EChk.AutoSize = true;
-      m_EChk.Location = new System.Drawing.Point(107, 90);
+      m_EChk.Location = new System.Drawing.Point(260, 12);
       m_EChk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_EChk.Name = "m_EChk";
       m_EChk.Size = new System.Drawing.Size(34, 21);
@@ -193,7 +193,7 @@
       // m_WChk
       // 
       m_WChk.AutoSize = true;
-      m_WChk.Location = new System.Drawing.Point(55, 90);
+      m_WChk.Location = new System.Drawing.Point(208, 12);
       m_WChk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_WChk.Name = "m_WChk";
       m_WChk.Size = new System.Drawing.Size(39, 21);
@@ -207,7 +207,7 @@
       m_QChk.AutoSize = true;
       m_QChk.Checked = true;
       m_QChk.CheckState = System.Windows.Forms.CheckState.Checked;
-      m_QChk.Location = new System.Drawing.Point(5, 90);
+      m_QChk.Location = new System.Drawing.Point(158, 12);
       m_QChk.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_QChk.Name = "m_QChk";
       m_QChk.Size = new System.Drawing.Size(37, 21);
@@ -219,8 +219,9 @@
       // _About
       // 
       _About.AutoSize = true;
+      _About.Font = new System.Drawing.Font("Segoe UI", 8.150944F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
       _About.ForeColor = System.Drawing.SystemColors.ControlDark;
-      _About.Location = new System.Drawing.Point(5, 313);
+      _About.Location = new System.Drawing.Point(818, 39);
       _About.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
       _About.Name = "_About";
       _About.Size = new System.Drawing.Size(14, 17);
@@ -230,7 +231,7 @@
       // _SettingsButton
       // 
       _SettingsButton.Image = Properties.Resources.settings_16;
-      _SettingsButton.Location = new System.Drawing.Point(5, 273);
+      _SettingsButton.Location = new System.Drawing.Point(520, 8);
       _SettingsButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _SettingsButton.Name = "_SettingsButton";
       _SettingsButton.Size = new System.Drawing.Size(67, 31);
@@ -243,7 +244,7 @@
       m_AutoMouse.AutoSize = true;
       m_AutoMouse.Checked = true;
       m_AutoMouse.CheckState = System.Windows.Forms.CheckState.Checked;
-      m_AutoMouse.Location = new System.Drawing.Point(5, 166);
+      m_AutoMouse.Location = new System.Drawing.Point(302, 12);
       m_AutoMouse.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_AutoMouse.Name = "m_AutoMouse";
       m_AutoMouse.Size = new System.Drawing.Size(132, 21);
@@ -254,9 +255,9 @@
       // 
       // _WarnTime
       // 
-      _WarnTime.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, 0);
+      _WarnTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.2264156F);
       _WarnTime.ForeColor = System.Drawing.Color.Red;
-      _WarnTime.Location = new System.Drawing.Point(5, 187);
+      _WarnTime.Location = new System.Drawing.Point(302, 39);
       _WarnTime.Name = "_WarnTime";
       _WarnTime.Size = new System.Drawing.Size(136, 39);
       _WarnTime.TabIndex = 11;
@@ -272,7 +273,7 @@
       // 
       // _ManaBar
       // 
-      _ManaBar.Location = new System.Drawing.Point(5, 67);
+      _ManaBar.Location = new System.Drawing.Point(5, 64);
       _ManaBar.Name = "_ManaBar";
       _ManaBar.Size = new System.Drawing.Size(136, 8);
       _ManaBar.TabIndex = 12;
@@ -281,7 +282,7 @@
       // 
       AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
       AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      ClientSize = new System.Drawing.Size(148, 348);
+      ClientSize = new System.Drawing.Size(593, 85);
       Controls.Add(_ManaBar);
       Controls.Add(_HPBar);
       Controls.Add(m_KeyCount);
@@ -297,7 +298,7 @@
       Controls.Add(m_ScanButton);
       Controls.Add(m_CloseButton);
       Controls.Add(m_StartButton);
-      FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+      FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
       Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
       Location = new System.Drawing.Point(2, 320);
       Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);

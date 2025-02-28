@@ -51,8 +51,20 @@ namespace MXTools
       InitializeComponent();
     }
 
+    private void Align()
+    {
+      int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
+      int formWidth = this.Width;
+
+      int x = (screenWidth - formWidth) / 2; // Center horizontally
+      int y = 0; // Align to top
+
+      this.Location = new System.Drawing.Point(x, y); // Move form
+    }
+
     private void OnFormLoad(object sender, EventArgs e)
     {
+      Align();
       LoadData();
 
       _About.Text = this.GetType().Assembly.GetName().Version.ToString() + " © by Alex";
@@ -163,7 +175,9 @@ namespace MXTools
 
           case System.Windows.Forms.Keys.OemPeriod:
             {
-              ShowMe(false);
+              ShowMe(true);
+              Align();
+              Utils.SetForegroundWindow(Handle);
             }
             break;
         }

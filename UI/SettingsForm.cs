@@ -68,25 +68,7 @@ namespace MXTools
     {
       _saved = false;
     }
-    //----------------------------------------------------------------------------------
-    private List<NumericUpDown> GetAllNumericUpDowns(Control parent)
-    {
-      List<NumericUpDown> numericList = new List<NumericUpDown>();
-
-      foreach (Control ctrl in parent.Controls)
-      {
-        if (ctrl is NumericUpDown numeric)
-        {
-          numericList.Add(numeric);
-        }
-        else if (ctrl.HasChildren)
-        {
-          numericList.AddRange(GetAllNumericUpDowns(ctrl)); // Recursively get from nested controls
-        }
-      }
-
-      return numericList;
-    }
+    
     //----------------------------------------------------------------------------------
     private void ShowData()
     {
