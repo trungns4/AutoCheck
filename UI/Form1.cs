@@ -57,7 +57,8 @@ namespace MXTools
       int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
       int formWidth = this.Width;
 
-      int x = (screenWidth - formWidth) / 2; // Center horizontally
+      //int x = (screenWidth - formWidth) / 2; // Center horizontally
+      int x = screenWidth - formWidth; // Align to right
       int y = 0; // Align to top
 
       this.Location = new System.Drawing.Point(x, y); // Move form

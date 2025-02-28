@@ -310,7 +310,7 @@
       Controls.Add(m_ScanButton);
       Controls.Add(m_CloseButton);
       Controls.Add(m_StartButton);
-      FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+      FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
       Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
       Location = new System.Drawing.Point(2, 320);
       Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
