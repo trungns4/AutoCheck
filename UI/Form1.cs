@@ -56,24 +56,8 @@ namespace MXTools
       LoadData();
 
       _About.Text = this.GetType().Assembly.GetName().Version.ToString() + " © by Alex";
-      _threadQ = new AutoKeyThread('q', _settings.Q, (current, max) =>
-      {
-        BeginInvoke(() =>
-        {
-          m_QPBar.Maximum = max;
-          m_QPBar.Minimum = 0;
-          m_QPBar.Value = Math.Min(current, max);
-        });
-      });
-      _threadW = new AutoKeyThread('w', _settings.W, (current, max) =>
-      {
-        BeginInvoke(() =>
-        {
-          m_WPBar.Maximum = max;
-          m_WPBar.Minimum = 0;
-          m_WPBar.Value = Math.Min(current, max);
-        });
-      });
+      _threadQ = new AutoKeyThread('q', _settings.Q, null);
+      _threadW = new AutoKeyThread('w', _settings.W, null);
 
       _qweThread = new AutoQWEThread(_settings.QWE, (count) =>
       {
@@ -132,6 +116,7 @@ namespace MXTools
               }
               break;
 
+            case System.Windows.Forms.Keys.Divide:
             case System.Windows.Forms.Keys.Multiply:
               {
                 var sharp = Utils.CreateMemorySharp();
@@ -387,16 +372,7 @@ namespace MXTools
       m_WChk.Checked = _settings.QWE._w;
       m_EChk.Checked = _settings.QWE._e;
 
-      m_VolumeCtrl.Minimum = 0;
-      m_VolumeCtrl.Maximum = 100;
-      m_VolumeCtrl.Value = (int)(Math.Min(_settings.Q._warnVolume, 1.0f) * 100f);
-
       m_AutoMouse.Checked = _settings.M._auto;
-    }
-    //----------------------------------------------------------------------------------
-    private void OnVolumeValueChanged(object sender, EventArgs e)
-    {
-      _settings.Q._warnVolume = (float)m_VolumeCtrl.Value / (float)m_VolumeCtrl.Maximum;
     }
 
     //----------------------------------------------------------------------------------
