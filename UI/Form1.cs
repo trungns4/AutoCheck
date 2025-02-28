@@ -56,8 +56,28 @@ namespace MXTools
       LoadData();
 
       _About.Text = this.GetType().Assembly.GetName().Version.ToString() + " © by Alex";
-      _threadQ = new AutoKeyThread('q', _settings.Q, null);
-      _threadW = new AutoKeyThread('w', _settings.W, null);
+      _threadQ = new AutoKeyThread('q', _settings.Q, (cur, max) =>
+      {
+        BeginInvoke(() =>
+        {
+          if (_HPBar.Maximum != max || _HPBar.Value != cur)
+          {
+            _HPBar.Maximum = max;
+            _HPBar.Value = Math.Min(cur, max);
+          }
+        });
+      });
+      _threadW = new AutoKeyThread('w', _settings.W, (cur, max) =>
+      {
+        BeginInvoke(() =>
+        {
+          if (_ManaBar.Maximum != max || _ManaBar.Value != cur)
+          {
+            _ManaBar.Maximum = max;
+            _ManaBar.Value = Math.Min(cur, max);
+          }
+        });
+      });
 
       _qweThread = new AutoQWEThread(_settings.QWE, (count) =>
       {
@@ -99,60 +119,54 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-      try
+      if (e.Control)
       {
-        if (e.Control)
+        switch (e.KeyCode)
         {
-          switch (e.KeyCode)
-          {
-            case System.Windows.Forms.Keys.D0:
-              ToggleStartStop();
-              break;
+          case System.Windows.Forms.Keys.D0:
+            ToggleStartStop();
+            break;
 
-            case System.Windows.Forms.Keys.A:
-              {
-                _settings.M._auto = !_settings.M._auto;
-                BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
-              }
-              break;
+          case System.Windows.Forms.Keys.A:
+            {
+              _settings.M._auto = !_settings.M._auto;
+              BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
+            }
+            break;
 
-            case System.Windows.Forms.Keys.Divide:
-            case System.Windows.Forms.Keys.Multiply:
+          case System.Windows.Forms.Keys.Divide:
+          case System.Windows.Forms.Keys.Multiply:
+            {
+              var sharp = Utils.CreateMemorySharp();
+              if (sharp != null && sharp.Windows.MainWindow != null)
               {
-                var sharp = Utils.CreateMemorySharp();
-                if (sharp != null && sharp.Windows.MainWindow != null)
-                {
-                  WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
-                }
+                WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
               }
-              break;
+            }
+            break;
 
-            case System.Windows.Forms.Keys.Oem3:
+          case System.Windows.Forms.Keys.Oem3:
+            {
+              var sharp = Utils.CreateMemorySharp();
+              if (sharp != null && sharp.Windows.MainWindow != null)
               {
-                var sharp = Utils.CreateMemorySharp();
-                if (sharp != null && sharp.Windows.MainWindow != null)
-                {
-                  WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
-                }
+                WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
               }
-              break;
+            }
+            break;
 
-            case System.Windows.Forms.Keys.Oemcomma:
-              {
-                ShowMe(false);
-              }
-              break;
+          case System.Windows.Forms.Keys.Oemcomma:
+            {
+              ShowMe(false);
+            }
+            break;
 
-            case System.Windows.Forms.Keys.OemPeriod:
-              {
-                ShowMe(false);
-              }
-              break;
-          }
+          case System.Windows.Forms.Keys.OemPeriod:
+            {
+              ShowMe(false);
+            }
+            break;
         }
-      }
-      finally
-      {
       }
     }
     //----------------------------------------------------------------------------------
@@ -202,6 +216,7 @@ namespace MXTools
       SaveData();
       Stop();
 
+      m_NotifyIcon.Visible = false;
       m_NotifyIcon.Dispose();
     }
     //----------------------------------------------------------------------------------
