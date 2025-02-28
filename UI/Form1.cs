@@ -24,6 +24,7 @@ using System.Xml.Linq;
 using log4net;
 using WindowsInput.Native;
 using System.Collections;
+using System.Runtime.Intrinsics.Arm;
 
 namespace MXTools
 {
@@ -67,7 +68,7 @@ namespace MXTools
       Align();
       LoadData();
 
-      _About.Text = this.GetType().Assembly.GetName().Version.ToString() + " © by Alex";
+      this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version.ToString()} © by Alex";
       _threadQ = new AutoKeyThread('q', _settings.Q, (cur, max) =>
       {
         BeginInvoke(() =>
@@ -119,6 +120,12 @@ namespace MXTools
       m_HideMenu.Click += OnHideMenu_Click;
       m_ShowMenu.Click += OnShowMenu_Click;
       m_StartMenu.Click += OnStartMenuClick;
+
+      var sharp = Utils.CreateMemorySharp();
+      if (sharp != null && sharp.Windows.MainWindow != null)
+      {
+        UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+      }
     }
     //----------------------------------------------------------------------------------
     private void OnKeyUp(object sender, KeyEventArgs e)
@@ -153,6 +160,7 @@ namespace MXTools
               if (sharp != null && sharp.Windows.MainWindow != null)
               {
                 WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
+                UpdateToogleButton(sharp.Windows.MainWindow.Handle);
               }
             }
             break;
@@ -163,6 +171,7 @@ namespace MXTools
               if (sharp != null && sharp.Windows.MainWindow != null)
               {
                 WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
+                UpdateToogleButton(sharp.Windows.MainWindow.Handle);
               }
             }
             break;
@@ -462,6 +471,26 @@ namespace MXTools
     private void m_AutoMouse_CheckedChanged(object sender, EventArgs e)
     {
       _settings.M._auto = m_AutoMouse.Checked;
+    }
+    //----------------------------------------------------------------------------------
+    private void OnToogleMXClicked(object sender, EventArgs e)
+    {
+      var sharp = Utils.CreateMemorySharp();
+      if (sharp != null && sharp.Windows.MainWindow != null)
+      {
+        WindowHider.ToggleWindow(sharp.Windows.MainWindow.Handle);
+        UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+      }
+    }
+    //----------------------------------------------------------------------------------
+    private void OnMinimizeClicked(object sender, EventArgs e)
+    {
+      this.WindowState = FormWindowState.Minimized;
+    }
+    //----------------------------------------------------------------------------------
+    private void UpdateToogleButton(IntPtr handle)
+    {
+      _ToggleMXButton.Image = WindowHider.IsShowing(handle) ? Resources.hide_16 : Resources.window_16;
     }
   }
 }

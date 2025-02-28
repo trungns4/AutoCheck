@@ -122,6 +122,12 @@ class WindowHider
       HideWindow(hWnd);
     }
   }
+  //----------------------------------------------------------------------------------
+  public static bool IsShowing(IntPtr hWnd)
+  {
+    int style = GetWindowLong(hWnd, GWL_EXSTYLE);
+    return ((style & WS_EX_TOOLWINDOW) == 0);
+  }
 
   //----------------------------------------------------------------------------------
   private static IntPtr SetClassLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)

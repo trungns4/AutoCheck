@@ -47,12 +47,13 @@
       m_EChk = new System.Windows.Forms.CheckBox();
       m_WChk = new System.Windows.Forms.CheckBox();
       m_QChk = new System.Windows.Forms.CheckBox();
-      _About = new System.Windows.Forms.Label();
       _SettingsButton = new System.Windows.Forms.Button();
       m_AutoMouse = new System.Windows.Forms.CheckBox();
       _WarnTime = new System.Windows.Forms.Label();
       _HPBar = new System.Windows.Forms.ProgressBar();
       _ManaBar = new System.Windows.Forms.ProgressBar();
+      _ToggleMXButton = new System.Windows.Forms.Button();
+      _MinimizeButton = new System.Windows.Forms.Button();
       m_ContextMenu.SuspendLayout();
       SuspendLayout();
       // 
@@ -70,7 +71,7 @@
       // m_StartButton
       // 
       m_StartButton.Image = Properties.Resources.play_16;
-      m_StartButton.Location = new System.Drawing.Point(445, 45);
+      m_StartButton.Location = new System.Drawing.Point(520, 42);
       m_StartButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_StartButton.Name = "m_StartButton";
       m_StartButton.Size = new System.Drawing.Size(67, 31);
@@ -159,7 +160,7 @@
       // m_CloseButton
       // 
       m_CloseButton.Image = Properties.Resources.quit_16;
-      m_CloseButton.Location = new System.Drawing.Point(520, 45);
+      m_CloseButton.Location = new System.Drawing.Point(595, 42);
       m_CloseButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       m_CloseButton.Name = "m_CloseButton";
       m_CloseButton.Size = new System.Drawing.Size(67, 31);
@@ -216,22 +217,10 @@
       m_QChk.UseVisualStyleBackColor = true;
       m_QChk.CheckedChanged += OnQChkChanged;
       // 
-      // _About
-      // 
-      _About.AutoSize = true;
-      _About.Font = new System.Drawing.Font("Segoe UI", 8.150944F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 0);
-      _About.ForeColor = System.Drawing.SystemColors.ControlDark;
-      _About.Location = new System.Drawing.Point(818, 39);
-      _About.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-      _About.Name = "_About";
-      _About.Size = new System.Drawing.Size(14, 17);
-      _About.TabIndex = 8;
-      _About.Text = "..";
-      // 
       // _SettingsButton
       // 
       _SettingsButton.Image = Properties.Resources.settings_16;
-      _SettingsButton.Location = new System.Drawing.Point(520, 8);
+      _SettingsButton.Location = new System.Drawing.Point(445, 42);
       _SettingsButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _SettingsButton.Name = "_SettingsButton";
       _SettingsButton.Size = new System.Drawing.Size(67, 31);
@@ -278,11 +267,33 @@
       _ManaBar.Size = new System.Drawing.Size(136, 8);
       _ManaBar.TabIndex = 12;
       // 
+      // _ToggleMXButton
+      // 
+      _ToggleMXButton.Image = Properties.Resources.window_16;
+      _ToggleMXButton.Location = new System.Drawing.Point(520, 8);
+      _ToggleMXButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _ToggleMXButton.Name = "_ToggleMXButton";
+      _ToggleMXButton.Size = new System.Drawing.Size(67, 31);
+      _ToggleMXButton.TabIndex = 9;
+      _ToggleMXButton.UseVisualStyleBackColor = true;
+      _ToggleMXButton.Click += OnToogleMXClicked;
+      // 
+      // _MinimizeButton
+      // 
+      _MinimizeButton.Image = Properties.Resources.down_16;
+      _MinimizeButton.Location = new System.Drawing.Point(595, 8);
+      _MinimizeButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _MinimizeButton.Name = "_MinimizeButton";
+      _MinimizeButton.Size = new System.Drawing.Size(67, 31);
+      _MinimizeButton.TabIndex = 9;
+      _MinimizeButton.UseVisualStyleBackColor = true;
+      _MinimizeButton.Click += OnMinimizeClicked;
+      // 
       // Form1
       // 
       AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
       AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      ClientSize = new System.Drawing.Size(593, 85);
+      ClientSize = new System.Drawing.Size(669, 80);
       Controls.Add(_ManaBar);
       Controls.Add(_HPBar);
       Controls.Add(m_KeyCount);
@@ -293,8 +304,9 @@
       Controls.Add(m_QChk);
       Controls.Add(_WarnTime);
       Controls.Add(m_AutoMouse);
+      Controls.Add(_MinimizeButton);
+      Controls.Add(_ToggleMXButton);
       Controls.Add(_SettingsButton);
-      Controls.Add(_About);
       Controls.Add(m_ScanButton);
       Controls.Add(m_CloseButton);
       Controls.Add(m_StartButton);
@@ -335,12 +347,13 @@
     private System.Windows.Forms.CheckBox m_WChk;
     private System.Windows.Forms.CheckBox m_QChk;
     private System.Windows.Forms.Label m_KeyCount;
-    private System.Windows.Forms.Label _About;
     private System.Windows.Forms.Button _SettingsButton;
     private System.Windows.Forms.CheckBox m_AutoMouse;
     private System.Windows.Forms.Label _WarnTime;
     private System.Windows.Forms.ProgressBar _HPBar;
     private System.Windows.Forms.ProgressBar _ManaBar;
+    private System.Windows.Forms.Button _ToggleMXButton;
+    private System.Windows.Forms.Button _MinimizeButton;
   }
 }
 

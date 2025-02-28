@@ -61,6 +61,25 @@ namespace MXTools.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MXTools.
+        /// </summary>
+        internal static string AppTitle {
+            get {
+                return ResourceManager.GetString("AppTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap close_16 {
+            get {
+                object obj = ResourceManager.GetObject("close_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon db {
@@ -71,7 +90,27 @@ namespace MXTools.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AutoCheck.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap down_16 {
+            get {
+                object obj = ResourceManager.GetObject("down_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap hide_16 {
+            get {
+                object obj = ResourceManager.GetObject("hide_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MXTools.
         /// </summary>
         internal static string MsgBoxCaption {
             get {
@@ -135,6 +174,16 @@ namespace MXTools.Properties {
         internal static System.Drawing.Bitmap stop_16 {
             get {
                 object obj = ResourceManager.GetObject("stop_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap window_16 {
+            get {
+                object obj = ResourceManager.GetObject("window_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
