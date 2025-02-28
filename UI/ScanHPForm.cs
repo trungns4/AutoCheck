@@ -50,6 +50,10 @@ namespace MXTools
     //--------------------------------------------------------------------------------------------
     private void _Scan_Click(object sender, EventArgs e)
     {
+      if (_scanning)
+      {
+        return;
+      }
       Scan();
     }
     //--------------------------------------------------------------------------------------------
@@ -176,13 +180,13 @@ namespace MXTools
         _scanning = true;
         if (false == int.TryParse(_InputBox.Text, out int val))
         {
-          MessageBox.Show("Please enter HP", Resources.MsgBoxCaption);
+          MessageBox.Show("Please enter HP", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
 
         if (false == int.TryParse(m_OffsetBox.Text, out int offset))
         {
-          MessageBox.Show("Please enter offset", Resources.MsgBoxCaption);
+          MessageBox.Show("Please enter offset", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
           return;
         }
 
@@ -193,7 +197,7 @@ namespace MXTools
         };
         _StopButton.Click += stopButtonClickHandler;
 
-        scan.Scan(val, offset,
+        var ret = scan.Scan(val, offset,
         total =>
         {
           BeginInvoke(() => OnStart(total));

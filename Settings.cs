@@ -173,7 +173,7 @@ namespace MXTools
       }
       catch
       {
-        MessageBox.Show("Load data failed", Resources.MsgBoxCaption);
+        MessageBox.Show("Load data failed", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
     }
@@ -187,7 +187,7 @@ namespace MXTools
       }
       catch
       {
-        MessageBox.Show("Load data failed", Resources.MsgBoxCaption);
+        MessageBox.Show("Load data failed", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
     //----------------------------------------------------------------------------------

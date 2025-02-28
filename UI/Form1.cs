@@ -122,7 +122,7 @@ namespace MXTools
       m_ShowMenu.Click += OnShowMenu_Click;
       m_StartMenu.Click += OnStartMenuClick;
 
-      var sharp = Utils.CreateMemorySharp();
+      var sharp = MemorySharpHolder.GetMemorySharp();
       if (sharp != null && sharp.Windows.MainWindow != null)
       {
         UpdateToogleButton(sharp.Windows.MainWindow.Handle);
@@ -157,7 +157,7 @@ namespace MXTools
           case System.Windows.Forms.Keys.Divide:
           case System.Windows.Forms.Keys.Multiply:
             {
-              var sharp = Utils.CreateMemorySharp();
+              var sharp = MemorySharpHolder.GetMemorySharp();
               if (sharp != null && sharp.Windows.MainWindow != null)
               {
                 WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
@@ -168,7 +168,7 @@ namespace MXTools
 
           case System.Windows.Forms.Keys.Oem3:
             {
-              var sharp = Utils.CreateMemorySharp();
+              var sharp = MemorySharpHolder.GetMemorySharp();
               if (sharp != null && sharp.Windows.MainWindow != null)
               {
                 WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
@@ -269,10 +269,10 @@ namespace MXTools
     private bool Start()
     {
       Utils.CloseApps();
-      _sharp = Utils.CreateMemorySharp();
+      _sharp = MemorySharpHolder.GetMemorySharp();
       if (_sharp == null)
       {
-        MessageBox.Show("The process is not running", Resources.MsgBoxCaption);
+        MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         return false;
       }
 
@@ -296,7 +296,6 @@ namespace MXTools
       m_StartMenu.Text = "Start";
       _SettingsButton.Enabled = true;
 
-      _sharp?.Dispose();
       return true;
     }
     //----------------------------------------------------------------------------------
@@ -399,7 +398,7 @@ namespace MXTools
       catch
       {
         _settings = new Settings();
-        MessageBox.Show("Load data failed", Resources.MsgBoxCaption);
+        MessageBox.Show("Load data failed", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
     //----------------------------------------------------------------------------------
@@ -476,7 +475,7 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnToogleMXClicked(object sender, EventArgs e)
     {
-      var sharp = Utils.CreateMemorySharp();
+      var sharp = MemorySharpHolder.GetMemorySharp();
       if (sharp != null && sharp.Windows.MainWindow != null)
       {
         WindowHider.ToggleWindow(sharp.Windows.MainWindow.Handle);

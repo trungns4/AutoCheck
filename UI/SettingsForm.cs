@@ -68,7 +68,7 @@ namespace MXTools
     {
       _saved = false;
     }
-    
+
     //----------------------------------------------------------------------------------
     private void ShowData()
     {
@@ -185,7 +185,7 @@ namespace MXTools
     {
       if (false == _saved)
       {
-        var m = MessageBox.Show("Do you want to save?", Resources.MsgBoxCaption, MessageBoxButtons.YesNoCancel);
+        var m = MessageBox.Show("Do you want to save?", Resources.MsgBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk);
         if (m == DialogResult.Yes)
         {
           UIToData();

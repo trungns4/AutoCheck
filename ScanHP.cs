@@ -80,9 +80,11 @@ namespace MXTools
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-      MemorySharp sharp = Utils.CreateMemorySharp();
+      MemorySharp sharp = MemorySharpHolder.GetMemorySharp();
       if (sharp == null)
       {
+        MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        doneFunc(0, 0);
         return false;
       }
 
