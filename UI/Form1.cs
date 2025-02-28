@@ -117,30 +117,52 @@ namespace MXTools
     {
       try
       {
-        if ((e.KeyCode == System.Windows.Forms.Keys.D0 ||
-        e.KeyCode == System.Windows.Forms.Keys.Divide) && e.Control)
+        if (e.Control)
         {
-          ToggleStartStop();
-        }
-        else if (e.KeyCode == System.Windows.Forms.Keys.A && e.Control)
-        {
-          _settings.M._auto = !_settings.M._auto;
-          m_AutoMouse.BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
-        }
-        else if (e.KeyCode == System.Windows.Forms.Keys.Multiply && e.Control)
-        {
-          var sharp = Utils.CreateMemorySharp();
-          if (sharp != null && sharp.Windows.MainWindow != null)
+          switch (e.KeyCode)
           {
-            WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
-          }
-        }
-        else if (e.KeyCode == System.Windows.Forms.Keys.Oem3 && e.Control)
-        {
-          var sharp = Utils.CreateMemorySharp();
-          if (sharp != null && sharp.Windows.MainWindow != null)
-          {
-            WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
+            case System.Windows.Forms.Keys.D0:
+              ToggleStartStop();
+              break;
+
+            case System.Windows.Forms.Keys.A:
+              {
+                _settings.M._auto = !_settings.M._auto;
+                BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
+              }
+              break;
+
+            case System.Windows.Forms.Keys.Multiply:
+              {
+                var sharp = Utils.CreateMemorySharp();
+                if (sharp != null && sharp.Windows.MainWindow != null)
+                {
+                  WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
+                }
+              }
+              break;
+
+            case System.Windows.Forms.Keys.Oem3:
+              {
+                var sharp = Utils.CreateMemorySharp();
+                if (sharp != null && sharp.Windows.MainWindow != null)
+                {
+                  WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
+                }
+              }
+              break;
+
+            case System.Windows.Forms.Keys.Oemcomma:
+              {
+                ShowMe(false);
+              }
+              break;
+
+            case System.Windows.Forms.Keys.OemPeriod:
+              {
+                ShowMe(false);
+              }
+              break;
           }
         }
       }
@@ -226,7 +248,7 @@ namespace MXTools
       _sharp = Utils.CreateMemorySharp();
       if (_sharp == null)
       {
-        MessageBox.Show("Could not read the memory", Resources.MsgBoxCaption);
+        MessageBox.Show("The process is not running", Resources.MsgBoxCaption);
         return false;
       }
 
