@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using WindowsInput.Native;
 
 namespace MXTools
@@ -67,6 +68,14 @@ namespace MXTools
       public int Right;
       public int Bottom;
     }
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+    private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
     //----------------------------------------------------------------------------------
     public static void GetWindowRectangle(IntPtr hWnd, out int left, out int top, out int right, out int bottom)
@@ -240,6 +249,37 @@ namespace MXTools
 
       ShowWindow(hwnd, IsWindowVisible(hwnd) ? SW_HIDE : SW_SHOW);
     }
-   
+    //---------------------------------------------------------------------------------- 
+    public static IntPtr FindWindowByExeName(string exeName)
+    {
+      IntPtr foundWindow = IntPtr.Zero;
+      uint currentProcessId = (uint)Process.GetCurrentProcess().Id;
+
+      EnumWindows((hWnd, lParam) =>
+      {
+        if (GetWindowThreadProcessId(hWnd, out uint processId) != 0)
+        {
+          if (processId != currentProcessId) // ✅ Exclude the current process
+          {
+            try
+            {
+              Process proc = Process.GetProcessById((int)processId);
+              if (proc.MainModule.FileName.EndsWith(exeName, StringComparison.OrdinalIgnoreCase))
+              {
+                foundWindow = hWnd;
+                return false; // Stop searching after finding the first match
+              }
+            }
+            catch
+            {
+              // Process might have exited, ignore exceptions
+            }
+          }
+        }
+        return true; // Continue enumeration
+      }, IntPtr.Zero);
+
+      return foundWindow;
+    }
   }
 }

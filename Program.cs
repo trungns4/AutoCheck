@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -34,8 +36,8 @@ namespace MXTools
       }
       else
       {
-        // Bring existing instance to the foreground
-        IntPtr hWnd = Utils.FindWindowByTitle(new Form1().Text); 
+        string exeName = System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
+        IntPtr hWnd = Utils.FindWindowByExeName(exeName);
         if (hWnd != IntPtr.Zero)
         {
           Utils.ShowWindow(hWnd);
