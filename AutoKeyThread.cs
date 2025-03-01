@@ -211,7 +211,6 @@ namespace MXTools
             double cv = _curVal;
             double mv = _maxVal;
 
-
             if (cv <= (mv * _settings._scale))
             {
               _full = false;
@@ -284,6 +283,15 @@ namespace MXTools
     {
       if (_display != null)
       {
+        if (current < 0)
+        {
+          current = 0;
+        }
+
+        if (max < 0)
+        {
+          max = 0;
+        }
         Task.Run(() => _display(current, max));
       }
     }

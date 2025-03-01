@@ -57,8 +57,8 @@ namespace MXTools
       int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
       int formWidth = this.Width;
 
-      //int x = (screenWidth - formWidth) / 2; // Center horizontally
-      int x = screenWidth - formWidth; // Align to right
+      int x = (screenWidth - formWidth) / 2; // Center horizontally
+      //int x = screenWidth - formWidth; // Align to right
       int y = 0; // Align to top
 
       this.Location = new System.Drawing.Point(x, y); // Move form
@@ -74,7 +74,7 @@ namespace MXTools
       {
         BeginInvoke(() =>
         {
-          if (_HPBar.Maximum != max || _HPBar.Value != cur)
+          if (max >= 0 && cur >= 0 && _HPBar.Maximum != max || _HPBar.Value != cur)
           {
             _HPBar.Maximum = max;
             _HPBar.Value = Math.Min(cur, max);
@@ -85,7 +85,7 @@ namespace MXTools
       {
         BeginInvoke(() =>
         {
-          if (_ManaBar.Maximum != max || _ManaBar.Value != cur)
+          if (max >= 0 && cur >= 0 && _ManaBar.Maximum != max || _ManaBar.Value != cur)
           {
             _ManaBar.Maximum = max;
             _ManaBar.Value = Math.Min(cur, max);
