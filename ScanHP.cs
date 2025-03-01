@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -53,36 +54,38 @@ namespace MXTools
         return -1;
       }
 
-      int a, b, c, d;
-      for (int i = 0; i <= buffer.Length - 28; i++)
+      int result = -1;
+      object lockObj = new object(); // Protect shared result
+      int maxIndex = buffer.Length - 28;
+
+      Parallel.For(0, maxIndex, (i, state) =>
       {
-        if (_stopFlag)
+        if (_stopFlag || result != -1)
         {
-          return -1;
+          state.Stop();
+          return;
         }
 
-        a = BitConverter.ToInt32(buffer, i);
+        int a = Unsafe.As<byte, int>(ref buffer[i]);
+        if (a != number) return;
 
-        if (a != number)
-        {
-          continue;
-        }
+        int c = Unsafe.As<byte, int>(ref buffer[i + 16]);
+        if (c != a) return;
 
-        c = BitConverter.ToInt32(buffer, i + 16);
-        if (c != a)
-        {
-          continue;
-        }
-
-        b = BitConverter.ToInt32(buffer, i + 8);
-        d = BitConverter.ToInt32(buffer, i + 24);
+        int b = Unsafe.As<byte, int>(ref buffer[i + 8]);
+        int d = Unsafe.As<byte, int>(ref buffer[i + 24]);
 
         if (b == d)
         {
-          return i;
+          lock (lockObj) // Ensure only one thread writes to result
+          {
+            if (result == -1) result = i;
+          }
+          state.Stop(); // Stop further processing
         }
-      }
-      return -1;
+      });
+
+      return result;
     }
     //--------------------------------------------------------------------------------------------
     public void Stop()
@@ -90,49 +93,31 @@ namespace MXTools
       _stopFlag = true;
     }
     //--------------------------------------------------------------------------------------------
-    private bool ScanRegion(MemorySharp sharp, RemoteRegion region,
-        ref int regionIndex, ref long current,
-        int hp, Action<long> progressFunc, out int adr)
+    private bool ScanRegion(MemorySharp sharp, RemoteRegion region, int hp, Action<long> progressFunc, out int adr)
     {
       adr = 0;
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
       try
       {
-        progressFunc(current);
-        Thread.Sleep(10);
-
         var rs = region.Information.RegionSize;
         if (rs < 24)
         {
-          log.Info($"Ignored small region size {regionIndex} {rs}");
           return false;
         }
 
-        //byte[] tempBuffer = sharp.Read<byte>(region.BaseAddress, rs, false);
-
         byte[] tempBuffer = MemoryCore.ReadBytes(sharp.Handle, region.BaseAddress, rs);
-
-        //log.Info($"Read {rs:N0} bytes of the region #{regionIndex}");
-
         int tempAdr = Find(tempBuffer, hp);
         if (tempAdr >= 0)
         {
           adr = tempAdr;
           return true;
         }
-        current += rs;
       }
       catch
       {
         //log.Error($"Could not read the region #{regionIndex}");
         return false;
       }
-      finally
-      {
-        regionIndex++;
-      }
-
       return false;
     }
     //--------------------------------------------------------------------------------------------
@@ -164,6 +149,9 @@ namespace MXTools
 
         foreach (var region in regions)
         {
+          progressFunc(current);
+          Thread.Sleep(10);
+
           if (_stopFlag)
           {
             log.InfoFormat("Scanning stopped");
@@ -171,7 +159,7 @@ namespace MXTools
             return;
           }
 
-          if (ScanRegion(sharp, region, ref regionIndex, ref current, hp, progressFunc, out int addr))
+          if (ScanRegion(sharp, region, hp, progressFunc, out int addr))
           {
             _address = region.BaseAddress.ToInt64() + addr;
             _offset = (regionIndex / 100) * 100;
@@ -180,7 +168,15 @@ namespace MXTools
             found = true;
             break;
           }
-          Thread.Sleep(10);
+          try
+          {
+            current += region.Information.RegionSize;
+            regionIndex++;
+          }
+          catch
+          {
+
+          }
         }
 
         if (found == false)
