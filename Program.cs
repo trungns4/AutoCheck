@@ -36,7 +36,7 @@ namespace MXTools
       }
       else
       {
-        string exeName = System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
+        string exeName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
         IntPtr hWnd = Utils.FindWindowByExeName(exeName);
         if (hWnd != IntPtr.Zero)
         {

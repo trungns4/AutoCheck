@@ -1,36 +1,18 @@
-﻿using MXTools.Properties;
-using Binarysharp.MemoryManagement;
-using Binarysharp.MemoryManagement.Memory;
-using Binarysharp.MemoryManagement.Modules;
-using Binarysharp.MemoryManagement.Native;
-using Gma.System.MouseKeyHook;
-using NAudio.Gui;
+﻿using Gma.System.MouseKeyHook;
+using MXTools.Properties;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using log4net;
-using WindowsInput.Native;
-using System.Collections;
-using System.Runtime.Intrinsics.Arm;
 
 namespace MXTools
 {
   public partial class Form1 : Form
   {
-    private MemorySharp _sharp = null;
+    private Process.NET.ProcessSharp _sharp = null;
 
     private long _addr = 0;
 
@@ -123,9 +105,9 @@ namespace MXTools
       m_StartMenu.Click += OnStartMenuClick;
 
       var sharp = MemorySharpHolder.GetMemorySharp();
-      if (sharp != null && sharp.Windows.MainWindow != null)
+      if (sharp != null && sharp.WindowFactory.MainWindow != null)
       {
-        UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+        UpdateToogleButton(sharp.WindowFactory.MainWindow.Handle);
       }
     }
     //----------------------------------------------------------------------------------
@@ -158,10 +140,10 @@ namespace MXTools
           case System.Windows.Forms.Keys.Multiply:
             {
               var sharp = MemorySharpHolder.GetMemorySharp();
-              if (sharp != null && sharp.Windows.MainWindow != null)
+              if (sharp != null && sharp.WindowFactory.MainWindow != null)
               {
-                WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
-                UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+                WindowHider.ShowWindow(sharp.WindowFactory.MainWindow.Handle);
+                UpdateToogleButton(sharp.WindowFactory.MainWindow.Handle);
               }
             }
             break;
@@ -169,10 +151,10 @@ namespace MXTools
           case System.Windows.Forms.Keys.Oem3:
             {
               var sharp = MemorySharpHolder.GetMemorySharp();
-              if (sharp != null && sharp.Windows.MainWindow != null)
+              if (sharp != null && sharp.WindowFactory.MainWindow != null)
               {
-                WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
-                UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+                WindowHider.HideWindow(sharp.WindowFactory.MainWindow.Handle);
+                UpdateToogleButton(sharp.WindowFactory.MainWindow.Handle);
               }
             }
             break;
@@ -476,10 +458,10 @@ namespace MXTools
     private void OnToogleMXClicked(object sender, EventArgs e)
     {
       var sharp = MemorySharpHolder.GetMemorySharp();
-      if (sharp != null && sharp.Windows.MainWindow != null)
+      if (sharp != null && sharp.WindowFactory.MainWindow != null)
       {
-        WindowHider.ToggleWindow(sharp.Windows.MainWindow.Handle);
-        UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+        WindowHider.ToggleWindow(sharp.WindowFactory.MainWindow.Handle);
+        UpdateToogleButton(sharp.WindowFactory.MainWindow.Handle);
       }
     }
     //----------------------------------------------------------------------------------

@@ -1,31 +1,19 @@
-﻿using Binarysharp.MemoryManagement;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace MXTools
 {
   public class MemorySharpHolder
   {
-    private static MemorySharp _sharp = null;
+    private static Process.NET.ProcessSharp _sharp = null;
 
-    public static MemorySharp GetMemorySharp()
+    public static Process.NET.ProcessSharp GetMemorySharp()
     {
-      if (_sharp == null)
+      if (_sharp == null || _sharp.Native == null || _sharp.Native?.HasExited == true)
       {
         _sharp = Utils.CreateMemorySharp();
       }
-      else
-      {
-        if (_sharp.IsRunning == false)
-        {
-          _sharp = Utils.CreateMemorySharp();
-        }
-      }
 
-      if (_sharp?.IsRunning == false)
+      if (_sharp?.Native?.HasExited == true)
       {
         return null;
       }

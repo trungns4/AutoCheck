@@ -1,14 +1,8 @@
-﻿using Binarysharp.MemoryManagement;
-using Binarysharp.MemoryManagement.Native;
-using log4net;
-using MXTools.Properties;
-using Newtonsoft.Json.Linq;
+﻿using log4net;
+using Process.NET;
+using Process.NET.Memory;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using WindowsInput.Native;
@@ -94,7 +88,7 @@ namespace MXTools
     }
 
     //----------------------------------------------------------------------------------
-    public static MemorySharp CreateMemorySharp()
+    public static ProcessSharp CreateMemorySharp()
     {
       var processId = GetProcessId();
       if (processId == null)
@@ -102,7 +96,7 @@ namespace MXTools
         log.Error("Failed to find process ID.");
         return null;
       }
-      return new MemorySharp(processId.Value);
+      return new ProcessSharp(System.Diagnostics.Process.GetProcessById(processId.Value), MemoryType.Remote);
     }
 
     //----------------------------------------------------------------------------------
@@ -144,7 +138,7 @@ namespace MXTools
     {
       try
       {
-        Process process = Process.GetProcessById(processId);
+        System.Diagnostics. Process process = System.Diagnostics.Process.GetProcessById(processId);
         return process.MainWindowHandle;
       }
       catch (Exception ex)
@@ -213,11 +207,11 @@ namespace MXTools
 
       foreach (var app in apps)
       {
-        var processes = Process.GetProcesses()
+        var processes = System.Diagnostics.Process.GetProcesses()
                                .Where(p => p.ProcessName.StartsWith(app, StringComparison.OrdinalIgnoreCase))
                                .ToList();
 
-        foreach (Process process in processes)
+        foreach (System.Diagnostics.Process process in processes)
         {
           try
           {
@@ -253,7 +247,7 @@ namespace MXTools
     public static IntPtr FindWindowByExeName(string exeName)
     {
       IntPtr foundWindow = IntPtr.Zero;
-      uint currentProcessId = (uint)Process.GetCurrentProcess().Id;
+      uint currentProcessId = (uint)System.Diagnostics.Process.GetCurrentProcess().Id;
 
       EnumWindows((hWnd, lParam) =>
       {
@@ -263,7 +257,7 @@ namespace MXTools
           {
             try
             {
-              Process proc = Process.GetProcessById((int)processId);
+              System.Diagnostics.Process proc = System.Diagnostics.Process.GetProcessById((int)processId);
               if (proc.MainModule.FileName.EndsWith(exeName, StringComparison.OrdinalIgnoreCase))
               {
                 foundWindow = hWnd;

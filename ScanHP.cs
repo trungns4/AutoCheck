@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Binarysharp.MemoryManagement.Memory;
-using Binarysharp.MemoryManagement;
+﻿using log4net;
 using MXTools.Properties;
-using log4net;
+using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
-using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MXTools
 {
@@ -27,10 +19,10 @@ namespace MXTools
     }
 
     //--------------------------------------------------------------------------------------------
-    public long TotalBytes(MemorySharp sharp)
+    public long TotalBytes(Process.NET.ProcessSharp sharp)
     {
       long totalBytes = 0;
-      foreach (var region in sharp.Memory.Regions)
+      foreach (var region in sharp.MemoryFactory.Regions)
       {
         try
         {
@@ -80,7 +72,7 @@ namespace MXTools
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-      MemorySharp sharp = MemorySharpHolder.GetMemorySharp();
+      Process.NET.ProcessSharp sharp = MemorySharpHolder.GetMemorySharp();
       if (sharp == null)
       {
         MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -97,7 +89,7 @@ namespace MXTools
         int current = 0;
         int regionIndex = 0;
         bool found = false;
-        foreach (var region in sharp.Memory.Regions)
+        foreach (var region in sharp.MemoryFactory.Regions)
         {
           try
           {
@@ -123,7 +115,7 @@ namespace MXTools
               continue;
             }
 
-            byte[] buffer = sharp.Read<byte>(region.BaseAddress, rs, false);
+            byte[] buffer = sharp.Memory.Read<byte>(region.BaseAddress, rs);
             current += rs;
 
             int adr = Find(buffer, hp);

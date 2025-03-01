@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using log4net;
+using System;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using MXTools.Properties;
-using Binarysharp.MemoryManagement;
-using log4net;
-using Newtonsoft.Json.Linq;
-using WindowsInput;
 
 namespace MXTools
 {
@@ -50,7 +40,7 @@ namespace MXTools
       }
     }
     //---------------------------------------------------------------------------------------
-    public bool Start(MemorySharp sharp)
+    public bool Start(Process.NET.ProcessSharp sharp)
     {
       _isRunning = true;
       _qThread = new Thread(() => Run('q'));

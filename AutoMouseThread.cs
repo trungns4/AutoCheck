@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Binarysharp.MemoryManagement;
 using log4net;
 using WindowsInput;
 
@@ -17,7 +16,7 @@ namespace MXTools
   {
     private MouseThreadSettings _settings;
     private Thread _thread;
-    private MemorySharp _sharp;
+    private Process.NET.ProcessSharp _sharp;
     private bool _isRunning = false;
 
     private int _left = 0, _right = 0, _top = 0, _bottom = 0;
@@ -31,7 +30,7 @@ namespace MXTools
     private bool CheckWindowRect()
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      var wnd = _sharp.Windows.MainWindow;
+      var wnd = _sharp.WindowFactory.MainWindow;
       if (wnd != null && wnd.Handle != IntPtr.Zero)
       {
         _left = wnd.X;
@@ -47,7 +46,7 @@ namespace MXTools
       }
     }
     //---------------------------------------------------------------------------------------
-    public bool Start(MemorySharp sharp)
+    public bool Start(Process.NET.ProcessSharp sharp)
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
