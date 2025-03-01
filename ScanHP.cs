@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Memory;
-using Binarysharp.MemoryManagement;
-using MXTools.Properties;
 using log4net;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Threading;
+using Microsoft.VisualBasic.Logging;
+using MXTools.Properties;
+using System;
+using System.Buffers;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection;
+using System.Reflection.Metadata;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MXTools
 {
@@ -27,10 +29,10 @@ namespace MXTools
     }
 
     //--------------------------------------------------------------------------------------------
-    public long TotalBytes(MemorySharp sharp)
+    public long TotalBytes(List<RemoteRegion> regions)
     {
       long totalBytes = 0;
-      foreach (var region in sharp.Memory.Regions)
+      foreach (var region in regions)
       {
         try
         {
@@ -51,6 +53,7 @@ namespace MXTools
         return -1;
       }
 
+      int a, b, c, d;
       for (int i = 0; i <= buffer.Length - 28; i++)
       {
         if (_stopFlag)
@@ -58,12 +61,23 @@ namespace MXTools
           return -1;
         }
 
-        int a = BitConverter.ToInt32(buffer, i);
-        int b = BitConverter.ToInt32(buffer, i + 8);
-        int c = BitConverter.ToInt32(buffer, i + 16);
-        int d = BitConverter.ToInt32(buffer, i + 24);
+        a = BitConverter.ToInt32(buffer, i);
 
-        if (a == c && a == number && b == d)
+        if (a != number)
+        {
+          continue;
+        }
+
+        c = BitConverter.ToInt32(buffer, i + 16);
+        if (c != a)
+        {
+          continue;
+        }
+
+        b = BitConverter.ToInt32(buffer, i + 8);
+        d = BitConverter.ToInt32(buffer, i + 24);
+
+        if (b == d)
         {
           return i;
         }
@@ -76,11 +90,57 @@ namespace MXTools
       _stopFlag = true;
     }
     //--------------------------------------------------------------------------------------------
+    private bool ScanRegion(MemorySharp sharp, RemoteRegion region,
+        ref int regionIndex, ref long current,
+        int hp, Action<long> progressFunc, out int adr)
+    {
+      adr = 0;
+      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+      try
+      {
+        progressFunc(current);
+        Thread.Sleep(10);
+
+        var rs = region.Information.RegionSize;
+        if (rs < 24)
+        {
+          log.Info($"Ignored small region size {regionIndex} {rs}");
+          return false;
+        }
+
+        //byte[] tempBuffer = sharp.Read<byte>(region.BaseAddress, rs, false);
+
+        byte[] tempBuffer = MemoryCore.ReadBytes(sharp.Handle, region.BaseAddress, rs);
+
+        //log.Info($"Read {rs:N0} bytes of the region #{regionIndex}");
+
+        int tempAdr = Find(tempBuffer, hp);
+        if (tempAdr >= 0)
+        {
+          adr = tempAdr;
+          return true;
+        }
+        current += rs;
+      }
+      catch
+      {
+        //log.Error($"Could not read the region #{regionIndex}");
+        return false;
+      }
+      finally
+      {
+        regionIndex++;
+      }
+
+      return false;
+    }
+    //--------------------------------------------------------------------------------------------
     public bool Scan(int hp, int offset, Action<long> totalFunc, Action<long> progressFunc, Action<long, int> doneFunc)
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-      MemorySharp sharp = MemorySharpHolder.GetMemorySharp();
+      var sharp = MemorySharpHolder.GetMemorySharp();
       if (sharp == null)
       {
         MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -88,70 +148,49 @@ namespace MXTools
         return false;
       }
 
-      var total = TotalBytes(sharp);
+      var regions = sharp.Memory.Regions.Skip(offset).ToList();
+
+      var total = TotalBytes(regions);
       totalFunc(total);
       _stopFlag = false;
 
+      log.InfoFormat($"Scanning {total:N0} bytes over {regions.Count()} regions");
+
       Task.Run(() =>
       {
-        int current = 0;
-        int regionIndex = 0;
+        long current = 0;
+        int regionIndex = offset;
         bool found = false;
-        foreach (var region in sharp.Memory.Regions)
+
+        foreach (var region in regions)
         {
-          try
+          if (_stopFlag)
           {
-            if (_stopFlag)
-            {
-              log.InfoFormat("Scanning stopped");
-              doneFunc(0, 0);
-              return;
-            }
-
-            progressFunc(current);
-            var rs = region.Information.RegionSize;
-
-            if (regionIndex < offset)
-            {
-              current += rs;
-              continue;
-            }
-
-            if (rs < 24)
-            {
-              log.InfoFormat("Ignored small region size {0} {1}", regionIndex, rs);
-              continue;
-            }
-
-            byte[] buffer = sharp.Read<byte>(region.BaseAddress, rs, false);
-            current += rs;
-
-            int adr = Find(buffer, hp);
-            if (adr >= 0)
-            {
-              _address = region.BaseAddress.ToInt64() + adr;
-              _offset = (regionIndex / 100) * 100;
-              doneFunc(_address, _offset);
-              found = true;
-              log.InfoFormat("Found address {0} at {1} offset {2}", _address, regionIndex, _offset);
-              break;
-            }
+            log.InfoFormat("Scanning stopped");
+            doneFunc(0, 0);
+            return;
           }
-          catch
+
+          if (ScanRegion(sharp, region, ref regionIndex, ref current, hp, progressFunc, out int addr))
           {
-            //log.Error($"Region {regionIndex} could not accessed");
+            _address = region.BaseAddress.ToInt64() + addr;
+            _offset = (regionIndex / 100) * 100;
+            doneFunc(_address, _offset);
+            log.InfoFormat($"Found address {_address:N0} at {regionIndex}/{region.Information.RegionSize:N0} offset {_offset}");
+            found = true;
+            break;
           }
-          finally
-          {
-            regionIndex++;
-          }
+          Thread.Sleep(10);
         }
+
         if (found == false)
         {
           log.InfoFormat("Not found");
           doneFunc(0, 0);
         }
       });
+
+
       return false;
     }
   }

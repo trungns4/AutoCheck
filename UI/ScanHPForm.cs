@@ -141,7 +141,7 @@ namespace MXTools
     private void OnProgress(long progress)
     {
       _ProgBar.Value = Math.Min((int)progress, _ProgBar.Maximum);
-      _AdrBox.Text = "Scanning...";
+      _AdrBox.Text = $"{_ProgBar.Value:N0}/{_ProgBar.Maximum:N0}";
       _ProgBar.Refresh();
     }
     //--------------------------------------------------------------------------------------------
