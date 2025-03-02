@@ -78,5 +78,4 @@ namespace MXTools
       keybd_event(key, 0, KEY_DOWN_EVENT, 0);
     }
   }
-
 }
