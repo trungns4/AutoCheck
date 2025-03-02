@@ -36,7 +36,6 @@
     <Content Include="Resources\play.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="InputSimulator" Version="1.0.4.0" />
     <PackageReference Include="log4net" Version="3.0.3" />
     <PackageReference Include="MemorySharp" Version="1.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

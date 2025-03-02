@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Binarysharp.MemoryManagement;
 using log4net;
-using WindowsInput;
 
 namespace MXTools
 {
@@ -69,7 +68,7 @@ namespace MXTools
       if (_up == false)
       {
         _up = true;
-        Input.Simulator.Mouse.RightButtonUp();
+        Mouse.RightButtonUp();
       }
     }
     //---------------------------------------------------------------------------------------
@@ -102,7 +101,7 @@ namespace MXTools
             Utils.GetMouse(out int x, out int y);
             if (x >= _left && x <= _right && y >= _top && y <= _bottom)
             {
-              Input.Simulator.Mouse.RightButtonDown();
+              Mouse.RightButtonDown();
               _up = false;
               Thread.Sleep(_settings._clickDelay);
             }
@@ -132,7 +131,7 @@ namespace MXTools
         _thread = null;
       }
 
-      Input.Simulator.Mouse.RightButtonUp();
+      Mouse.RightButtonUp();
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       log.DebugFormat("Mouse Click Thread stopped");

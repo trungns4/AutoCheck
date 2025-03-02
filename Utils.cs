@@ -1,17 +1,11 @@
 ﻿using Binarysharp.MemoryManagement;
-using Binarysharp.MemoryManagement.Native;
 using log4net;
-using MXTools.Properties;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using WindowsInput.Native;
+using System.Windows.Forms;
 
 namespace MXTools
 {
@@ -109,11 +103,22 @@ namespace MXTools
     public static int? GetProcessId()
     {
       var windowName = GetConfigString("window").ToUpper();
-      IntPtr hWnd = FindWindow(null, windowName);
-      if (hWnd == IntPtr.Zero) return null;
+      var app = GetConfigString("app");
 
-      GetWindowThreadProcessId(hWnd, out uint processId);
-      return processId == 0 ? (int?)null : (int)processId;
+      IntPtr hWnd = FindWindow(null, windowName);
+      if (hWnd != IntPtr.Zero)
+      {
+        GetWindowThreadProcessId(hWnd, out uint processId);
+        if (processId != 0)
+        {
+          return (int)processId;
+        }
+      }
+
+      var processes = Process.GetProcesses()
+        .Where(p => p.ProcessName.Contains(app, StringComparison.OrdinalIgnoreCase));
+
+      return processes.FirstOrDefault()?.Id;
     }
 
     //----------------------------------------------------------------------------------
@@ -155,10 +160,10 @@ namespace MXTools
     }
 
     //----------------------------------------------------------------------------------
-    public static VirtualKeyCode KeyCode(char ch)
+    public static Keys KeyCode(char ch)
     {
       short vkey = VkKeyScan(ch);
-      return (VirtualKeyCode)(vkey & 0xFF);
+      return (Keys)(vkey & 0xFF);
     }
 
     //----------------------------------------------------------------------------------

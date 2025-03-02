@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using Binarysharp.MemoryManagement;
+using log4net;
+using System;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MXTools.Properties;
-using Binarysharp.MemoryManagement;
-using log4net;
-using Newtonsoft.Json.Linq;
-using WindowsInput;
 
 namespace MXTools
 {
@@ -136,16 +128,13 @@ namespace MXTools
           continue;
         }
 
-        var si = Input.Simulator;
-
         if (key == 'q')
         {
           if (_settings._q)
           {
-            si.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_Q);
+            Keyboard.KeyDown((byte)Keys.Q);
             Thread.Sleep(_settings._keyDownDelayQ);
-
-            si.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_Q);
+            Keyboard.KeyUp((byte)Keys.Q);
             UpdateUIAndSleep(_settings._keyUpDelayQ);
           }
         }
@@ -153,10 +142,9 @@ namespace MXTools
         {
           if (_settings._w)
           {
-            si.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_W);
+            Keyboard.KeyDown((byte)Keys.W);
             Thread.Sleep(_settings._keyDownDelayW);
-
-            si.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_W);
+            Keyboard.KeyUp((byte)Keys.W);
             UpdateUIAndSleep(_settings._keyUpDelayW);
           }
         }
@@ -164,10 +152,9 @@ namespace MXTools
         {
           if (_settings._e)
           {
-            si.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_E);
+            Keyboard.KeyDown((byte)Keys.E);
             Thread.Sleep(_settings._keyDownDelayE);
-
-            si.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.VK_E);
+            Keyboard.KeyUp((byte)Keys.E);
             UpdateUIAndSleep(_settings._keyUpDelayE);
           }
         }

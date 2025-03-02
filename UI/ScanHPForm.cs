@@ -1,22 +1,11 @@
-﻿using System;
+﻿using MXTools.Properties;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using MXTools.Properties;
-using Binarysharp.MemoryManagement;
-using Binarysharp.MemoryManagement.Memory;
-using Newtonsoft.Json;
-using WindowsInput;
 
 namespace MXTools
 {
@@ -96,13 +85,6 @@ namespace MXTools
     //--------------------------------------------------------------------------------------------
     private void LoadData()
     {
-      int maxOffset = 9999;
-      MemorySharp sharp = Utils.CreateMemorySharp();
-      if (sharp != null)
-      {
-        maxOffset = (int)(sharp.Memory.Regions.Count() - 1);
-      }
-
       var offset = 1;
       _InputBox.Text = "";
       string file = GetDataFile();
@@ -118,7 +100,7 @@ namespace MXTools
         {
           if (int.TryParse(data["OFFSET"], out int number))
           {
-            offset = Math.Min(maxOffset, Math.Max(0, number));
+            offset = Utils.Clamp<int>(number, 0, 99);
           }
         }
       }

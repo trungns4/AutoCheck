@@ -1,30 +1,14 @@
-﻿using MXTools.Properties;
-using Binarysharp.MemoryManagement;
-using Binarysharp.MemoryManagement.Memory;
-using Binarysharp.MemoryManagement.Modules;
-using Binarysharp.MemoryManagement.Native;
+﻿using Binarysharp.MemoryManagement;
 using Gma.System.MouseKeyHook;
-using NAudio.Gui;
+using log4net;
+using MXTools.Properties;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using log4net;
-using WindowsInput.Native;
-using System.Collections;
-using System.Runtime.Intrinsics.Arm;
 
 namespace MXTools
 {
@@ -51,6 +35,24 @@ namespace MXTools
     {
       InitializeComponent();
     }
+
+    protected override void WndProc(ref Message m)
+    {
+      if (m.Msg == 0x0010) // WM_CLOSE
+      {
+        ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        log.Info("Received CLOSE request");
+        
+        if (m_bForcingClose == false)
+        {
+          ShowMe(false);
+          return;
+        }
+      }
+      base.WndProc(ref m);
+    }
+
 
     private void Align()
     {

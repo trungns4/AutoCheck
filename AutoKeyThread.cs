@@ -2,9 +2,9 @@
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Binarysharp.MemoryManagement;
 using log4net;
-using WindowsInput.Native;
 
 namespace MXTools
 {
@@ -30,7 +30,7 @@ namespace MXTools
     private bool _isRunning = false;
     private bool _full = false;
     private SoundPlayer _player;
-    private VirtualKeyCode _keyCode;
+    private Keys _keyCode;
 
     private Action<int, int> _display;
 
@@ -243,15 +243,13 @@ namespace MXTools
         _keyFlag.WaitOne();
         bool delay = true;
 
-        var si = Input.Simulator;
-
         while (_settings._auto && _settings._autoKey == true
         && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
         {
-          si.Keyboard.KeyDown(_keyCode);
+          Keyboard.KeyDown((byte)_keyCode);
           Thread.Sleep(_settings._keyUpDelay);
 
-          si.Keyboard.KeyUp(_keyCode);
+          Keyboard.KeyUp((byte)_keyCode);
           Thread.Sleep(_settings._keyDownDelay);
 
           delay = false;
