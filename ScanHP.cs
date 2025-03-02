@@ -93,7 +93,7 @@ namespace MXTools
       _stopFlag = true;
     }
     //--------------------------------------------------------------------------------------------
-    private bool ScanRegion(MemorySharp sharp, RemoteRegion region, int hp, Action<long> progressFunc, out int adr)
+    private bool ScanRegion(MemorySharp sharp, RemoteRegion region, int hp, out int adr)
     {
       adr = 0;
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -121,6 +121,18 @@ namespace MXTools
       return false;
     }
     //--------------------------------------------------------------------------------------------
+    private int RegionSize(RemoteRegion region)
+    {
+      try
+      {
+        return region.Information.RegionSize;
+      }
+      catch
+      {
+        return 0;
+      }
+    }
+    //--------------------------------------------------------------------------------------------
     public bool Scan(int hp, int offset, Action<long> totalFunc, Action<long> progressFunc, Action<long, int> doneFunc)
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -133,13 +145,15 @@ namespace MXTools
         return false;
       }
 
-      var regions = sharp.Memory.Regions.Skip(offset).ToList();
-
+      offset = Math.Min(Math.Max(offset, 0), 99);
+      var regions = sharp.Memory.Regions.ToList();
       var total = TotalBytes(regions);
       totalFunc(total);
       _stopFlag = false;
 
-      log.InfoFormat($"Scanning {total:N0} bytes over {regions.Count()} regions");
+      double start = (double)(total) * (double)offset / 100.0;
+
+      log.InfoFormat($"Scanning {total:N0} bytes over {regions.Count} regions");
 
       Task.Run(() =>
       {
@@ -150,8 +164,6 @@ namespace MXTools
         foreach (var region in regions)
         {
           progressFunc(current);
-          Thread.Sleep(10);
-
           if (_stopFlag)
           {
             log.InfoFormat("Scanning stopped");
@@ -159,24 +171,24 @@ namespace MXTools
             return;
           }
 
-          if (ScanRegion(sharp, region, hp, progressFunc, out int addr))
+          if (current < start)
+          {
+            current += RegionSize(region);
+            regionIndex++;
+            continue;
+          }
+
+          if (ScanRegion(sharp, region, hp, out int addr))
           {
             _address = region.BaseAddress.ToInt64() + addr;
-            _offset = (regionIndex / 100) * 100;
+            _offset = Utils.Clamp<int>((int)((double)current / total * 100) - 5, 0, 99);
             doneFunc(_address, _offset);
             log.InfoFormat($"Found address {_address:N0} at {regionIndex}/{region.Information.RegionSize:N0} offset {_offset}");
             found = true;
             break;
           }
-          try
-          {
-            current += region.Information.RegionSize;
-            regionIndex++;
-          }
-          catch
-          {
-
-          }
+          current += RegionSize(region);
+          regionIndex++;
         }
 
         if (found == false)

@@ -43,7 +43,7 @@
       // 
       // _OKButton
       // 
-      _OKButton.Location = new System.Drawing.Point(287, 89);
+      _OKButton.Location = new System.Drawing.Point(287, 90);
       _OKButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _OKButton.Name = "_OKButton";
       _OKButton.Size = new System.Drawing.Size(88, 31);
@@ -54,7 +54,7 @@
       // 
       // _CancelButton
       // 
-      _CancelButton.Location = new System.Drawing.Point(381, 89);
+      _CancelButton.Location = new System.Drawing.Point(381, 90);
       _CancelButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _CancelButton.Name = "_CancelButton";
       _CancelButton.Size = new System.Drawing.Size(88, 31);
@@ -84,10 +84,12 @@
       // 
       // _ProgBar
       // 
-      _ProgBar.Location = new System.Drawing.Point(9, 65);
+      _ProgBar.Location = new System.Drawing.Point(9, 62);
       _ProgBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _ProgBar.MarqueeAnimationSpeed = 50;
       _ProgBar.Name = "_ProgBar";
-      _ProgBar.Size = new System.Drawing.Size(460, 18);
+      _ProgBar.Size = new System.Drawing.Size(460, 22);
+      _ProgBar.Step = 1;
       _ProgBar.TabIndex = 4;
       _ProgBar.Visible = false;
       // 
@@ -113,6 +115,7 @@
       // 
       // _StopButton
       // 
+      _StopButton.Enabled = false;
       _StopButton.Location = new System.Drawing.Point(104, 90);
       _StopButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
       _StopButton.Name = "_StopButton";
@@ -125,7 +128,7 @@
       // 
       m_OffsetBox.Location = new System.Drawing.Point(139, 31);
       m_OffsetBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-      m_OffsetBox.Maximum = new decimal(new int[] { 99999, 0, 0, 0 });
+      m_OffsetBox.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
       m_OffsetBox.Name = "m_OffsetBox";
       m_OffsetBox.Size = new System.Drawing.Size(114, 25);
       m_OffsetBox.TabIndex = 8;

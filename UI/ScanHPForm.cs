@@ -122,7 +122,7 @@ namespace MXTools
           }
         }
       }
-      m_OffsetBox.Value = offset;
+      m_OffsetBox.Value = Utils.Clamp<decimal>(offset, 0, 99);
     }
     //--------------------------------------------------------------------------------------------
     private void OnStart(long total)
@@ -132,6 +132,8 @@ namespace MXTools
       {
         item.Enabled = false;
       }
+
+      _StopButton.Enabled = true;
 
       _ProgBar.Visible = true;
       _ProgBar.Minimum = 0;
@@ -163,6 +165,7 @@ namespace MXTools
       {
         item.Enabled = true;
       }
+      _StopButton.Enabled = false;
 
       _StopButton.Click -= handler;
       _scanning = false;
