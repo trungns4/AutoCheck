@@ -68,7 +68,7 @@ namespace MXTools
       if (_up == false)
       {
         _up = true;
-        Mouse.RightButtonUp();
+        InputSender.RightButtonUp();
       }
     }
     //---------------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ namespace MXTools
             Utils.GetMouse(out int x, out int y);
             if (x >= _left && x <= _right && y >= _top && y <= _bottom)
             {
-              Mouse.RightButtonDown();
+              InputSender.RightButtonDown();
               _up = false;
               Thread.Sleep(_settings._clickDelay);
             }
@@ -131,7 +131,7 @@ namespace MXTools
         _thread = null;
       }
 
-      Mouse.RightButtonUp();
+      InputSender.RightButtonUp();
 
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       log.DebugFormat("Mouse Click Thread stopped");

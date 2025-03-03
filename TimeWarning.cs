@@ -40,6 +40,11 @@ namespace MXTools
         return;
       }
 
+      if(_settings._auto == false)
+      {
+        return;
+      }
+
       var elapsed = (DateTime.Now - _time).TotalMinutes;
       var remain = _settings._interval - elapsed;
 

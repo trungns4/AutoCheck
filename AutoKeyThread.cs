@@ -246,10 +246,10 @@ namespace MXTools
         while (_settings._auto && _settings._autoKey == true
         && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
         {
-          Keyboard.KeyDown((byte)_keyCode);
+          InputSender.SendKey((ushort)_keyCode, true);
           Thread.Sleep(_settings._keyUpDelay);
 
-          Keyboard.KeyUp((byte)_keyCode);
+          InputSender.SendKey((ushort)_keyCode, false);
           Thread.Sleep(_settings._keyDownDelay);
 
           delay = false;

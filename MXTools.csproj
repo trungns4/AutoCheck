@@ -16,14 +16,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Adapter\**" />
     <Compile Remove="AutoCheckPlus\**" />
     <Compile Remove="Driver\**" />
     <Compile Remove="Misc\**" />
     <Compile Remove="packages\**" />
+    <EmbeddedResource Remove="Adapter\**" />
     <EmbeddedResource Remove="AutoCheckPlus\**" />
     <EmbeddedResource Remove="Driver\**" />
     <EmbeddedResource Remove="Misc\**" />
     <EmbeddedResource Remove="packages\**" />
+    <None Remove="Adapter\**" />
     <None Remove="AutoCheckPlus\**" />
     <None Remove="Driver\**" />
     <None Remove="Misc\**" />

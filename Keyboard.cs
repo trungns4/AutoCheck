@@ -1,81 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MXTools
 {
   public class Keyboard
   {
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
-    /// <summary>
-    /// Key down flag
-    /// </summary>
-    private const int KEY_DOWN_EVENT = 0x0001;
-    /// <summary>
-    /// Key up flag
-    /// </summary>
-    private const int KEY_UP_EVENT = 0x0002;
-    /// <summary>
-    /// ms to wait between keystrokes when holding a key down
-    /// </summary>
-    private const int PauseBetweenStrokes = 10;
+    private delegate void KeybdEventDelegate(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
+    private static KeybdEventDelegate _originalKeybdEvent;
 
-    /// <summary>
-    /// Will hold a key down for a number of milliseconds
-    /// </summary>
-    /// <param name="key">byte value for key. can cast like this: (byte)System.Windows.Forms.Keys.F24</param>
-    /// <param name="duration">ms to hold key down for</param>
-    /// <example>
-    /// <code>
-    /// Keyboard.KeyUp((byte)Keys.F24,5000);
-    /// </code>
-    /// </example>
-    public static void HoldKey(byte key, int duration)
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
+    public static void Init()
     {
-      int totalDuration = 0;
-      while (totalDuration < duration)
+      // Get the original keybd_event function address
+      IntPtr hUser32 = GetModuleHandle("user32.dll");
+      IntPtr funcAddr = GetProcAddress(hUser32, "keybd_event");
+
+      if (funcAddr != IntPtr.Zero)
       {
-        keybd_event(key, 0, KEY_DOWN_EVENT, 0);
-        keybd_event(key, 0, KEY_UP_EVENT, 0);
-        System.Threading.Thread.Sleep(PauseBetweenStrokes);
-        totalDuration += PauseBetweenStrokes;
+        _originalKeybdEvent = Marshal.GetDelegateForFunctionPointer<KeybdEventDelegate>(funcAddr);
       }
-    }
-    /// <summary>
-    /// Will press a key
-    /// </summary>
-    /// <param name="key">byte value for key. can cast like this: (byte)System.Windows.Forms.Keys.F24</param>
-    /// <example>
-    /// <code>
-    /// Keyboard.PressKey((byte)Keys.F24);
-    /// </code>
-    /// </example>
-    public static void PressKey(byte key)
-    {
-      keybd_event(key, 0, KEY_DOWN_EVENT, 0);
-      keybd_event(key, 0, KEY_UP_EVENT, 0);
-    }
-    /// <summary>
-    /// Will trigger the KeyUp event for a key. Easy way to keep the computer awake without sending any input.
-    /// </summary>
-    /// <param name="key">byte value for key. can cast like this: (byte)System.Windows.Forms.Keys.F24</param>
-    /// <example>
-    /// <code>
-    /// Keyboard.KeyUp((byte)Keys.F24);
-    /// </code>
-    /// </example>
-    public static void KeyUp(byte key)
-    {
-      keybd_event(key, 0, KEY_UP_EVENT, 0);
     }
 
     public static void KeyDown(byte key)
     {
-      keybd_event(key, 0, KEY_DOWN_EVENT, 0);
+      _originalKeybdEvent?.Invoke(key, 0, 0, 0);
+    }
+
+    public static void KeyUp(byte key)
+    {
+      _originalKeybdEvent?.Invoke(key, 0, 2, 0);
     }
   }
 }

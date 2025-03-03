@@ -34,6 +34,8 @@ namespace MXTools
     public Form1()
     {
       InitializeComponent();
+      Keyboard.Init();
+      InputSender.Init();
     }
 
     protected override void WndProc(ref Message m)

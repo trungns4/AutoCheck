@@ -132,9 +132,14 @@ namespace MXTools
         {
           if (_settings._q)
           {
-            Keyboard.KeyDown((byte)Keys.Q);
+            //Keyboard.KeyDown((byte)Keys.Q);
+            //Thread.Sleep(_settings._keyDownDelayQ);
+            //Keyboard.KeyUp((byte)Keys.Q);
+            //UpdateUIAndSleep(_settings._keyUpDelayQ);
+
+            InputSender.SendKey((ushort)Keys.Q, true);
             Thread.Sleep(_settings._keyDownDelayQ);
-            Keyboard.KeyUp((byte)Keys.Q);
+            InputSender.SendKey((byte)Keys.Q, false);
             UpdateUIAndSleep(_settings._keyUpDelayQ);
           }
         }
@@ -142,9 +147,14 @@ namespace MXTools
         {
           if (_settings._w)
           {
-            Keyboard.KeyDown((byte)Keys.W);
+            //Keyboard.KeyDown((byte)Keys.W);
+            //Thread.Sleep(_settings._keyDownDelayW);
+            //Keyboard.KeyUp((byte)Keys.W);
+            //UpdateUIAndSleep(_settings._keyUpDelayW);
+
+            InputSender.SendKey((ushort)Keys.W, true);
             Thread.Sleep(_settings._keyDownDelayW);
-            Keyboard.KeyUp((byte)Keys.W);
+            InputSender.SendKey((byte)Keys.W, false);
             UpdateUIAndSleep(_settings._keyUpDelayW);
           }
         }
@@ -152,9 +162,14 @@ namespace MXTools
         {
           if (_settings._e)
           {
-            Keyboard.KeyDown((byte)Keys.E);
+            //Keyboard.KeyDown((byte)Keys.E);
+            //Thread.Sleep(_settings._keyDownDelayE);
+            //Keyboard.KeyUp((byte)Keys.E);
+            //UpdateUIAndSleep(_settings._keyUpDelayE);
+
+            InputSender.SendKey((ushort)Keys.E, true);
             Thread.Sleep(_settings._keyDownDelayE);
-            Keyboard.KeyUp((byte)Keys.E);
+            InputSender.SendKey((byte)Keys.E, false);
             UpdateUIAndSleep(_settings._keyUpDelayE);
           }
         }
