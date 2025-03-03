@@ -137,9 +137,14 @@ namespace MXTools
             //Keyboard.KeyUp((byte)Keys.Q);
             //UpdateUIAndSleep(_settings._keyUpDelayQ);
 
-            InputSender.SendKey((ushort)Keys.Q, true);
+            //InputSender.SendKey((ushort)Keys.Q, true);
+            //Thread.Sleep(_settings._keyDownDelayQ);
+            //InputSender.SendKey((byte)Keys.Q, false);
+            //UpdateUIAndSleep(_settings._keyUpDelayQ);
+
+            IbInputSimulator.IbSendKeybdDown((ushort)Keys.Q);
             Thread.Sleep(_settings._keyDownDelayQ);
-            InputSender.SendKey((byte)Keys.Q, false);
+            IbInputSimulator.IbSendKeybdUp((byte)Keys.Q);
             UpdateUIAndSleep(_settings._keyUpDelayQ);
           }
         }
@@ -152,9 +157,14 @@ namespace MXTools
             //Keyboard.KeyUp((byte)Keys.W);
             //UpdateUIAndSleep(_settings._keyUpDelayW);
 
-            InputSender.SendKey((ushort)Keys.W, true);
+            //InputSender.SendKey((ushort)Keys.W, true);
+            //Thread.Sleep(_settings._keyDownDelayW);
+            //InputSender.SendKey((byte)Keys.W, false);
+            //UpdateUIAndSleep(_settings._keyUpDelayW);
+
+            IbInputSimulator.IbSendKeybdDown((ushort)Keys.W);
             Thread.Sleep(_settings._keyDownDelayW);
-            InputSender.SendKey((byte)Keys.W, false);
+            IbInputSimulator.IbSendKeybdUp((byte)Keys.W);
             UpdateUIAndSleep(_settings._keyUpDelayW);
           }
         }
@@ -167,9 +177,14 @@ namespace MXTools
             //Keyboard.KeyUp((byte)Keys.E);
             //UpdateUIAndSleep(_settings._keyUpDelayE);
 
-            InputSender.SendKey((ushort)Keys.E, true);
+            //InputSender.SendKey((ushort)Keys.E, true);
+            //Thread.Sleep(_settings._keyDownDelayE);
+            //InputSender.SendKey((byte)Keys.E, false);
+            //UpdateUIAndSleep(_settings._keyUpDelayE);
+
+            IbInputSimulator.IbSendKeybdDown((ushort)Keys.E);
             Thread.Sleep(_settings._keyDownDelayE);
-            InputSender.SendKey((byte)Keys.E, false);
+            IbInputSimulator.IbSendKeybdUp((byte)Keys.E);
             UpdateUIAndSleep(_settings._keyUpDelayE);
           }
         }

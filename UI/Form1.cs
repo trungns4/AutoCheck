@@ -36,6 +36,8 @@ namespace MXTools
       InitializeComponent();
       Keyboard.Init();
       InputSender.Init();
+
+      IbInputSimulator.IbSendInit(IbInputSimulator.SendType.AnyDriver, 0, 0);
     }
 
     protected override void WndProc(ref Message m)
@@ -246,6 +248,8 @@ namespace MXTools
 
       m_NotifyIcon.Visible = false;
       m_NotifyIcon.Dispose();
+
+      IbInputSimulator.IbSendDestroy();
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
