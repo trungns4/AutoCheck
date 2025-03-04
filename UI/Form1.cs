@@ -1,5 +1,4 @@
-﻿using Binarysharp.MemoryManagement;
-using Gma.System.MouseKeyHook;
+﻿using Gma.System.MouseKeyHook;
 using log4net;
 using MXTools.Properties;
 using Newtonsoft.Json;
@@ -14,8 +13,7 @@ namespace MXTools
 {
   public partial class Form1 : Form
   {
-    private MemorySharp _sharp = null;
-    private long _addr = 0;
+    private ulong _addr = 0;
     private AutoKeyThread _threadQ = null;
     private AutoKeyThread _threadW = null;
     private AutoQWEThread _qweThread = null;
@@ -127,10 +125,9 @@ namespace MXTools
       m_ShowMenu.Click += OnShowMenu_Click;
       m_StartMenu.Click += OnStartMenuClick;
 
-      var sharp = MemorySharpHolder.GetMemorySharp();
-      if (sharp != null && sharp.Windows.MainWindow != null)
+      if (MxSharp.Instance.EnsureAttached())
       {
-        UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+        //UpdateToogleButton(sharp.Windows.MainWindow.Handle);
       }
     }
     //----------------------------------------------------------------------------------
@@ -171,23 +168,23 @@ namespace MXTools
           case System.Windows.Forms.Keys.Divide:
           case System.Windows.Forms.Keys.Multiply:
             {
-              var sharp = MemorySharpHolder.GetMemorySharp();
-              if (sharp != null && sharp.Windows.MainWindow != null)
-              {
-                WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
-                UpdateToogleButton(sharp.Windows.MainWindow.Handle);
-              }
+              //var sharp = MemorySharpHolder.GetMemorySharp();
+              //if (sharp != null && sharp.Windows.MainWindow != null)
+              //{
+              //  WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
+              //  UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+              //}
             }
             break;
 
           case System.Windows.Forms.Keys.Oem3:
             {
-              var sharp = MemorySharpHolder.GetMemorySharp();
-              if (sharp != null && sharp.Windows.MainWindow != null)
-              {
-                WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
-                UpdateToogleButton(sharp.Windows.MainWindow.Handle);
-              }
+              //var sharp = MemorySharpHolder.GetMemorySharp();
+              //if (sharp != null && sharp.Windows.MainWindow != null)
+              //{
+              //  WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
+              //  UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+              //}
             }
             break;
 
@@ -287,8 +284,8 @@ namespace MXTools
     {
       _enableStart = false;
       Utils.CloseApps();
-      _sharp = MemorySharpHolder.GetMemorySharp();
-      if (_sharp == null)
+      
+      if (MxSharp.Instance.EnsureAttached())
       {
         MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         _enableStart = true;
@@ -347,10 +344,10 @@ namespace MXTools
         {
           if (Start())
           {
-            _threadQ.Start(_sharp, _addr, _addr + 16);
-            _threadW.Start(_sharp, _addr + 8, _addr + 24);
-            _qweThread.Start(_sharp);
-            _mThread.Start(_sharp);
+            _threadQ.Start(_addr, _addr + 16);
+            _threadW.Start(_addr + 8, _addr + 24);
+            _qweThread.Start();
+            _mThread.Start();
             _timerWarning.Start();
           }
         }
@@ -376,7 +373,7 @@ namespace MXTools
     private void SaveAddress()
     {
       string file = GetAddressFile();
-      var data = new Dictionary<string, long>
+      var data = new Dictionary<string, ulong>
       {
         { "addr", _addr }
       };
@@ -392,7 +389,7 @@ namespace MXTools
         if (File.Exists(file) == true)
         {
           string json = File.ReadAllText(file);
-          var data = JsonConvert.DeserializeObject<Dictionary<string, long>>(json);
+          var data = JsonConvert.DeserializeObject<Dictionary<string, ulong>>(json);
           _addr = data["addr"];
         }
       }
@@ -495,12 +492,12 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnToogleMXClicked(object sender, EventArgs e)
     {
-      var sharp = MemorySharpHolder.GetMemorySharp();
-      if (sharp != null && sharp.Windows.MainWindow != null)
-      {
-        WindowHider.ToggleWindow(sharp.Windows.MainWindow.Handle);
-        UpdateToogleButton(sharp.Windows.MainWindow.Handle);
-      }
+      //var sharp = MemorySharpHolder.GetMemorySharp();
+      //if (sharp != null && sharp.Windows.MainWindow != null)
+      //{
+      //  WindowHider.ToggleWindow(sharp.Windows.MainWindow.Handle);
+      //  UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+      //}
     }
     //----------------------------------------------------------------------------------
     private void OnMinimizeClicked(object sender, EventArgs e)

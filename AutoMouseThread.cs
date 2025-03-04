@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using log4net;
+using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Binarysharp.MemoryManagement;
-using log4net;
 
 namespace MXTools
 {
@@ -16,7 +10,6 @@ namespace MXTools
   {
     private MouseThreadSettings _settings;
     private Thread _thread;
-    private MemorySharp _sharp;
     private bool _isRunning = false;
 
     private int _left = 0, _right = 0, _top = 0, _bottom = 0;
@@ -29,28 +22,28 @@ namespace MXTools
     //---------------------------------------------------------------------------------------
     private bool CheckWindowRect()
     {
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      var wnd = _sharp.Windows.MainWindow;
-      if (wnd != null && wnd.Handle != IntPtr.Zero)
-      {
-        _left = wnd.X;
-        _right = wnd.X + wnd.Width;
-        _top = wnd.Y;
-        _bottom = wnd.Y + wnd.Height;
-        log.InfoFormat($"Target Window: {_left} {_top} {_right} {_bottom}");
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+      //ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+      //var wnd = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
+      //if (wnd != null && wnd.Handle != IntPtr.Zero)
+      //{
+      //  _left = wnd.X;
+      //  _right = wnd.X + wnd.Width;
+      //  _top = wnd.Y;
+      //  _bottom = wnd.Y + wnd.Height;
+      //  log.InfoFormat($"Target Window: {_left} {_top} {_right} {_bottom}");
+      //  return true;
+      //}
+      //else
+      //{
+      //  return false;
+      //}
+      return true;
     }
     //---------------------------------------------------------------------------------------
-    public bool Start(MemorySharp sharp)
+    public bool Start()
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-      _sharp = sharp;
       CheckWindowRect();
 
       _isRunning = true;

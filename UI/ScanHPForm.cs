@@ -56,9 +56,9 @@ namespace MXTools
       DialogResult = DialogResult.Cancel;
     }
     //--------------------------------------------------------------------------------------------
-    public long GetAddress()
+    public ulong GetAddress()
     {
-      if (long.TryParse(_AdrBox.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out long number))
+      if (ulong.TryParse(_AdrBox.Text, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out ulong number))
       {
         return number;
       }

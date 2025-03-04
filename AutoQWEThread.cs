@@ -1,5 +1,4 @@
-﻿using Binarysharp.MemoryManagement;
-using log4net;
+﻿using log4net;
 using System;
 using System.Reflection;
 using System.Threading;
@@ -42,7 +41,7 @@ namespace MXTools
       }
     }
     //---------------------------------------------------------------------------------------
-    public bool Start(MemorySharp sharp)
+    public bool Start()
     {
       _isRunning = true;
       _qThread = new Thread(() => Run('q'));

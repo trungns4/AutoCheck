@@ -1,10 +1,9 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Binarysharp.MemoryManagement;
-using log4net;
 
 namespace MXTools
 {
@@ -12,15 +11,14 @@ namespace MXTools
   {
     private char _key;
     private QWMemThreadSettings _settings;
-    private MemorySharp _sharp;
 
     //current
     private int _curVal = 0;
-    private long _curAdr = 0;
+    private ulong _curAdr = 0;
 
     //max
     private int _maxVal = 0;
-    private long _maxAdr = 0;
+    private ulong _maxAdr = 0;
 
     private Thread _thread;
     private Thread _keyThread;
@@ -37,7 +35,6 @@ namespace MXTools
     //---------------------------------------------------------------------------------------
     public AutoKeyThread(char key, QWMemThreadSettings settings, Action<int, int> display)
     {
-      _sharp = null;
       _key = key;
       _keyCode = Utils.KeyCode(_key);
       _settings = settings;
@@ -57,10 +54,9 @@ namespace MXTools
       }
     }
     //---------------------------------------------------------------------------------------
-    public bool Start(MemorySharp sharp, long curAddr, long maxAddr)
+    public bool Start(ulong curAddr, ulong maxAddr)
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      _sharp = sharp;
       _curAdr = curAddr;
       _maxAdr = maxAddr;
 
@@ -201,12 +197,17 @@ namespace MXTools
         {
           if (_key == 'q')
           {
-            AutoFlags.IsTargetWindowActive = Utils.IsWindowActive(_sharp.Pid);
+            if (MxSharp.Instance.EnsureAttached() == false)
+            {
+              continue;
+            }
+            AutoFlags.IsTargetWindowActive = Utils.IsWindowActive((int)MxSharp.Instance.PID());
           }
+
           if (_curAdr >= 24 && _maxAdr >= 24 && _settings._auto)
           {
-            _curVal = _sharp.Read<int>((IntPtr)_curAdr, false);
-            _maxVal = _sharp.Read<int>((IntPtr)_maxAdr, false);
+            _curVal = MxSharp.Instance.ReadMemory(_curAdr);
+            _maxVal = MxSharp.Instance.ReadMemory(_maxAdr);
 
             double cv = _curVal;
             double mv = _maxVal;

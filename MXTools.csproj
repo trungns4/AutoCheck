@@ -6,8 +6,9 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <Platforms>x64;x86</Platforms>
   </PropertyGroup>
+
   <PropertyGroup>
     <Version>1.1.0</Version>
     <FileVersion>1.1.0.*</FileVersion>
@@ -36,6 +37,7 @@
   <ItemGroup>
     <None Remove="IbInputSimulator.dll" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="alarm.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -45,21 +47,22 @@
     </Content>
     <Content Include="Resources\play.ico" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="log4net" Version="3.0.3" />
-    <PackageReference Include="MemorySharp" Version="1.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NAudio" Version="2.2.1" />
-    <PackageReference Include="NAudio.Asio" Version="2.2.1" />
-    <PackageReference Include="NAudio.Core" Version="2.2.1" />
-    <PackageReference Include="NAudio.Midi" Version="2.2.1" />
-    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
     <PackageReference Include="NAudio.WinForms" Version="2.2.1" />
-    <PackageReference Include="NAudio.WinMM" Version="2.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Adapter\Adapter.vcxproj">
+      <TreatAsUsed>true</TreatAsUsed>
+    </ProjectReference>
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -72,6 +75,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
     <None Update="alarm2.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -84,21 +88,27 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
   <PropertyGroup>
-    <PlatformTarget>x86</PlatformTarget>
     <ApplicationIcon>Resources\play.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NoWarn>1701;1702;CA1416</NoWarn>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <NoWarn>1701;1702;CA1416</NoWarn>
   </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /s /e /y /q /i $(ProjectDir)\..\Blackbone\Blackbone\build\x64\Release(DLL)\*.DLL $(TargetDir)" />
+  </Target>
 </Project>

@@ -1,5 +1,4 @@
-﻿using Binarysharp.MemoryManagement;
-using log4net;
+﻿using log4net;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -92,17 +91,17 @@ namespace MXTools
       }
     }
 
-    //----------------------------------------------------------------------------------
-    public static MemorySharp CreateMemorySharp()
-    {
-      var processId = GetProcessId();
-      if (processId == null)
-      {
-        log.Error("Failed to find process ID.");
-        return null;
-      }
-      return new MemorySharp(processId.Value);
-    }
+    ////----------------------------------------------------------------------------------
+    //public static MemorySharp CreateMemorySharp()
+    //{
+    //  var processId = GetProcessId();
+    //  if (processId == null)
+    //  {
+    //    log.Error("Failed to find process ID.");
+    //    return null;
+    //  }
+    //  return new MemorySharp(processId.Value);
+    //}
 
     //----------------------------------------------------------------------------------
     public static int? GetProcessId()
