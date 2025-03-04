@@ -61,12 +61,21 @@ namespace MXTools
         System::Threading::Monitor::Exit(lockObj);
       }
     }
+
     return _instance;
   }
   //----------------------------------------------------------------------
-  bool MxSharp::Attach(unsigned int pid)
+  bool MxSharp::Attach(System::String^ name)
   {
     Dettach();
+
+    auto pid = FindProcess(name);
+    if (pid == 0)
+    {
+      return false;
+    }
+
+    _processName = name;
     return (_process->Attach(pid) == STATUS_SUCCESS);
   }
   //----------------------------------------------------------------------
@@ -78,9 +87,12 @@ namespace MXTools
     }
     else
     {
-       _process->Attach(_process->pid());
-       return Valid();
-    }   
+      if (Attach(_processName) == false)
+      {
+        return false;
+      }
+      return Valid();
+    }
   }
   //----------------------------------------------------------------------
   void MxSharp::Dettach()
@@ -128,11 +140,8 @@ namespace MXTools
     return true;
   }
   //----------------------------------------------------------------------
-  bool MxSharp::ScanMemory(int number,
-    int offset,
-    ScanProgressDelegate^ progress,
-    ScanCompleteDelegate^ complete,
-    CancellationToken token)
+  bool MxSharp::ScanMemory(int number, int offset, ScanStartDelegate^ start, ScanProgressDelegate^ progress,
+    ScanCompleteDelegate^ complete, CancellationToken token)
   {
     if (Valid() == false)
     {
@@ -142,7 +151,7 @@ namespace MXTools
     auto& memory = _process->memory();
     auto regions = memory.EnumRegions();
 
-    double total = 0;
+    size_t total = 0;
     for (const auto& region : regions)
     {
       total += region.RegionSize;
@@ -150,48 +159,56 @@ namespace MXTools
 
     if (total == 0)
     {
+      complete(0, 0);
       return false;
     }
+   
+    start(100);
 
     size_t current = 0;
+    double percel = 0;
     for (const auto& region : regions)
     {
       if (token.IsCancellationRequested)
       {
+        complete(0, 0);
         return false;
       }
 
-      double percel = (double)current / total * 100;
-
+      percel = (double)current / total * 100;
       if (percel < offset)
       {
         current += region.RegionSize;
-        progress(current);
+        progress(percel);
         continue;
       }
 
       current += region.RegionSize;
-      progress(current);
+      if (false == progress(percel))
+      {
+        complete(0, 0);
+        return false;
+      }
 
       std::vector<BYTE> buffer;
       buffer.resize(region.RegionSize);
 
-      NTSTATUS status = memory.Read(region.BaseAddress, region.RegionSize, buffer.data());
+      NTSTATUS status = memory.Read(region.BaseAddress, region.RegionSize, buffer.data(), true);
       if (NT_SUCCESS(status) == false)
       {
+        if (false == progress(percel))
+        {
+          complete(0, 0);
+          return false;
+        }
         continue;
       }
 
       auto adr = _find(number, buffer.data(), buffer.size(), token);
-
       if (adr >= 0)
       {
         complete(region.BaseAddress + adr, Math::Max(0, Math::Min((int)percel - 1, 99)));
         return true;
-      }
-      else
-      {
-        continue;
       }
     }
 

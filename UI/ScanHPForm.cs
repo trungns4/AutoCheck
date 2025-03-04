@@ -1,10 +1,14 @@
-﻿using MXTools.Properties;
+﻿using log4net;
+using MXTools.Helpers;
+using MXTools.Properties;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MXTools
@@ -12,6 +16,7 @@ namespace MXTools
   public partial class ScanHPForm : Form
   {
     private bool _scanning = false;
+    private static readonly ILog log = LogManager.GetLogger(typeof(Utils));
 
     public ScanHPForm()
     {
@@ -107,7 +112,7 @@ namespace MXTools
       m_OffsetBox.Value = Utils.Clamp<decimal>(offset, 0, 99);
     }
     //--------------------------------------------------------------------------------------------
-    private void OnStart(long total)
+    private void OnStart(double total)
     {
       var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
       foreach (var item in buttons)
@@ -119,17 +124,20 @@ namespace MXTools
 
       _ProgBar.Visible = true;
       _ProgBar.Minimum = 0;
-      _ProgBar.Maximum = (int)(total + 1);
+      _ProgBar.Maximum = (int)(total);
     }
     //--------------------------------------------------------------------------------------------
-    private void OnProgress(long progress)
+    private void OnProgress(double progress)
     {
-      _ProgBar.Value = Math.Min((int)progress, _ProgBar.Maximum);
-      _AdrBox.Text = $"{_ProgBar.Value:N0}/{_ProgBar.Maximum:N0}";
-      _ProgBar.Refresh();
+      int val = Math.Min((int)progress, _ProgBar.Maximum);
+      if (val != _ProgBar.Value)
+      {
+        _ProgBar.Value = val;
+      }
+      _AdrBox.Text = $"{_ProgBar.Value}%";
     }
     //--------------------------------------------------------------------------------------------
-    private void OnDone(long adr, int ofs, EventHandler handler)
+    private void OnDone(ulong adr, int ofs, EventHandler handler)
     {
       if (adr > 0 & ofs >= 0)
       {
@@ -148,7 +156,6 @@ namespace MXTools
         item.Enabled = true;
       }
       _StopButton.Enabled = false;
-
       _StopButton.Click -= handler;
       _scanning = false;
     }
@@ -162,6 +169,12 @@ namespace MXTools
 
       try
       {
+        if (MxSharp.Instance.EnsureAttached() == false)
+        {
+          MessageBox.Show("App is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+
         _scanning = true;
         if (false == int.TryParse(_InputBox.Text, out int val))
         {
@@ -175,30 +188,36 @@ namespace MXTools
           return;
         }
 
-        ScanHP scan = new ScanHP();
+        CancellationTokenSource cts = new CancellationTokenSource();
         EventHandler stopButtonClickHandler = (sender, e) =>
         {
-          scan.Stop();
+          cts.Cancel();
         };
         _StopButton.Click += stopButtonClickHandler;
 
-        var ret = scan.Scan(val, offset,
-        total =>
+        Task.Run(() =>
         {
-          BeginInvoke(() => OnStart(total));
-        },
-        progress =>
-        {
-          BeginInvoke(() => OnProgress(progress));
-        },
-        (adr, ofs) =>
-        {
-          BeginInvoke(() => OnDone(adr, ofs, stopButtonClickHandler));
+          MxSharp.Instance.ScanMemory(val, offset,
+          total =>
+          {
+            BeginInvoke(() => OnStart(total));
+          },
+          progress =>
+          {
+            BeginInvoke(() => OnProgress(progress));
+            return (cts.Token.IsCancellationRequested == false);
+          },
+          (adr, ofs) =>
+          {
+            BeginInvoke(() => OnDone(adr, ofs, stopButtonClickHandler));
+          },
+          cts.Token);
         });
       }
       finally
       {
       }
     }
+    //--------------------------------------------------------------------------------------------
   }
 }

@@ -1,6 +1,9 @@
 ﻿using Gma.System.MouseKeyHook;
 using log4net;
+using MXTools.Helpers;
+using MXTools.Input;
 using MXTools.Properties;
+using MXTools.Threads;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,6 +16,8 @@ namespace MXTools
 {
   public partial class Form1 : Form
   {
+    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
     private ulong _addr = 0;
     private AutoKeyThread _threadQ = null;
     private AutoKeyThread _threadW = null;
@@ -24,7 +29,7 @@ namespace MXTools
     private bool m_bForcingClose = false;
 
     private IKeyboardMouseEvents m_GlobalHook;
-    private Settings _settings = new Settings();
+    private ThreadSettings _settings = new ThreadSettings();
     private bool _enableStart = true;
 
     public Form1()
@@ -32,17 +37,22 @@ namespace MXTools
       InitializeComponent();
       Keyboard.Init();
       InputSender.Init();
-      //IbInputSimulator.IbSendInit(IbInputSimulator.SendType.AnyDriver, 0, 0);
-    }
 
+      if (false == MxSharp.Instance.Attach(GlobalSettings.Instance.GetConfigString("app")))
+      {
+        _log.Warn("App is not running yet");
+      }
+      else
+      {
+        _log.Warn($"App is running. Attached to {MxSharp.Instance.PID()}");
+      }
+    }
+    //----------------------------------------------------------------------------------
     protected override void WndProc(ref Message m)
     {
       if (m.Msg == 0x0010) // WM_CLOSE
       {
-        ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        log.Info("Received CLOSE request");
-
+        _log.Info("Received CLOSE request");
         if (m_bForcingClose == false)
         {
           ShowMe(false);
@@ -51,20 +61,19 @@ namespace MXTools
       }
       base.WndProc(ref m);
     }
-
-
+    //----------------------------------------------------------------------------------
     private void Align()
     {
       int screenWidth = Screen.PrimaryScreen.WorkingArea.Width;
       int formWidth = this.Width;
 
-      int x = (screenWidth - formWidth) / 2; // Center horizontally
+      int x = (screenWidth - formWidth) / 2;
       //int x = screenWidth - formWidth; // Align to right
       int y = 0; // Align to top
 
       this.Location = new System.Drawing.Point(x, y); // Move form
     }
-
+    //----------------------------------------------------------------------------------
     private void OnFormLoad(object sender, EventArgs e)
     {
       Align();
@@ -127,7 +136,7 @@ namespace MXTools
 
       if (MxSharp.Instance.EnsureAttached())
       {
-        //UpdateToogleButton(sharp.Windows.MainWindow.Handle);
+        UpdateToogleButton(Utils.GetMainWindowHandle((int)MxSharp.Instance.PID()));
       }
     }
     //----------------------------------------------------------------------------------
@@ -138,7 +147,6 @@ namespace MXTools
         ToggleStartStop();
       }
     }
-
     //----------------------------------------------------------------------------------
     private void OnKeyUp(object sender, KeyEventArgs e)
     {
@@ -254,8 +262,6 @@ namespace MXTools
 
       m_NotifyIcon.Visible = false;
       m_NotifyIcon.Dispose();
-
-      IbInputSimulator.IbSendDestroy();
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
@@ -283,16 +289,13 @@ namespace MXTools
     private bool Start()
     {
       _enableStart = false;
-      Utils.CloseApps();
-      
-      if (MxSharp.Instance.EnsureAttached())
+      if (MxSharp.Instance.EnsureAttached() == false)
       {
         MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         _enableStart = true;
         return false;
       }
 
-      //m_StartButton.Text = "Stop";
       m_StartButton.Image = Resources.stop_16;
       m_ScanButton.Enabled = false;
 
@@ -301,12 +304,13 @@ namespace MXTools
 
       Thread.Sleep(50);
       _enableStart = true;
+
+      Utils.CloseApps();
       return true;
     }
     //----------------------------------------------------------------------------------
     private bool Stop()
     {
-      //m_StartButton.Text = "Start";
       m_StartButton.Image = Resources.play_16;
       m_ScanButton.Enabled = true;
 
@@ -331,6 +335,7 @@ namespace MXTools
 
         m_StartButton.Enabled = false;
         _starting = true;
+        _enableStart = false;
         if (_threadQ.IsRunning())
         {
           _threadQ.Stop();
@@ -355,6 +360,7 @@ namespace MXTools
       finally
       {
         _starting = false;
+        _enableStart = true;
         m_StartButton.Enabled = true;
       }
     }
@@ -414,7 +420,7 @@ namespace MXTools
       }
       catch
       {
-        _settings = new Settings();
+        _settings = new ThreadSettings();
         MessageBox.Show("Load data failed", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
@@ -492,12 +498,12 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnToogleMXClicked(object sender, EventArgs e)
     {
-      //var sharp = MemorySharpHolder.GetMemorySharp();
-      //if (sharp != null && sharp.Windows.MainWindow != null)
-      //{
-      //  WindowHider.ToggleWindow(sharp.Windows.MainWindow.Handle);
-      //  UpdateToogleButton(sharp.Windows.MainWindow.Handle);
-      //}
+      if (MxSharp.Instance.EnsureAttached())
+      {
+        var handle = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
+        WindowHider.ToggleWindow(handle);
+        UpdateToogleButton(handle);
+      }
     }
     //----------------------------------------------------------------------------------
     private void OnMinimizeClicked(object sender, EventArgs e)

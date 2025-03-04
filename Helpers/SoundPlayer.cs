@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using log4net;
 using NAudio.Wave;
 
-namespace MXTools
+namespace MXTools.Helpers
 {
   internal class SoundPlayer : IDisposable
   {
@@ -88,7 +88,7 @@ namespace MXTools
     //---------------------------------------------------------------------------------
     public bool IsPlaying()
     {
-      return (_outputDevice.PlaybackState == PlaybackState.Playing);
+      return _outputDevice.PlaybackState == PlaybackState.Playing;
     }
   }
 }

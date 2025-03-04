@@ -8,12 +8,15 @@ using System.Timers;
 using log4net;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.Logging;
+using MXTools.Helpers;
 
-namespace MXTools
+namespace MXTools.Threads
 {
 
   internal class TimeWarning
   {
+    ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
     private readonly Timer _timer;
     private SoundPlayer _player;
     private TimeWarningSettings _settings;
@@ -35,12 +38,7 @@ namespace MXTools
     //------------------------------------------------------------------------------
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)
     {
-      if (_time == DateTime.MinValue)
-      {
-        return;
-      }
-
-      if(_settings._auto == false)
+      if (_time == DateTime.MinValue || _settings._auto == false)
       {
         return;
       }
@@ -66,24 +64,22 @@ namespace MXTools
       if (remain <= 0)
       {
         _time = DateTime.Now;
-        Task.Run(() => _player.Play(TimeSpan.FromSeconds((double)_settings._duration)));
+        Task.Run(() => _player.Play(TimeSpan.FromSeconds(_settings._duration)));
       }
     }
     //------------------------------------------------------------------------------
     public void Start()
     {
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       _time = DateTime.Now;
       _timer.Start();
-      log.InfoFormat("Warning Timer Started");
+      _log.InfoFormat("Warning Timer Started");
     }
     //------------------------------------------------------------------------------
     public void Stop()
     {
       _timer.Stop();
       _player.Stop();
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.InfoFormat("Warning Timer Stopped");
+      _log.InfoFormat("Warning Timer Stopped");
     }
     //------------------------------------------------------------------------------
     public bool IsRunning()

@@ -18,16 +18,19 @@
 
   <ItemGroup>
     <Compile Remove="Adapter\**" />
+    <Compile Remove="Archive\**" />
     <Compile Remove="AutoCheckPlus\**" />
     <Compile Remove="Driver\**" />
     <Compile Remove="Misc\**" />
     <Compile Remove="packages\**" />
     <EmbeddedResource Remove="Adapter\**" />
+    <EmbeddedResource Remove="Archive\**" />
     <EmbeddedResource Remove="AutoCheckPlus\**" />
     <EmbeddedResource Remove="Driver\**" />
     <EmbeddedResource Remove="Misc\**" />
     <EmbeddedResource Remove="packages\**" />
     <None Remove="Adapter\**" />
+    <None Remove="Archive\**" />
     <None Remove="AutoCheckPlus\**" />
     <None Remove="Driver\**" />
     <None Remove="Misc\**" />
@@ -35,16 +38,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="IbInputSimulator.dll" />
+    <None Remove="Sounds\alarm.mp3" />
+    <None Remove="Sounds\alarm2.mp3" />
+    <None Remove="Sounds\warning.mp3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="alarm.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="IbInputSimulator.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\play.ico" />
   </ItemGroup>
 
@@ -77,15 +76,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="alarm2.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Update="warning.mp3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -94,6 +87,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Sounds\" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -109,6 +106,6 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /s /e /y /q /i $(ProjectDir)\..\Blackbone\Blackbone\build\x64\Release(DLL)\*.DLL $(TargetDir)" />
+    <Exec Command="xcopy /s /e /y /q /i $(ProjectDir)\..\Blackbone\Blackbone\build\x64\Release(DLL)\*.DLL $(TargetDir)&#xD;&#xA;xcopy /s /e /y /q /i $(ProjectDir)\Sounds\*.* $(TargetDir)" />
   </Target>
 </Project>

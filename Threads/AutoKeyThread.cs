@@ -1,14 +1,18 @@
 ﻿using log4net;
+using MXTools.Helpers;
+using MXTools.Input;
 using System;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MXTools
+namespace MXTools.Threads
 {
   internal class AutoKeyThread
   {
+    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
     private char _key;
     private QWMemThreadSettings _settings;
 
@@ -56,7 +60,6 @@ namespace MXTools
     //---------------------------------------------------------------------------------------
     public bool Start(ulong curAddr, ulong maxAddr)
     {
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
       _curAdr = curAddr;
       _maxAdr = maxAddr;
 
@@ -78,8 +81,6 @@ namespace MXTools
       _thread.Priority = ThreadPriority.Normal;
       _thread.Start();
 
-      Thread.Sleep(50);
-
       _keyThread = new Thread(RunKeyCheck);
       _keyThread.IsBackground = true;
       _thread.Priority = ThreadPriority.Highest;
@@ -89,18 +90,18 @@ namespace MXTools
       _warnThread.IsBackground = true;
       _warnThread.Start();
 
-      log.Info("Monitoring Thread started");
+      _log.Info("Monitoring Thread started");
 
-      log.InfoFormat($"Key: {_key}");
-      log.InfoFormat($"Key Up Delay: {_settings._keyUpDelay}");
-      log.InfoFormat($"Key Down Delay: {_settings._keyDownDelay}");
-      log.InfoFormat($"Key Thread Delay: {_settings._keyThreadDelay}");
-      log.InfoFormat($"Mem Thread Delay: {_settings._memThreadDelay}");
-      log.InfoFormat($"Warn Thread Delay: {_settings._warnThreadDelay}");
+      _log.InfoFormat($"Key: {_key}");
+      _log.InfoFormat($"Key Up Delay: {_settings._keyUpDelay}");
+      _log.InfoFormat($"Key Down Delay: {_settings._keyDownDelay}");
+      _log.InfoFormat($"Key Thread Delay: {_settings._keyThreadDelay}");
+      _log.InfoFormat($"Mem Thread Delay: {_settings._memThreadDelay}");
+      _log.InfoFormat($"Warn Thread Delay: {_settings._warnThreadDelay}");
 
-      log.InfoFormat($"Scale: {_settings._scale}");
-      log.InfoFormat($"Warn Scale: {_settings._warnScale}");
-      log.InfoFormat($"Warn Volume: {_settings._warnVolume:0.00}");
+      _log.InfoFormat($"Scale: {_settings._scale}");
+      _log.InfoFormat($"Warn Scale: {_settings._warnScale}");
+      _log.InfoFormat($"Warn Volume: {_settings._warnVolume:0.00}");
 
       return true;
     }
@@ -175,7 +176,7 @@ namespace MXTools
         double mv = _maxVal;
 
         //warning
-        if (cv <= (mv * _settings._warnScale))
+        if (cv <= mv * _settings._warnScale)
         {
           if (cv != 0)
           {
@@ -199,9 +200,10 @@ namespace MXTools
           {
             if (MxSharp.Instance.EnsureAttached() == false)
             {
+              _log.Info("App is not running");
               continue;
             }
-            AutoFlags.IsTargetWindowActive = Utils.IsWindowActive((int)MxSharp.Instance.PID());
+            GlobalFlags.IsTargetWindowActive = Utils.IsWindowActive((int)MxSharp.Instance.PID());
           }
 
           if (_curAdr >= 24 && _maxAdr >= 24 && _settings._auto)
@@ -212,7 +214,7 @@ namespace MXTools
             double cv = _curVal;
             double mv = _maxVal;
 
-            if (cv <= (mv * _settings._scale))
+            if (cv <= mv * _settings._scale)
             {
               _full = false;
               _keyFlag.Set();
@@ -244,16 +246,16 @@ namespace MXTools
         _keyFlag.WaitOne();
         bool delay = true;
 
-        while (_settings._auto && _settings._autoKey == true
-        && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
+        while (_settings._auto == true
+              && _settings._autoKey == true
+              && _isRunning == true
+              && _full == false
+              && GlobalFlags.IsTargetWindowActive == true)
         {
           InputSender.SendKey((ushort)_keyCode, true);
-          //IbInputSimulator.IbSendKeybdDown((ushort)_keyCode);
-
           Thread.Sleep(_settings._keyUpDelay);
 
           InputSender.SendKey((ushort)_keyCode, false);
-          //IbInputSimulator.IbSendKeybdUp((ushort)_keyCode);
           Thread.Sleep(_settings._keyDownDelay);
 
           delay = false;

@@ -13,7 +13,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Runtime;
 
-namespace MXTools
+namespace MXTools.Threads
 {
   public class MouseThreadSettings
   {
@@ -120,7 +120,7 @@ namespace MXTools
     }
   }
 
-  public class Settings
+  public class ThreadSettings
   {
     public QWMemThreadSettings Q { get; }
     public QWMemThreadSettings W { get; }
@@ -128,7 +128,7 @@ namespace MXTools
     public MouseThreadSettings M { get; }
     public TimeWarningSettings T { get; }
 
-    public Settings()
+    public ThreadSettings()
     {
       Q = new QWMemThreadSettings() { };
 
@@ -165,7 +165,7 @@ namespace MXTools
         string json = File.ReadAllText(file);
 
         // Deserialize into a temporary object
-        Settings tempSettings = JsonConvert.DeserializeObject<Settings>(json);
+        ThreadSettings tempSettings = JsonConvert.DeserializeObject<ThreadSettings>(json);
 
         CopyFrom(tempSettings);
 
@@ -191,7 +191,7 @@ namespace MXTools
       }
     }
     //----------------------------------------------------------------------------------
-    public void CopyFrom(Settings other)
+    public void CopyFrom(ThreadSettings other)
     {
       if (other == null) return;
 

@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using MXTools.Properties;
+using MXTools.Threads;
 
 namespace MXTools
 {
   public partial class SettingsForm : Form
   {
-    private Settings _settings;
+    private ThreadSettings _settings;
 
     private bool _saved = true;
 
-    public SettingsForm(Settings settings)
+    public SettingsForm(ThreadSettings settings)
     {
       InitializeComponent();
 
-      _settings = new Settings();
+      _settings = new ThreadSettings();
       _settings.CopyFrom(settings);
 
       ShowData();
@@ -36,7 +37,7 @@ namespace MXTools
       }
     }
     //----------------------------------------------------------------------------------
-    public Settings Settings
+    public ThreadSettings Settings
     {
       get { return _settings; }
     }
@@ -222,7 +223,7 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void m_DefaultButton_Click(object sender, EventArgs e)
     {
-      _settings = new Settings();
+      _settings = new ThreadSettings();
       _saved = false;
       ShowData();
     }

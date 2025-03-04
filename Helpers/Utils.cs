@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MXTools
+namespace MXTools.Helpers
 {
   internal class Utils
   {
@@ -14,19 +14,19 @@ namespace MXTools
 
     // Windows API functions
     [DllImport("user32.dll", SetLastError = true)]
-    private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+    private static extern nint FindWindow(string lpClassName, string lpWindowName);
 
     [DllImport("user32.dll", SetLastError = true)]
-    private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+    private static extern uint GetWindowThreadProcessId(nint hWnd, out uint processId);
 
     [DllImport("user32.dll")]
-    private static extern IntPtr GetForegroundWindow();
+    private static extern nint GetForegroundWindow();
 
     [DllImport("user32.dll")]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
+    public static extern bool SetForegroundWindow(nint hWnd);
 
     [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+    private static extern bool GetWindowRect(nint hWnd, out RECT lpRect);
 
     [DllImport("user32.dll")]
     public static extern bool GetCursorPos(out POINT lpPoint);
@@ -38,15 +38,10 @@ namespace MXTools
     private static extern short GetAsyncKeyState(int vKey);
 
     [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+    private static extern bool ShowWindow(nint hWnd, int nCmdShow);
 
     [DllImport("user32.dll")]
-    private static extern bool IsWindowVisible(IntPtr hWnd);
-
-    [DllImport("ntdll.dll")]
-    private static extern int NtSetInformationProcess(IntPtr processHandle, int processInformationClass, ref int processInformation, int processInformationLength);
-
-    private const int ProcessDenyHandleAccess = 0x1D; // ProcessInformationClass = 29 (PROCESSINFOCLASS::ProcessAccessToken)
+    private static extern bool IsWindowVisible(nint hWnd);
 
     private const int SW_RESTORE = 9;
     private const int SW_HIDE = 0;
@@ -68,15 +63,15 @@ namespace MXTools
     }
 
     [DllImport("user32.dll", SetLastError = true)]
-    private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
+    private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, nint lParam);
 
     [DllImport("user32.dll", SetLastError = true)]
-    private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+    private static extern int GetWindowText(nint hWnd, StringBuilder lpString, int nMaxCount);
 
-    private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+    private delegate bool EnumWindowsProc(nint hWnd, nint lParam);
 
     //----------------------------------------------------------------------------------
-    public static void GetWindowRectangle(IntPtr hWnd, out int left, out int top, out int right, out int bottom)
+    public static void GetWindowRectangle(nint hWnd, out int left, out int top, out int right, out int bottom)
     {
       if (GetWindowRect(hWnd, out RECT rect))
       {
@@ -90,46 +85,11 @@ namespace MXTools
         left = top = right = bottom = 0;
       }
     }
-
-    ////----------------------------------------------------------------------------------
-    //public static MemorySharp CreateMemorySharp()
-    //{
-    //  var processId = GetProcessId();
-    //  if (processId == null)
-    //  {
-    //    log.Error("Failed to find process ID.");
-    //    return null;
-    //  }
-    //  return new MemorySharp(processId.Value);
-    //}
-
-    //----------------------------------------------------------------------------------
-    public static int? GetProcessId()
-    {
-      var windowName = GetConfigString("window").ToUpper();
-      var app = GetConfigString("app");
-
-      IntPtr hWnd = FindWindow(null, windowName);
-      if (hWnd != IntPtr.Zero)
-      {
-        GetWindowThreadProcessId(hWnd, out uint processId);
-        if (processId != 0)
-        {
-          return (int)processId;
-        }
-      }
-
-      var processes = Process.GetProcesses()
-        .Where(p => p.ProcessName.Contains(app, StringComparison.OrdinalIgnoreCase));
-
-      return processes.FirstOrDefault()?.Id;
-    }
-
     //----------------------------------------------------------------------------------
     public static bool IsWindowActive(int id)
     {
-      IntPtr foregroundWindow = GetForegroundWindow();
-      if (foregroundWindow == IntPtr.Zero)
+      nint foregroundWindow = GetForegroundWindow();
+      if (foregroundWindow == nint.Zero)
       {
         return false;
       }
@@ -139,17 +99,7 @@ namespace MXTools
     }
 
     //----------------------------------------------------------------------------------
-    public static void SetWindowActive(int processId)
-    {
-      IntPtr hwnd = GetMainWindowHandle(processId);
-      if (hwnd != IntPtr.Zero)
-      {
-        SetForegroundWindow(hwnd);
-      }
-    }
-
-    //----------------------------------------------------------------------------------
-    public static IntPtr GetMainWindowHandle(int processId)
+    public static nint GetMainWindowHandle(int processId)
     {
       try
       {
@@ -159,7 +109,7 @@ namespace MXTools
       catch (Exception ex)
       {
         log.Error($"Error getting main window handle for PID {processId}: {ex.Message}");
-        return IntPtr.Zero;
+        return nint.Zero;
       }
     }
 
@@ -170,23 +120,6 @@ namespace MXTools
       return (Keys)(vkey & 0xFF);
     }
 
-    //----------------------------------------------------------------------------------
-    public static int GetConfigInt(string name, int def = 0)
-    {
-      return int.TryParse(GetConfigString(name), out int result) ? result : def;
-    }
-
-    //----------------------------------------------------------------------------------
-    public static double GetConfigDouble(string name, double def = 0)
-    {
-      return double.TryParse(GetConfigString(name), out double result) ? result : def;
-    }
-
-    //----------------------------------------------------------------------------------
-    public static string GetConfigString(string name, string def = "")
-    {
-      return GlobalSettings.Instance.GetConfigString(name) ?? def;
-    }
 
     //----------------------------------------------------------------------------------
     public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
@@ -218,7 +151,7 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     public static void CloseApps()
     {
-      var apps = GetConfigString("closeApps").Split(";");
+      var apps = GlobalSettings.Instance.GetConfigString("closeApps").Split(";");
 
       foreach (var app in apps)
       {
@@ -242,26 +175,14 @@ namespace MXTools
       }
     }
     //----------------------------------------------------------------------------------
-    public static void ShowWindow(IntPtr hWnd)
+    public static void ShowWindow(nint hWnd)
     {
       ShowWindow(hWnd, SW_RESTORE);
     }
-    //----------------------------------------------------------------------------------
-    public static IntPtr FindWindowByTitle(string lpWindowName)
-    {
-      return FindWindow(null, lpWindowName);
-    }
-    //----------------------------------------------------------------------------------
-    public static void ToggleWindow(IntPtr hwnd)
-    {
-      if (hwnd == IntPtr.Zero) return;
-
-      ShowWindow(hwnd, IsWindowVisible(hwnd) ? SW_HIDE : SW_SHOW);
-    }
     //---------------------------------------------------------------------------------- 
-    public static IntPtr FindWindowByExeName(string exeName)
+    public static nint FindWindowByExeName(string exeName)
     {
-      IntPtr foundWindow = IntPtr.Zero;
+      nint foundWindow = nint.Zero;
       uint currentProcessId = (uint)Process.GetCurrentProcess().Id;
 
       EnumWindows((hWnd, lParam) =>
@@ -286,22 +207,9 @@ namespace MXTools
           }
         }
         return true; // Continue enumeration
-      }, IntPtr.Zero);
+      }, nint.Zero);
 
       return foundWindow;
-    }
-
-    public static void ProtectProcess()
-    {
-      int denyHandleValue = 1;
-      IntPtr currentProcess = Process.GetCurrentProcess().Handle;
-
-      int status = NtSetInformationProcess(currentProcess, ProcessDenyHandleAccess, ref denyHandleValue, sizeof(int));
-
-      if (status == 0)
-        Console.WriteLine("✅ Process handle access blocked successfully!");
-      else
-        Console.WriteLine($"❌ Failed to block handle access. Status: 0x{status:X}");
     }
   }
 }

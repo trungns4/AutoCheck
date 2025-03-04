@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MXTools
+namespace MXTools.Threads
 {
-  internal class AutoFlags
+  internal class GlobalFlags
   {
     public static volatile bool IsTargetWindowActive = false;
   }

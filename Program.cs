@@ -7,14 +7,13 @@ using System.Threading;
 using System.Windows.Forms;
 using log4net;
 using log4net.Config;
+using MXTools.Helpers;
 
 namespace MXTools
 {
   internal static class Program
   {
-    static Mutex mutex = new Mutex(true, "_AUTOCHECK_");
-
-
+    static Mutex mutex = new Mutex(true, "__MXTOOL__");
 
     /// <summary>
     /// The main entry point for the application.

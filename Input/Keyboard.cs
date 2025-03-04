@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MXTools
+namespace MXTools.Input
 {
   public class Keyboard
   {
@@ -9,18 +9,18 @@ namespace MXTools
     private static KeybdEventDelegate _originalKeybdEvent;
 
     [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr GetModuleHandle(string lpModuleName);
+    private static extern nint GetModuleHandle(string lpModuleName);
 
     [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+    private static extern nint GetProcAddress(nint hModule, string procName);
 
     public static void Init()
     {
       // Get the original keybd_event function address
-      IntPtr hUser32 = GetModuleHandle("user32.dll");
-      IntPtr funcAddr = GetProcAddress(hUser32, "keybd_event");
+      nint hUser32 = GetModuleHandle("user32.dll");
+      nint funcAddr = GetProcAddress(hUser32, "keybd_event");
 
-      if (funcAddr != IntPtr.Zero)
+      if (funcAddr != nint.Zero)
       {
         _originalKeybdEvent = Marshal.GetDelegateForFunctionPointer<KeybdEventDelegate>(funcAddr);
       }

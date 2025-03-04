@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MXTools
+namespace MXTools.Input
 {
   public class InputSender
   {
-    private delegate uint SendInputDelegate(uint nInputs, IntPtr pInputs, int cbSize);
+    private delegate uint SendInputDelegate(uint nInputs, nint pInputs, int cbSize);
     private static SendInputDelegate _originalSendInput;
 
     [StructLayout(LayoutKind.Sequential)]
@@ -30,7 +30,7 @@ namespace MXTools
       public ushort wScan;
       public uint dwFlags;
       public uint time;
-      public IntPtr dwExtraInfo;
+      public nint dwExtraInfo;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -41,7 +41,7 @@ namespace MXTools
       public uint mouseData;
       public uint dwFlags;
       public uint time;
-      public IntPtr dwExtraInfo;
+      public nint dwExtraInfo;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -53,18 +53,18 @@ namespace MXTools
     }
 
     [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr GetModuleHandle(string lpModuleName);
+    private static extern nint GetModuleHandle(string lpModuleName);
 
     [DllImport("kernel32.dll", SetLastError = true)]
-    private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+    private static extern nint GetProcAddress(nint hModule, string procName);
 
     public static void Init()
     {
       // Get the original SendInput function address
-      IntPtr hUser32 = GetModuleHandle("user32.dll");
-      IntPtr funcAddr = GetProcAddress(hUser32, "SendInput");
+      nint hUser32 = GetModuleHandle("user32.dll");
+      nint funcAddr = GetProcAddress(hUser32, "SendInput");
 
-      if (funcAddr != IntPtr.Zero)
+      if (funcAddr != nint.Zero)
       {
         _originalSendInput = Marshal.GetDelegateForFunctionPointer<SendInputDelegate>(funcAddr);
       }
@@ -80,9 +80,9 @@ namespace MXTools
       inputs[0].u.ki.wScan = 0;
       inputs[0].u.ki.dwFlags = keyDown ? 0u : 2u; // 0 = key down, 2 = key up
       inputs[0].u.ki.time = 0;
-      inputs[0].u.ki.dwExtraInfo = IntPtr.Zero;
+      inputs[0].u.ki.dwExtraInfo = nint.Zero;
 
-      IntPtr pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
+      nint pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
       Marshal.StructureToPtr(inputs[0], pInputs, false);
 
       _originalSendInput((uint)inputs.Length, pInputs, Marshal.SizeOf(typeof(INPUT)));
@@ -101,9 +101,9 @@ namespace MXTools
       inputs[0].u.mi.mouseData = 0;
       inputs[0].u.mi.dwFlags = 0x0008; // MOUSEEVENTF_RIGHTDOWN
       inputs[0].u.mi.time = 0;
-      inputs[0].u.mi.dwExtraInfo = IntPtr.Zero;
+      inputs[0].u.mi.dwExtraInfo = nint.Zero;
 
-      IntPtr pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
+      nint pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
       Marshal.StructureToPtr(inputs[0], pInputs, false);
 
       _originalSendInput((uint)inputs.Length, pInputs, Marshal.SizeOf(typeof(INPUT)));
@@ -122,9 +122,9 @@ namespace MXTools
       inputs[0].u.mi.mouseData = 0;
       inputs[0].u.mi.dwFlags = 0x0010; // MOUSEEVENTF_RIGHTUP
       inputs[0].u.mi.time = 0;
-      inputs[0].u.mi.dwExtraInfo = IntPtr.Zero;
+      inputs[0].u.mi.dwExtraInfo = nint.Zero;
 
-      IntPtr pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
+      nint pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
       Marshal.StructureToPtr(inputs[0], pInputs, false);
 
       _originalSendInput((uint)inputs.Length, pInputs, Marshal.SizeOf(typeof(INPUT)));

@@ -86,7 +86,6 @@
       // 
       _ProgBar.Location = new System.Drawing.Point(9, 62);
       _ProgBar.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-      _ProgBar.MarqueeAnimationSpeed = 50;
       _ProgBar.Name = "_ProgBar";
       _ProgBar.Size = new System.Drawing.Size(460, 22);
       _ProgBar.Step = 1;

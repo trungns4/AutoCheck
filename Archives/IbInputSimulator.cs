@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MXTools
+namespace MXTools.Archive
 {
   using System;
   using System.Runtime.InteropServices;
@@ -93,7 +93,7 @@ namespace MXTools
 
     // Initialization
     [DllImport(DllName, CallingConvention = CallingConvention.StdCall)]
-    public static extern Error IbSendInit(SendType type, uint flags, IntPtr argument);
+    public static extern Error IbSendInit(SendType type, uint flags, nint argument);
 
     [DllImport(DllName, CallingConvention = CallingConvention.StdCall)]
     public static extern void IbSendDestroy();
@@ -127,7 +127,7 @@ namespace MXTools
 
     // Windows Input API
     [DllImport(DllName, CallingConvention = CallingConvention.StdCall)]
-    public static extern uint IbSendInput(uint cInputs, IntPtr pInputs, int cbSize);
+    public static extern uint IbSendInput(uint cInputs, nint pInputs, int cbSize);
 
     [DllImport(DllName, CallingConvention = CallingConvention.StdCall)]
     public static extern void IbSend_mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, ulong dwExtraInfo);

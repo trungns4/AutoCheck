@@ -1,13 +1,17 @@
 ﻿using log4net;
+using MXTools.Helpers;
+using MXTools.Input;
 using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 
-namespace MXTools
+namespace MXTools.Threads
 {
   internal class AutoMouseThread
   {
+    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
     private MouseThreadSettings _settings;
     private Thread _thread;
     private bool _isRunning = false;
@@ -22,28 +26,25 @@ namespace MXTools
     //---------------------------------------------------------------------------------------
     private bool CheckWindowRect()
     {
-      //ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      //var wnd = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
-      //if (wnd != null && wnd.Handle != IntPtr.Zero)
-      //{
-      //  _left = wnd.X;
-      //  _right = wnd.X + wnd.Width;
-      //  _top = wnd.Y;
-      //  _bottom = wnd.Y + wnd.Height;
-      //  log.InfoFormat($"Target Window: {_left} {_top} {_right} {_bottom}");
-      //  return true;
-      //}
-      //else
-      //{
-      //  return false;
-      //}
-      return true;
+      var wnd = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
+      if (wnd != 0)
+      {
+        Utils.GetWindowRectangle(wnd, out int left, out int top, out int right, out int bottom);
+        _left = left;
+        _right = right;
+        _top = top;
+        _bottom = bottom;
+        _log.InfoFormat($"Target Window: {_left} {_top} {_right} {_bottom}");
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
     //---------------------------------------------------------------------------------------
     public bool Start()
     {
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
       CheckWindowRect();
 
       _isRunning = true;
@@ -52,7 +53,7 @@ namespace MXTools
       _thread.Priority = ThreadPriority.Highest;
       _thread.Start();
 
-      log.Info("Mouse click thread started");
+      _log.Info("Mouse click thread started");
       return true;
     }
     //---------------------------------------------------------------------------------------
@@ -69,7 +70,13 @@ namespace MXTools
     {
       while (_isRunning)
       {
-        if (AutoFlags.IsTargetWindowActive == false)
+        if (_settings._auto == false)
+        {
+          Thread.Sleep(_settings._threadDelay);
+          continue;
+        }
+
+        if (GlobalFlags.IsTargetWindowActive == false)
         {
           CheckToFireUp();
           Thread.Sleep(_settings._threadDelay);
@@ -81,34 +88,29 @@ namespace MXTools
           CheckWindowRect();
         }
 
-        if (_settings._auto)
+        if (Utils.IsAlt())
         {
-          if (Utils.IsAlt())
-          {
-            CheckToFireUp();
-            Thread.Sleep(_settings._threadDelay);
-            continue;
-          }
-          else
-          {
-            Utils.GetMouse(out int x, out int y);
-            if (x >= _left && x <= _right && y >= _top && y <= _bottom)
-            {
-              InputSender.RightButtonDown();
-              _up = false;
-              Thread.Sleep(_settings._clickDelay);
-            }
-            else
-            {
-              CheckToFireUp();
-              Thread.Sleep(_settings._threadDelay);
-            }
-          }
+          CheckToFireUp();
+          Thread.Sleep(_settings._threadDelay);
+          continue;
         }
         else
         {
-          Thread.Sleep(_settings._threadDelay);
+          Utils.GetMouse(out int x, out int y);
+          if (x >= _left && x <= _right && y >= _top && y <= _bottom)
+          {
+            InputSender.RightButtonDown();
+            _up = false;
+            Thread.Sleep(_settings._clickDelay);
+          }
+          else
+          {
+            CheckToFireUp();
+            Thread.Sleep(_settings._threadDelay);
+          }
         }
+
+        Thread.Sleep(_settings._threadDelay);
       }
     }
     //---------------------------------------------------------------------------------------
@@ -125,28 +127,13 @@ namespace MXTools
       }
 
       InputSender.RightButtonUp();
-
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.DebugFormat("Mouse Click Thread stopped");
+      _log.DebugFormat("Mouse Click Thread stopped");
     }
 
     //---------------------------------------------------------------------------------------
     public bool IsRunning()
     {
       return _isRunning;
-    }
-    //---------------------------------------------------------------------------------------
-    public void Pause(int time)
-    {
-      var running = _isRunning;
-      _isRunning = false;
-      Thread.Sleep(10);
-      var sw = Stopwatch.StartNew();
-      while (sw.ElapsedMilliseconds < time)
-      {
-        Thread.Sleep(time / 10);
-      }
-      _isRunning = running;
     }
   }
 }

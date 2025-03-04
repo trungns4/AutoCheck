@@ -3,18 +3,18 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace MXTools
+namespace MXTools.Archive
 {
   public class HookScanner
   {
     [DllImport("kernel32.dll")]
-    private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+    private static extern nint GetProcAddress(nint hModule, string procName);
 
     [DllImport("kernel32.dll")]
-    private static extern IntPtr LoadLibrary(string lpLibFileName);
+    private static extern nint LoadLibrary(string lpLibFileName);
 
     [DllImport("kernel32.dll")]
-    private static extern bool VirtualProtect(IntPtr lpAddress, int dwSize, uint flNewProtect, out uint lpflOldProtect);
+    private static extern bool VirtualProtect(nint lpAddress, int dwSize, uint flNewProtect, out uint lpflOldProtect);
 
     private const uint PAGE_EXECUTE_READWRITE = 0x40;
 
@@ -22,10 +22,10 @@ namespace MXTools
     {
       ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-      IntPtr hUser32 = LoadLibrary("user32.dll");
-      IntPtr funcAddr = GetProcAddress(hUser32, functionName);
+      nint hUser32 = LoadLibrary("user32.dll");
+      nint funcAddr = GetProcAddress(hUser32, functionName);
 
-      if (funcAddr == IntPtr.Zero)
+      if (funcAddr == nint.Zero)
       {
         log.Error($"Failed to locate {functionName}.");
         return;
@@ -35,8 +35,8 @@ namespace MXTools
       Marshal.Copy(funcAddr, currentBytes, 0, 5);
 
       // Get original bytes from a fresh module load
-      IntPtr hTempUser32 = LoadLibrary("user32.dll");
-      IntPtr cleanFuncAddr = GetProcAddress(hTempUser32, functionName);
+      nint hTempUser32 = LoadLibrary("user32.dll");
+      nint cleanFuncAddr = GetProcAddress(hTempUser32, functionName);
 
       byte[] originalBytes = new byte[5];
       Marshal.Copy(cleanFuncAddr, originalBytes, 0, 5);
