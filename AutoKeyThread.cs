@@ -246,13 +246,13 @@ namespace MXTools
         while (_settings._auto && _settings._autoKey == true
         && _isRunning == true && _full == false && AutoFlags.IsTargetWindowActive == true)
         {
-          //InputSender.SendKey((ushort)_keyCode, true);
-          IbInputSimulator.IbSendKeybdDown((ushort)_keyCode);
+          InputSender.SendKey((ushort)_keyCode, true);
+          //IbInputSimulator.IbSendKeybdDown((ushort)_keyCode);
 
           Thread.Sleep(_settings._keyUpDelay);
 
-          //InputSender.SendKey((ushort)_keyCode, false);
-          IbInputSimulator.IbSendKeybdUp((ushort)_keyCode);
+          InputSender.SendKey((ushort)_keyCode, false);
+          //IbInputSimulator.IbSendKeybdUp((ushort)_keyCode);
           Thread.Sleep(_settings._keyDownDelay);
 
           delay = false;

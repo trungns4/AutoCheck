@@ -44,6 +44,11 @@ namespace MXTools
     [DllImport("user32.dll")]
     private static extern bool IsWindowVisible(IntPtr hWnd);
 
+    [DllImport("ntdll.dll")]
+    private static extern int NtSetInformationProcess(IntPtr processHandle, int processInformationClass, ref int processInformation, int processInformationLength);
+
+    private const int ProcessDenyHandleAccess = 0x1D; // ProcessInformationClass = 29 (PROCESSINFOCLASS::ProcessAccessToken)
+
     private const int SW_RESTORE = 9;
     private const int SW_HIDE = 0;
     private const int SW_SHOW = 5;
@@ -285,6 +290,19 @@ namespace MXTools
       }, IntPtr.Zero);
 
       return foundWindow;
+    }
+
+    public static void ProtectProcess()
+    {
+      int denyHandleValue = 1;
+      IntPtr currentProcess = Process.GetCurrentProcess().Handle;
+
+      int status = NtSetInformationProcess(currentProcess, ProcessDenyHandleAccess, ref denyHandleValue, sizeof(int));
+
+      if (status == 0)
+        Console.WriteLine("✅ Process handle access blocked successfully!");
+      else
+        Console.WriteLine($"❌ Failed to block handle access. Status: 0x{status:X}");
     }
   }
 }

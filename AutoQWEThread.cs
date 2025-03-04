@@ -137,15 +137,15 @@ namespace MXTools
             //Keyboard.KeyUp((byte)Keys.Q);
             //UpdateUIAndSleep(_settings._keyUpDelayQ);
 
-            //InputSender.SendKey((ushort)Keys.Q, true);
-            //Thread.Sleep(_settings._keyDownDelayQ);
-            //InputSender.SendKey((byte)Keys.Q, false);
-            //UpdateUIAndSleep(_settings._keyUpDelayQ);
-
-            IbInputSimulator.IbSendKeybdDown((ushort)Keys.Q);
+            InputSender.SendKey((ushort)Keys.Q, true);
             Thread.Sleep(_settings._keyDownDelayQ);
-            IbInputSimulator.IbSendKeybdUp((byte)Keys.Q);
+            InputSender.SendKey((byte)Keys.Q, false);
             UpdateUIAndSleep(_settings._keyUpDelayQ);
+
+            //IbInputSimulator.IbSendKeybdDown((ushort)Keys.Q);
+            //Thread.Sleep(_settings._keyDownDelayQ);
+            //IbInputSimulator.IbSendKeybdUp((byte)Keys.Q);
+            //UpdateUIAndSleep(_settings._keyUpDelayQ);
           }
         }
         else if (key == 'w')
@@ -157,15 +157,15 @@ namespace MXTools
             //Keyboard.KeyUp((byte)Keys.W);
             //UpdateUIAndSleep(_settings._keyUpDelayW);
 
-            //InputSender.SendKey((ushort)Keys.W, true);
-            //Thread.Sleep(_settings._keyDownDelayW);
-            //InputSender.SendKey((byte)Keys.W, false);
-            //UpdateUIAndSleep(_settings._keyUpDelayW);
-
-            IbInputSimulator.IbSendKeybdDown((ushort)Keys.W);
+            InputSender.SendKey((ushort)Keys.W, true);
             Thread.Sleep(_settings._keyDownDelayW);
-            IbInputSimulator.IbSendKeybdUp((byte)Keys.W);
+            InputSender.SendKey((byte)Keys.W, false);
             UpdateUIAndSleep(_settings._keyUpDelayW);
+
+            //IbInputSimulator.IbSendKeybdDown((ushort)Keys.W);
+            //Thread.Sleep(_settings._keyDownDelayW);
+            //IbInputSimulator.IbSendKeybdUp((byte)Keys.W);
+            //UpdateUIAndSleep(_settings._keyUpDelayW);
           }
         }
         else if (key == 'e')
@@ -177,15 +177,15 @@ namespace MXTools
             //Keyboard.KeyUp((byte)Keys.E);
             //UpdateUIAndSleep(_settings._keyUpDelayE);
 
-            //InputSender.SendKey((ushort)Keys.E, true);
-            //Thread.Sleep(_settings._keyDownDelayE);
-            //InputSender.SendKey((byte)Keys.E, false);
-            //UpdateUIAndSleep(_settings._keyUpDelayE);
-
-            IbInputSimulator.IbSendKeybdDown((ushort)Keys.E);
+            InputSender.SendKey((ushort)Keys.E, true);
             Thread.Sleep(_settings._keyDownDelayE);
-            IbInputSimulator.IbSendKeybdUp((byte)Keys.E);
+            InputSender.SendKey((byte)Keys.E, false);
             UpdateUIAndSleep(_settings._keyUpDelayE);
+
+            //IbInputSimulator.IbSendKeybdDown((ushort)Keys.E);
+            //Thread.Sleep(_settings._keyDownDelayE);
+            //IbInputSimulator.IbSendKeybdUp((byte)Keys.E);
+            //UpdateUIAndSleep(_settings._keyUpDelayE);
           }
         }
 

@@ -15,16 +15,14 @@ namespace MXTools
   public partial class Form1 : Form
   {
     private MemorySharp _sharp = null;
-
     private long _addr = 0;
-
     private AutoKeyThread _threadQ = null;
     private AutoKeyThread _threadW = null;
     private AutoQWEThread _qweThread = null;
     private AutoMouseThread _mThread = null;
     private TimeWarning _timerWarning = null;
-    private bool _starting = false;
 
+    private bool _starting = false;
     private bool m_bForcingClose = false;
 
     private IKeyboardMouseEvents m_GlobalHook;
@@ -36,8 +34,7 @@ namespace MXTools
       InitializeComponent();
       Keyboard.Init();
       InputSender.Init();
-
-      IbInputSimulator.IbSendInit(IbInputSimulator.SendType.AnyDriver, 0, 0);
+      //IbInputSimulator.IbSendInit(IbInputSimulator.SendType.AnyDriver, 0, 0);
     }
 
     protected override void WndProc(ref Message m)
@@ -47,7 +44,7 @@ namespace MXTools
         ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         log.Info("Received CLOSE request");
-        
+
         if (m_bForcingClose == false)
         {
           ShowMe(false);
@@ -119,6 +116,8 @@ namespace MXTools
       m_GlobalHook.KeyUp += OnKeyUp;
       m_GlobalHook.KeyDown += OnKeyDown;
 
+      m_GlobalHook.MouseClick += OnMouseClick;
+
       m_NotifyIcon.Visible = true;
       m_ShowMenu.Visible = !this.Visible;
       m_HideMenu.Visible = this.Visible;
@@ -134,6 +133,15 @@ namespace MXTools
         UpdateToogleButton(sharp.Windows.MainWindow.Handle);
       }
     }
+    //----------------------------------------------------------------------------------
+    private void OnMouseClick(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.XButton1 || e.Button == MouseButtons.XButton2)
+      {
+        ToggleStartStop();
+      }
+    }
+
     //----------------------------------------------------------------------------------
     private void OnKeyUp(object sender, KeyEventArgs e)
     {
@@ -239,6 +247,7 @@ namespace MXTools
     {
       m_GlobalHook.KeyUp -= OnKeyUp;
       m_GlobalHook.KeyDown -= OnKeyDown;
+      m_GlobalHook.MouseClick -= OnMouseClick;
 
       //It is recommened to dispose it
       m_GlobalHook.Dispose();
@@ -276,11 +285,13 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private bool Start()
     {
+      _enableStart = false;
       Utils.CloseApps();
       _sharp = MemorySharpHolder.GetMemorySharp();
       if (_sharp == null)
       {
         MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        _enableStart = true;
         return false;
       }
 
@@ -292,6 +303,7 @@ namespace MXTools
       _SettingsButton.Enabled = false;
 
       Thread.Sleep(50);
+      _enableStart = true;
       return true;
     }
     //----------------------------------------------------------------------------------

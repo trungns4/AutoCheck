@@ -30,6 +30,8 @@ namespace MXTools
         ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         log.Debug("Application started");
 
+        //Utils.ProtectProcess();
+
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(new Form1());
