@@ -62,7 +62,7 @@ namespace MXTools.Threads
         }
 
 
-        if (Utils.IsAlt())
+        if (Win32.IsAltHolding())
         {
           CheckToFireUp();
           Thread.Sleep(_settings._threadDelay);
@@ -70,7 +70,7 @@ namespace MXTools.Threads
         }
         else
         {
-          Utils.GetMouse(out int x, out int y);
+          Win32.GetMousePos(out int x, out int y);
           var rect = ForegroundWindowCheck.Instance.GetCurrentRectangle();
           if (rect.Contains(x, y))
           {

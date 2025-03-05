@@ -4,19 +4,12 @@ using System.Reflection;
 
 namespace MXTools.Input
 {
-  public sealed class KeyboardManager
+  public static class KeyboardManager
   {
-    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private static readonly IKeyboard _keyboard;
 
-    private static readonly Lazy<KeyboardManager> _instance =
-        new Lazy<KeyboardManager>(() => new KeyboardManager());
-
-    private IKeyboard _keyboard;
-
-    public static KeyboardManager Instance => _instance.Value;
-    public IKeyboard Current => _keyboard;
-
-    private KeyboardManager()
+    static KeyboardManager()
     {
       string kbOpt = GlobalSettings.Instance.GetConfigString("keyboard", "win");
       if (kbOpt == "win")
@@ -30,5 +23,7 @@ namespace MXTools.Input
         _log.Info("Loaded Driver Keyboard");
       }
     }
+
+    public static IKeyboard Active => _keyboard;
   }
 }

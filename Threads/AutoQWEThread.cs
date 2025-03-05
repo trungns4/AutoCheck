@@ -126,23 +126,23 @@ namespace MXTools.Threads
 
         if (key == 'q' && _settings._q)
         {
-          KeyboardManager.Instance.Current.KeyDown((byte)Keys.Q);
+          KeyboardManager.Active.KeyDown((byte)Keys.Q);
           Thread.Sleep(_settings._keyDownDelayQ);
-          KeyboardManager.Instance.Current.KeyUp((byte)Keys.Q);
+          KeyboardManager.Active.KeyUp((byte)Keys.Q);
           UpdateUIAndSleep(_settings._keyUpDelayQ);
         }
         else if (key == 'w' && _settings._w)
         {
-          KeyboardManager.Instance.Current.KeyDown((byte)Keys.W);
+          KeyboardManager.Active.KeyDown((byte)Keys.W);
           Thread.Sleep(_settings._keyDownDelayW);
-          KeyboardManager.Instance.Current.KeyUp((byte)Keys.W);
+          KeyboardManager.Active.KeyUp((byte)Keys.W);
           UpdateUIAndSleep(_settings._keyUpDelayW);
         }
         else if (key == 'e' && _settings._e)
         {
-          KeyboardManager.Instance.Current.KeyDown((byte)Keys.E);
+          KeyboardManager.Active.KeyDown((byte)Keys.E);
           Thread.Sleep(_settings._keyDownDelayE);
-          KeyboardManager.Instance.Current.KeyUp((byte)Keys.E);
+          KeyboardManager.Active.KeyUp((byte)Keys.E);
           UpdateUIAndSleep(_settings._keyUpDelayE);
         }
 

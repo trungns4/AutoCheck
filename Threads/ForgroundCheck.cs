@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Text;
 using Vanara.PInvoke;
-using static MXTools.Helpers.Utils;
+using static MXTools.Helpers.Win32;
 using static Vanara.PInvoke.User32;
 using static Vanara.PInvoke.Kernel32;
 

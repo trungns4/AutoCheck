@@ -27,8 +27,6 @@ namespace MXTools
         ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         log.Debug("Application started");
 
-        //Utils.ProtectProcess();
-
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         Application.Run(new Form1());
@@ -36,11 +34,11 @@ namespace MXTools
       else
       {
         string exeName = System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
-        IntPtr hWnd = Utils.FindWindowByExeName(exeName);
+        IntPtr hWnd = Win32.FindWindowByExeName(exeName);
         if (hWnd != IntPtr.Zero)
         {
-          Utils.ShowWindow(hWnd);
-          Utils.SetForegroundWindow(hWnd);
+          Win32.ShowWindow(hWnd);
+          Win32.SetForegroundWindow(hWnd);
         }
       }
     }

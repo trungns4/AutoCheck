@@ -41,7 +41,7 @@ namespace MXTools.Threads
     public AutoKeyThread(char key, QWMemThreadSettings settings, Action<int, int> display)
     {
       _key = key;
-      _keyCode = Utils.KeyCode(_key);
+      _keyCode = Win32.KeyCode(_key);
       _settings = settings;
       _player = new SoundPlayer("alarm2.mp3", _settings._warnVolume);
       _display = display;
@@ -253,10 +253,10 @@ namespace MXTools.Threads
               && _full == false
               && GlobalFlags.IsTargetWindowActive == true)
         {
-          KeyboardManager.Instance.Current.KeyDown((byte)_keyCode);
+          KeyboardManager.Active.KeyDown((byte)_keyCode);
           Thread.Sleep(_settings._keyUpDelay);
 
-          KeyboardManager.Instance.Current.KeyUp((byte)_keyCode);
+          KeyboardManager.Active.KeyUp((byte)_keyCode);
           Thread.Sleep(_settings._keyDownDelay);
 
           delay = false;

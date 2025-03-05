@@ -3,17 +3,19 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <Deterministic>false</Deterministic>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Platforms>x64;x86</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.1.0</Version>
-    <FileVersion>1.1.0.*</FileVersion>
-    <AssemblyVersion>1.1.0.*</AssemblyVersion>
-    <InformationalVersion>1.1.0.0</InformationalVersion>
+    <VersionPrefix>1.1</VersionPrefix>
+    <Time>$([System.DateTime]::Now.ToString("yyMM"))</Time>
+    <BuildNumber>$([System.DateTime]::Now.ToString("ddHHm"))</BuildNumber>
+    <Version>$(VersionPrefix).$(Time).$(BuildNumber)</Version>
+    <AssemblyVersion>$(VersionPrefix).$(Time).$(BuildNumber)</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).$(Time).$(BuildNumber)</FileVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>

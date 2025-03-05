@@ -47,7 +47,7 @@ namespace MXTools.Threads
         _update((int)(remain * 60));
       }
 
-      if (_settings._dismiss.Any(x => Utils.IsKeyHeld(x)))
+      if (_settings._dismiss.Any(x => Win32.IsKeyHolding(x)))
       {
         _time = DateTime.Now;
         if (_player.IsPlaying())

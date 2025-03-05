@@ -39,7 +39,7 @@ namespace MXTools
       Keyboard.Init();
       InputSender.Init();
 
-      KeyboardManager.Instance.Current.Init();
+      KeyboardManager.Active.Init();
 
       if (false == MxSharp.Instance.Attach(GlobalSettings.Instance.GetConfigString("app")))
       {
@@ -71,10 +71,9 @@ namespace MXTools
       int formWidth = this.Width;
 
       int x = (screenWidth - formWidth) / 2;
-      //int x = screenWidth - formWidth; // Align to right
-      int y = 0; // Align to top
+      int y = 0;
 
-      this.Location = new System.Drawing.Point(x, y); // Move form
+      this.Location = new System.Drawing.Point(x, y);
     }
     //----------------------------------------------------------------------------------
     private void OnFormLoad(object sender, EventArgs e)
@@ -141,7 +140,7 @@ namespace MXTools
 
       if (MxSharp.Instance.EnsureAttached())
       {
-        UpdateToogleButton(Utils.GetMainWindowHandle((int)MxSharp.Instance.PID()));
+        UpdateToogleButton(Win32.GetMainWindowHandle((int)MxSharp.Instance.PID()));
       }
     }
     //----------------------------------------------------------------------------------
@@ -183,8 +182,8 @@ namespace MXTools
             {
               if (MxSharp.Instance.EnsureAttached())
               {
-                var handle = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
-                WindowHider.ShowWindow(handle);
+                var handle = Win32.GetMainWindowHandle((int)MxSharp.Instance.PID());
+                WindowManipulate.ShowWindow(handle);
                 UpdateToogleButton(handle);
               }
             }
@@ -194,10 +193,10 @@ namespace MXTools
             {
               if (MxSharp.Instance.EnsureAttached())
               {
-                var handle = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
+                var handle = Win32.GetMainWindowHandle((int)MxSharp.Instance.PID());
                 if (handle != nint.Zero)
                 {
-                  WindowHider.HideWindow(handle);
+                  WindowManipulate.HideWindow(handle);
                   UpdateToogleButton(handle);
                 }
               }
@@ -214,7 +213,7 @@ namespace MXTools
             {
               ShowMe(true);
               Align();
-              Utils.SetForegroundWindow(Handle);
+              Win32.SetForegroundWindow(Handle);
             }
             break;
         }
@@ -261,8 +260,6 @@ namespace MXTools
       m_GlobalHook.KeyUp -= OnKeyUp;
       m_GlobalHook.KeyDown -= OnKeyDown;
       m_GlobalHook.MouseClick -= OnMouseClick;
-
-      //It is recommened to dispose it
       m_GlobalHook.Dispose();
 
       SaveData();
@@ -272,7 +269,7 @@ namespace MXTools
       m_NotifyIcon.Dispose();
 
       ForegroundWindowCheck.Instance.Stop();
-      KeyboardManager.Instance.Current.Destroy();
+      KeyboardManager.Active.Destroy();
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
@@ -318,7 +315,7 @@ namespace MXTools
       Thread.Sleep(50);
       _enableStart = true;
 
-      Utils.CloseApps();
+      Win32.CloseApps();
       return true;
     }
     //----------------------------------------------------------------------------------
@@ -513,10 +510,10 @@ namespace MXTools
     {
       if (MxSharp.Instance.EnsureAttached())
       {
-        var handle = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
+        var handle = Win32.GetMainWindowHandle((int)MxSharp.Instance.PID());
         if (handle != nint.Zero)
         {
-          WindowHider.ToggleWindow(handle);
+          WindowManipulate.ToggleWindow(handle);
           UpdateToogleButton(handle);
         }
       }
@@ -529,7 +526,7 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void UpdateToogleButton(IntPtr handle)
     {
-      _ToggleMXButton.Image = WindowHider.IsShowing(handle) ? Resources.hide_16 : Resources.window_16;
+      _ToggleMXButton.Image = WindowManipulate.IsShowing(handle) ? Resources.hide_16 : Resources.window_16;
     }
   }
 }

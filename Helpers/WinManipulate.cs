@@ -2,7 +2,7 @@
 using System.Drawing;
 using Vanara.PInvoke;
 
-class WindowHider
+class WindowManipulate
 {
   public static void HideWindow(IntPtr hWnd)
   {
