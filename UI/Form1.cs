@@ -39,6 +39,8 @@ namespace MXTools
       Keyboard.Init();
       InputSender.Init();
 
+      KeyboardManager.Instance.Current.Init();
+
       if (false == MxSharp.Instance.Attach(GlobalSettings.Instance.GetConfigString("app")))
       {
         _log.Warn("App is not running yet");
@@ -81,7 +83,6 @@ namespace MXTools
       LoadData();
 
       this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version.ToString()} © by Alex";
-
 
       ForegroundWindowCheck.Instance.Start();
 
@@ -180,23 +181,26 @@ namespace MXTools
           case System.Windows.Forms.Keys.Divide:
           case System.Windows.Forms.Keys.Multiply:
             {
-              //var sharp = MemorySharpHolder.GetMemorySharp();
-              //if (sharp != null && sharp.Windows.MainWindow != null)
-              //{
-              //  WindowHider.ShowWindow(sharp.Windows.MainWindow.Handle);
-              //  UpdateToogleButton(sharp.Windows.MainWindow.Handle);
-              //}
+              if (MxSharp.Instance.EnsureAttached())
+              {
+                var handle = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
+                WindowHider.ShowWindow(handle);
+                UpdateToogleButton(handle);
+              }
             }
             break;
 
           case System.Windows.Forms.Keys.Oem3:
             {
-              //var sharp = MemorySharpHolder.GetMemorySharp();
-              //if (sharp != null && sharp.Windows.MainWindow != null)
-              //{
-              //  WindowHider.HideWindow(sharp.Windows.MainWindow.Handle);
-              //  UpdateToogleButton(sharp.Windows.MainWindow.Handle);
-              //}
+              if (MxSharp.Instance.EnsureAttached())
+              {
+                var handle = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
+                if (handle != nint.Zero)
+                {
+                  WindowHider.HideWindow(handle);
+                  UpdateToogleButton(handle);
+                }
+              }
             }
             break;
 
@@ -268,6 +272,7 @@ namespace MXTools
       m_NotifyIcon.Dispose();
 
       ForegroundWindowCheck.Instance.Stop();
+      KeyboardManager.Instance.Current.Destroy();
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
@@ -509,8 +514,11 @@ namespace MXTools
       if (MxSharp.Instance.EnsureAttached())
       {
         var handle = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
-        WindowHider.ToggleWindow(handle);
-        UpdateToogleButton(handle);
+        if (handle != nint.Zero)
+        {
+          WindowHider.ToggleWindow(handle);
+          UpdateToogleButton(handle);
+        }
       }
     }
     //----------------------------------------------------------------------------------

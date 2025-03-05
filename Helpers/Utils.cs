@@ -12,21 +12,11 @@ namespace MXTools.Helpers
   {
     private static readonly ILog _log = LogManager.GetLogger(typeof(Utils));
 
-    // Windows API functions
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern nint FindWindow(string lpClassName, string lpWindowName);
-
     [DllImport("user32.dll", SetLastError = true)]
     private static extern uint GetWindowThreadProcessId(nint hWnd, out uint processId);
 
     [DllImport("user32.dll")]
-    private static extern nint GetForegroundWindow();
-
-    [DllImport("user32.dll")]
     public static extern bool SetForegroundWindow(nint hWnd);
-
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(nint hWnd, out RECT lpRect);
 
     [DllImport("user32.dll")]
     public static extern bool GetCursorPos(out POINT lpPoint);
@@ -53,50 +43,10 @@ namespace MXTools.Helpers
       public int Y;
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
-    {
-      public int Left;
-      public int Top;
-      public int Right;
-      public int Bottom;
-    }
-
     [DllImport("user32.dll", SetLastError = true)]
     private static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, nint lParam);
 
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern int GetWindowText(nint hWnd, StringBuilder lpString, int nMaxCount);
-
     private delegate bool EnumWindowsProc(nint hWnd, nint lParam);
-
-    //----------------------------------------------------------------------------------
-    public static void GetWindowRectangle(nint hWnd, out int left, out int top, out int right, out int bottom)
-    {
-      if (GetWindowRect(hWnd, out RECT rect))
-      {
-        left = rect.Left;
-        top = rect.Top;
-        right = rect.Right;
-        bottom = rect.Bottom;
-      }
-      else
-      {
-        left = top = right = bottom = 0;
-      }
-    }
-    //----------------------------------------------------------------------------------
-    public static bool IsWindowActive(int id)
-    {
-      nint foregroundWindow = GetForegroundWindow();
-      if (foregroundWindow == nint.Zero)
-      {
-        return false;
-      }
-
-      GetWindowThreadProcessId(foregroundWindow, out uint pid);
-      return pid == (uint)id;
-    }
 
     //----------------------------------------------------------------------------------
     public static nint GetMainWindowHandle(int processId)

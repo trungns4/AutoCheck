@@ -253,10 +253,10 @@ namespace MXTools.Threads
               && _full == false
               && GlobalFlags.IsTargetWindowActive == true)
         {
-          InputSender.SendKey((ushort)_keyCode, true);
+          KeyboardManager.Instance.Current.KeyDown((byte)_keyCode);
           Thread.Sleep(_settings._keyUpDelay);
 
-          InputSender.SendKey((ushort)_keyCode, false);
+          KeyboardManager.Instance.Current.KeyUp((byte)_keyCode);
           Thread.Sleep(_settings._keyDownDelay);
 
           delay = false;

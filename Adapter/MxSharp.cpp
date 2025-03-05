@@ -69,13 +69,14 @@ namespace MXTools
   {
     Dettach();
 
+    _processName = name;
+
     auto pid = FindProcess(name);
     if (pid == 0)
     {
       return false;
     }
 
-    _processName = name;
     return (_process->Attach(pid) == STATUS_SUCCESS);
   }
   //----------------------------------------------------------------------

@@ -111,6 +111,6 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /s /e /y /q /i $(ProjectDir)\..\Blackbone\Blackbone\build\x64\Release(DLL)\*.DLL $(TargetDir)&#xD;&#xA;xcopy /s /e /y /q /i $(ProjectDir)\Sounds\*.* $(TargetDir)" />
+    <Exec Command="&quot;$(ProjectDir)PostBuild.bat&quot; &quot;$(ProjectDir)&quot; &quot;$(TargetDir)&quot;" />
   </Target>
 </Project>
