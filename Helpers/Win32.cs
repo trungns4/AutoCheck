@@ -30,9 +30,6 @@ namespace MXTools.Helpers
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(nint hWnd, int nCmdShow);
 
-    [DllImport("user32.dll")]
-    private static extern bool IsWindowVisible(nint hWnd);
-
     private const int SW_RESTORE = 9;
     private const int SW_HIDE = 0;
     private const int SW_SHOW = 5;
