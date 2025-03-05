@@ -138,8 +138,7 @@ namespace MXTools.Threads
 
       _player.Stop();
 
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.Info($"Thread {_key} stopped");
+      _log.Info($"Thread {_key} stopped");
 
       return true;
     }

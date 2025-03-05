@@ -16,8 +16,6 @@ namespace MXTools
   public partial class ScanHPForm : Form
   {
     private bool _scanning = false;
-    private static readonly ILog log = LogManager.GetLogger(typeof(Utils));
-
     public ScanHPForm()
     {
       InitializeComponent();

@@ -93,8 +93,7 @@ namespace MXTools.Threads
         _eThread = null;
       }
 
-      ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-      log.DebugFormat("Auto Key Threads stopped");
+      _log.DebugFormat("Auto Key Threads stopped");
     }
     //---------------------------------------------------------------------------------------
     private void DisplayCountNumber()

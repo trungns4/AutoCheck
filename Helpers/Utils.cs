@@ -10,7 +10,7 @@ namespace MXTools.Helpers
 {
   internal class Utils
   {
-    private static readonly ILog log = LogManager.GetLogger(typeof(Utils));
+    private static readonly ILog _log = LogManager.GetLogger(typeof(Utils));
 
     // Windows API functions
     [DllImport("user32.dll", SetLastError = true)]
@@ -108,7 +108,7 @@ namespace MXTools.Helpers
       }
       catch (Exception ex)
       {
-        log.Error($"Error getting main window handle for PID {processId}: {ex.Message}");
+        _log.Error($"Error getting main window handle for PID {processId}: {ex.Message}");
         return nint.Zero;
       }
     }
@@ -165,11 +165,11 @@ namespace MXTools.Helpers
           {
             process.Kill();
             process.WaitForExit();
-            log.Info($"Terminated app {app}");
+            _log.Info($"Terminated app {app}");
           }
           catch (Exception ex)
           {
-            log.Error($"Failed to terminate {app}: {ex.Message}");
+            _log.Error($"Failed to terminate {app}: {ex.Message}");
           }
         }
       }

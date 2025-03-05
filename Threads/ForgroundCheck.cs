@@ -2,9 +2,11 @@
 using System;
 using System.Drawing;
 using System.Reflection;
+using System.Text;
 using Vanara.PInvoke;
 using static MXTools.Helpers.Utils;
 using static Vanara.PInvoke.User32;
+using static Vanara.PInvoke.Kernel32;
 
 namespace MxTools
 {
@@ -55,6 +57,7 @@ namespace MxTools
       }
       return _currentRectangle;
     }
+
     public uint GetCurrentProcessId()
     {
       if (_currentProcessId == 0)
@@ -66,6 +69,7 @@ namespace MxTools
         return _currentProcessId;
       }
     }
+
     public uint GetForegroundProcessId()
     {
       HWND hwnd = GetForegroundWindow();

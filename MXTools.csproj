@@ -18,18 +18,21 @@
 
   <ItemGroup>
     <Compile Remove="Adapter\**" />
+    <Compile Remove="Archives\**" />
     <Compile Remove="Archive\**" />
     <Compile Remove="MxToolsPlus\**" />
     <Compile Remove="Driver\**" />
     <Compile Remove="Misc\**" />
     <Compile Remove="packages\**" />
     <EmbeddedResource Remove="Adapter\**" />
+    <EmbeddedResource Remove="Archives\**" />
     <EmbeddedResource Remove="Archive\**" />
     <EmbeddedResource Remove="MxToolsPlus\**" />
     <EmbeddedResource Remove="Driver\**" />
     <EmbeddedResource Remove="Misc\**" />
     <EmbeddedResource Remove="packages\**" />
     <None Remove="Adapter\**" />
+    <None Remove="Archives\**" />
     <None Remove="Archive\**" />
     <None Remove="MxToolsPlus\**" />
     <None Remove="Driver\**" />
@@ -54,6 +57,7 @@
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.WinForms" Version="2.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Vanara.PInvoke.Kernel32" Version="4.0.6" />
     <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.6" />
   </ItemGroup>
 
