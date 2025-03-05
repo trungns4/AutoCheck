@@ -1,8 +1,7 @@
 ﻿using log4net;
+using MxTools;
 using MXTools.Helpers;
 using MXTools.Input;
-using System;
-using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
 
@@ -16,37 +15,16 @@ namespace MXTools.Threads
     private Thread _thread;
     private bool _isRunning = false;
 
-    private int _left = 0, _right = 0, _top = 0, _bottom = 0;
     private bool _up = false;
 
     public AutoMouseThread(MouseThreadSettings settings)
     {
       _settings = settings;
     }
-    //---------------------------------------------------------------------------------------
-    private bool CheckWindowRect()
-    {
-      var wnd = Utils.GetMainWindowHandle((int)MxSharp.Instance.PID());
-      if (wnd != 0)
-      {
-        Utils.GetWindowRectangle(wnd, out int left, out int top, out int right, out int bottom);
-        _left = left;
-        _right = right;
-        _top = top;
-        _bottom = bottom;
-        _log.InfoFormat($"Target Window: {_left} {_top} {_right} {_bottom}");
-        return true;
-      }
-      else
-      {
-        return false;
-      }
-    }
+
     //---------------------------------------------------------------------------------------
     public bool Start()
     {
-      CheckWindowRect();
-
       _isRunning = true;
       _thread = new Thread(Run);
       _thread.IsBackground = true;
@@ -83,10 +61,6 @@ namespace MXTools.Threads
           continue;
         }
 
-        if (_right == 0 && _bottom == 0)
-        {
-          CheckWindowRect();
-        }
 
         if (Utils.IsAlt())
         {
@@ -97,7 +71,8 @@ namespace MXTools.Threads
         else
         {
           Utils.GetMouse(out int x, out int y);
-          if (x >= _left && x <= _right && y >= _top && y <= _bottom)
+          var rect = ForegroundWindowCheck.Instance.GetCurrentRectangle();
+          if (rect.Contains(x, y))
           {
             InputSender.RightButtonDown();
             _up = false;

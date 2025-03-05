@@ -1,4 +1,5 @@
 ﻿using log4net;
+using MxTools;
 using MXTools.Helpers;
 using MXTools.Input;
 using System;
@@ -203,7 +204,8 @@ namespace MXTools.Threads
               _log.Info("App is not running");
               continue;
             }
-            GlobalFlags.IsTargetWindowActive = Utils.IsWindowActive((int)MxSharp.Instance.PID());
+            GlobalFlags.IsTargetWindowActive =
+              (ForegroundWindowCheck.Instance.GetCurrentProcessId() == MxSharp.Instance.PID());
           }
 
           if (_curAdr >= 24 && _maxAdr >= 24 && _settings._auto)

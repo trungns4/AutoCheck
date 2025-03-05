@@ -1,12 +1,10 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Diagnostics;
 using System.IO;
-using System.Media;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using NAudio.Wave;
 
 namespace MXTools.Helpers
 {

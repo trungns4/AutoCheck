@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using MXTools.Properties;
-using NAudio.Gui;
-using Newtonsoft.Json.Linq;
-using System.Globalization;
-using System.Windows.Forms;
-using System.IO;
+﻿using MXTools.Properties;
 using Newtonsoft.Json;
-using System.Runtime;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace MXTools.Threads
 {

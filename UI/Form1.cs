@@ -1,5 +1,6 @@
 ﻿using Gma.System.MouseKeyHook;
 using log4net;
+using MxTools;
 using MXTools.Helpers;
 using MXTools.Input;
 using MXTools.Properties;
@@ -80,6 +81,10 @@ namespace MXTools
       LoadData();
 
       this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version.ToString()} © by Alex";
+
+
+      ForegroundWindowCheck.Instance.Start();
+
       _threadQ = new AutoKeyThread('q', _settings.Q, (cur, max) =>
       {
         BeginInvoke(() =>
@@ -122,7 +127,6 @@ namespace MXTools
       m_GlobalHook = Hook.GlobalEvents();
       m_GlobalHook.KeyUp += OnKeyUp;
       m_GlobalHook.KeyDown += OnKeyDown;
-
       m_GlobalHook.MouseClick += OnMouseClick;
 
       m_NotifyIcon.Visible = true;
@@ -262,6 +266,8 @@ namespace MXTools
 
       m_NotifyIcon.Visible = false;
       m_NotifyIcon.Dispose();
+
+      ForegroundWindowCheck.Instance.Stop();
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
@@ -295,6 +301,8 @@ namespace MXTools
         _enableStart = true;
         return false;
       }
+
+      _log.Info($"Starting with PID {MxSharp.Instance.PID()}");
 
       m_StartButton.Image = Resources.stop_16;
       m_ScanButton.Enabled = false;

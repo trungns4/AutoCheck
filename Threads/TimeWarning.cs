@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using log4net;
+using MXTools.Helpers;
+using System;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using log4net;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.Logging;
-using MXTools.Helpers;
 
 namespace MXTools.Threads
 {

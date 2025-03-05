@@ -19,19 +19,19 @@
   <ItemGroup>
     <Compile Remove="Adapter\**" />
     <Compile Remove="Archive\**" />
-    <Compile Remove="AutoCheckPlus\**" />
+    <Compile Remove="MxToolsPlus\**" />
     <Compile Remove="Driver\**" />
     <Compile Remove="Misc\**" />
     <Compile Remove="packages\**" />
     <EmbeddedResource Remove="Adapter\**" />
     <EmbeddedResource Remove="Archive\**" />
-    <EmbeddedResource Remove="AutoCheckPlus\**" />
+    <EmbeddedResource Remove="MxToolsPlus\**" />
     <EmbeddedResource Remove="Driver\**" />
     <EmbeddedResource Remove="Misc\**" />
     <EmbeddedResource Remove="packages\**" />
     <None Remove="Adapter\**" />
     <None Remove="Archive\**" />
-    <None Remove="AutoCheckPlus\**" />
+    <None Remove="MxToolsPlus\**" />
     <None Remove="Driver\**" />
     <None Remove="Misc\**" />
     <None Remove="packages\**" />
@@ -48,12 +48,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="3.0.3" />
+    <PackageReference Include="log4net" Version="3.0.4" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.WinForms" Version="2.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.6" />
   </ItemGroup>
 
   <ItemGroup>
