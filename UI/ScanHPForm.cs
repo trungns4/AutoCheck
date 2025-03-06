@@ -70,7 +70,7 @@ namespace MXTools
     //--------------------------------------------------------------------------------------------
     private static string GetDataFile()
     {
-      string exeDirectory = Path.GetDirectoryName(Environment.ProcessPath);
+      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
       return Path.Combine(exeDirectory, "hp.json");
     }
     //--------------------------------------------------------------------------------------------

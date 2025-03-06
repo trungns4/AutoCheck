@@ -19,7 +19,7 @@ namespace MXTools.Helpers
     public SoundPlayer(string sound, float volume)
     {
       _sound = sound;
-      string exeDirectory = Path.GetDirectoryName(Environment.ProcessPath);
+      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
       string file = Path.Combine(exeDirectory, _sound);
       _outputDevice = new WaveOutEvent()
       {

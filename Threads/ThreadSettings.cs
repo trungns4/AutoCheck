@@ -1,6 +1,5 @@
 ﻿using MXTools.Properties;
 using Newtonsoft.Json;
-using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -140,7 +139,7 @@ namespace MXTools.Threads
     //----------------------------------------------------------------------------------
     private static string GetDataFile()
     {
-      string exeDirectory = Path.GetDirectoryName(Environment.ProcessPath);
+      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
       return Path.Combine(exeDirectory, "data.json");
     }
     //----------------------------------------------------------------------------------
