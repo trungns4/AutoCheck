@@ -77,7 +77,7 @@ namespace MXTools
       return false;
     }
 
-    return (_process->Attach(pid) == STATUS_SUCCESS);
+    return (_process->Attach(pid, PROCESS_QUERY_INFORMATION | PROCESS_VM_READ) == STATUS_SUCCESS);
   }
   //----------------------------------------------------------------------
   bool MxSharp::EnsureAttached()
@@ -163,7 +163,7 @@ namespace MXTools
       complete(0, 0);
       return false;
     }
-   
+
     start(100);
 
     size_t current = 0;
@@ -221,7 +221,7 @@ namespace MXTools
   {
     if (Valid() == false)
     {
-      return 0;
+      return -1;
     }
     auto& memory = _process->memory();
     int value = -1;
