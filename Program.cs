@@ -1,9 +1,11 @@
 ﻿using log4net;
 using log4net.Config;
 using MXTools.Helpers;
+using MXTools.Properties;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -13,6 +15,15 @@ namespace MXTools
   {
     static Mutex mutex = new Mutex(true, "__MXTOOL__");
 
+    static bool IsRunningAsAdmin()
+    {
+      using (var identity = WindowsIdentity.GetCurrent())
+      {
+        var principal = new WindowsPrincipal(identity);
+        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+      }
+    }
+
     /// <summary>
     /// The main entry point for the application.
     /// </summary>
@@ -21,6 +32,13 @@ namespace MXTools
     {
       if (mutex.WaitOne(TimeSpan.Zero, true))
       {
+        if (IsRunningAsAdmin() == false)
+        {
+          MessageBox.Show("Please Run As Administrator",
+              Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
+
         // Initialize log4net from App.config
         XmlConfigurator.Configure();
 
