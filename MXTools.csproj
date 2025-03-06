@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>1.1</VersionPrefix>
-    <Time>$([System.DateTime]::Now.ToString("yyMM"))</Time>
-    <BuildNumber>$([System.DateTime]::Now.ToString("ddHHm"))</BuildNumber>
+    <VersionPrefix>1.25</VersionPrefix>
+    <Time>$([System.DateTime]::Now.ToString("MMdd"))</Time>
+    <BuildNumber>$([System.DateTime]::Now.ToString("HHmm"))</BuildNumber>
     <Version>$(VersionPrefix).$(Time).$(BuildNumber)</Version>
     <AssemblyVersion>$(VersionPrefix).$(Time).$(BuildNumber)</AssemblyVersion>
     <FileVersion>$(VersionPrefix).$(Time).$(BuildNumber)</FileVersion>
@@ -22,29 +22,35 @@
     <Compile Remove="Adapter\**" />
     <Compile Remove="Archives\**" />
     <Compile Remove="Archive\**" />
+    <Compile Remove="Loader\**" />
     <Compile Remove="MxToolsPlus\**" />
     <Compile Remove="Driver\**" />
     <Compile Remove="Misc\**" />
     <Compile Remove="packages\**" />
     <Compile Remove="QCheck\**" />
+    <Compile Remove="RunMxTools\**" />
     <Compile Remove="x64\**" />
     <EmbeddedResource Remove="Adapter\**" />
     <EmbeddedResource Remove="Archives\**" />
     <EmbeddedResource Remove="Archive\**" />
+    <EmbeddedResource Remove="Loader\**" />
     <EmbeddedResource Remove="MxToolsPlus\**" />
     <EmbeddedResource Remove="Driver\**" />
     <EmbeddedResource Remove="Misc\**" />
     <EmbeddedResource Remove="packages\**" />
     <EmbeddedResource Remove="QCheck\**" />
+    <EmbeddedResource Remove="RunMxTools\**" />
     <EmbeddedResource Remove="x64\**" />
     <None Remove="Adapter\**" />
     <None Remove="Archives\**" />
     <None Remove="Archive\**" />
+    <None Remove="Loader\**" />
     <None Remove="MxToolsPlus\**" />
     <None Remove="Driver\**" />
     <None Remove="Misc\**" />
     <None Remove="packages\**" />
     <None Remove="QCheck\**" />
+    <None Remove="RunMxTools\**" />
     <None Remove="x64\**" />
   </ItemGroup>
 
