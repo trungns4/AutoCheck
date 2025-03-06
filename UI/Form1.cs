@@ -25,6 +25,7 @@ namespace MXTools
     private AutoQWEThread _qweThread = null;
     private AutoMouseThread _mThread = null;
     private TimeWarning _timerWarning = null;
+    private GeneralThread _gnThread = null;
 
     private bool _starting = false;
     private bool m_bForcingClose = false;
@@ -121,6 +122,8 @@ namespace MXTools
         var ts = TimeSpan.FromSeconds(rmain);
         BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
       };
+
+      _gnThread = new GeneralThread();
 
       UpdateUIByData();
 
@@ -316,6 +319,7 @@ namespace MXTools
       _enableStart = true;
 
       Win32.CloseApps();
+      ForegroundWindowCheck.Instance.ForceForegroundCheck();
       return true;
     }
     //----------------------------------------------------------------------------------
@@ -353,6 +357,7 @@ namespace MXTools
           _qweThread.Stop();
           _mThread.Stop();
           _timerWarning.Stop();
+          _gnThread.Stop();
           Stop();
         }
         else
@@ -364,6 +369,7 @@ namespace MXTools
             _qweThread.Start();
             _mThread.Start();
             _timerWarning.Start();
+            _gnThread.Start();
           }
         }
       }

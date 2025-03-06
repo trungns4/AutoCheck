@@ -196,17 +196,6 @@ namespace MXTools.Threads
       {
         try
         {
-          if (_key == 'q')
-          {
-            if (MxSharp.Instance.EnsureAttached() == false)
-            {
-              _log.Info("App is not running");
-              continue;
-            }
-            GlobalFlags.IsTargetWindowActive =
-              (ForegroundWindowCheck.Instance.GetCurrentProcessId() == MxSharp.Instance.PID());
-          }
-
           if (_curAdr >= 24 && _maxAdr >= 24 && _settings._auto)
           {
             _curVal = MxSharp.Instance.ReadMemory(_curAdr);

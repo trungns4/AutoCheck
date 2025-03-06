@@ -49,7 +49,7 @@ namespace MxTools
 
     public Rectangle GetCurrentRectangle()
     {
-      if(_currentRectangle.IsEmpty)
+      if (_currentRectangle.IsEmpty)
       {
         HWND hwnd = GetForegroundWindow();
         GetWindowRect(hwnd, out Vanara.PInvoke.RECT rect);
@@ -87,12 +87,25 @@ namespace MxTools
       {
         if (User32.GetWindowRect(hwnd, out var rect))
         {
+          var oldId = _currentProcessId;
           _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
           User32.GetWindowThreadProcessId(hwnd, out _currentProcessId);
           ForegroundWindowChanged?.Invoke((nint)hwnd, _currentRectangle);
 
-          _log.Info($"Foreground changed to {_currentProcessId}");
+          if (_currentProcessId != oldId)
+            _log.Info($"Foreground changed to {_currentProcessId}");
         }
+      }
+    }
+
+    public void ForceForegroundCheck()
+    {
+      HWND hwnd = GetForegroundWindow();
+      if (hwnd.IsNull == false)
+      {
+        User32.GetWindowThreadProcessId(hwnd, out _currentProcessId);
+        GetWindowRect(hwnd, out Vanara.PInvoke.RECT rect);
+        _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
       }
     }
   }

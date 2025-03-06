@@ -14,7 +14,6 @@ namespace MXTools.Threads
     private MouseThreadSettings _settings;
     private Thread _thread;
     private bool _isRunning = false;
-
     private bool _up = false;
 
     public AutoMouseThread(MouseThreadSettings settings)
@@ -28,7 +27,7 @@ namespace MXTools.Threads
       _isRunning = true;
       _thread = new Thread(Run);
       _thread.IsBackground = true;
-      _thread.Priority = ThreadPriority.Highest;
+      _thread.Priority = ThreadPriority.Normal;
       _thread.Start();
 
       _log.Info("Mouse click thread started");
@@ -60,7 +59,6 @@ namespace MXTools.Threads
           Thread.Sleep(_settings._threadDelay);
           continue;
         }
-
 
         if (Win32.IsAltHolding())
         {
