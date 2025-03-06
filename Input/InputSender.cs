@@ -51,7 +51,7 @@ namespace MXTools.Input
       public ushort wParamH;
     }
 
-    [DllImport("kernel32.dll", SetLastError = true)]
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     private static extern nint GetModuleHandle(string lpModuleName);
 
     [DllImport("kernel32.dll", SetLastError = true)]

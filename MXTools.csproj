@@ -108,6 +108,7 @@
 
   <PropertyGroup>
     <ApplicationIcon>Resources\play.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

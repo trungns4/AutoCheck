@@ -1,6 +1,5 @@
 ﻿using Gma.System.MouseKeyHook;
 using log4net;
-using MxTools;
 using MXTools.Helpers;
 using MXTools.Input;
 using MXTools.Properties;
@@ -17,7 +16,7 @@ namespace MXTools
 {
   public partial class Form1 : Form
   {
-    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     private ulong _addr = 0;
     private AutoKeyThread _threadQ = null;
@@ -31,7 +30,7 @@ namespace MXTools
     private bool m_bForcingClose = false;
 
     private IKeyboardMouseEvents m_GlobalHook;
-    private ThreadSettings _settings = new ThreadSettings();
+    private ThreadSettings _settings = new();
     private bool _enableStart = true;
 
     public Form1()
@@ -82,7 +81,7 @@ namespace MXTools
       Align();
       LoadData();
 
-      this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version.ToString()} © by Alex";
+      this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version} © by Alex";
 
       ForegroundWindowCheck.Instance.Start();
 
@@ -115,12 +114,13 @@ namespace MXTools
       });
 
       _mThread = new AutoMouseThread(_settings.M);
-      _timerWarning = new TimeWarning(_settings.T);
-
-      _timerWarning.Update = (rmain) =>
+      _timerWarning = new TimeWarning(_settings.T)
       {
-        var ts = TimeSpan.FromSeconds(rmain);
-        BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
+        Update = (rmain) =>
+        {
+          var ts = TimeSpan.FromSeconds(rmain);
+          BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
+        }
       };
 
       _gnThread = new GeneralThread();
@@ -244,7 +244,7 @@ namespace MXTools
       Close();
     }
     //----------------------------------------------------------------------------------
-    private void m_ContextMenu_Opened(object sender, EventArgs e)
+    private void ContextMenu_Opened(object sender, EventArgs e)
     {
     }
     //----------------------------------------------------------------------------------
@@ -278,7 +278,7 @@ namespace MXTools
     private void OnScanClicked(object sender, EventArgs e)
     {
       _enableStart = false;
-      ScanHPForm f = new ScanHPForm();
+      ScanHPForm f = new();
       if (f.ShowDialog() == DialogResult.OK)
       {
         _addr = f.GetAddress();
@@ -386,9 +386,9 @@ namespace MXTools
       ToggleStartStop();
     }
     //----------------------------------------------------------------------------------
-    private string GetAddressFile()
+    private static string GetAddressFile()
     {
-      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+      string exeDirectory = Path.GetDirectoryName(Environment.ProcessPath);
       return Path.Combine(exeDirectory, "addr.json");
     }
     //----------------------------------------------------------------------------------
@@ -469,13 +469,13 @@ namespace MXTools
       }
     }
     //----------------------------------------------------------------------------------
-    private void m_CloseButton_Click(object sender, EventArgs e)
+    private void CloseButton_Click(object sender, EventArgs e)
     {
       m_bForcingClose = true;
       Close();
     }
     //----------------------------------------------------------------------------------
-    private void m_NotifyIcon_Click(object sender, EventArgs e)
+    private void NotifyIcon_Click(object sender, EventArgs e)
     {
       ShowMe(true);
     }
@@ -495,10 +495,10 @@ namespace MXTools
       _settings.QWE.W = m_WChk.Checked;
     }
     //----------------------------------------------------------------------------------
-    private void _SettingsButton_Click_1(object sender, EventArgs e)
+    private void SettingsButton_Click_1(object sender, EventArgs e)
     {
       _enableStart = false;
-      SettingsForm settingsForm = new SettingsForm(_settings);
+      SettingsForm settingsForm = new(_settings);
       if (settingsForm.ShowDialog() == DialogResult.OK)
       {
         _settings.CopyFrom(settingsForm.Settings);
@@ -507,7 +507,7 @@ namespace MXTools
       _enableStart = true;
     }
     //----------------------------------------------------------------------------------
-    private void m_AutoMouse_CheckedChanged(object sender, EventArgs e)
+    private void AutoMouse_CheckedChanged(object sender, EventArgs e)
     {
       _settings.M.Auto = m_AutoMouse.Checked;
     }

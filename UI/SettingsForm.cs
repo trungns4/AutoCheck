@@ -43,9 +43,9 @@ namespace MXTools
     }
 
     //----------------------------------------------------------------------------------
-    public List<T> CollectControls<T>(Control parentControl) where T : Control
+    public static List<T> CollectControls<T>(Control parentControl) where T : Control
     {
-      List<T> collectedControls = new List<T>();
+      List<T> collectedControls = [];
 
       foreach (Control control in parentControl.Controls)
       {
@@ -207,12 +207,12 @@ namespace MXTools
       }
     }
     //----------------------------------------------------------------------------------
-    private void m_OKButton_Click(object sender, EventArgs e)
+    private void OKButton_Click(object sender, EventArgs e)
     {
       AskToQuit(DialogResult.OK);
     }
     //----------------------------------------------------------------------------------
-    private void m_CancelButton_Click(object sender, EventArgs e)
+    private void CancelButton_Click(object sender, EventArgs e)
     {
       AskToQuit(DialogResult.Cancel);
     }
@@ -221,21 +221,21 @@ namespace MXTools
     {
     }
     //----------------------------------------------------------------------------------
-    private void m_DefaultButton_Click(object sender, EventArgs e)
+    private void DefaultButton_Click(object sender, EventArgs e)
     {
       _settings = new ThreadSettings();
       _saved = false;
       ShowData();
     }
     //----------------------------------------------------------------------------------
-    private void m_ReloadButton_Click(object sender, EventArgs e)
+    private void ReloadButton_Click(object sender, EventArgs e)
     {
       _settings.LoadData();
       _saved = false;
       ShowData();
     }
     //----------------------------------------------------------------------------------
-    private void _SaveButton_Click(object sender, EventArgs e)
+    private void SaveButton_Click(object sender, EventArgs e)
     {
       UIToData();
     }

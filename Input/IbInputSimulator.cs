@@ -1,4 +1,4 @@
-﻿namespace MXTools.Archive
+﻿namespace MXTools.Input
 {
   using System.Runtime.InteropServices;
 

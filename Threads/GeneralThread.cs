@@ -1,5 +1,4 @@
 ﻿using log4net;
-using MxTools;
 using MXTools.Input;
 using System;
 using System.Collections.Generic;

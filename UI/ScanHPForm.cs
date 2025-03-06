@@ -40,7 +40,7 @@ namespace MXTools
       }
     }
     //--------------------------------------------------------------------------------------------
-    private void _Scan_Click(object sender, EventArgs e)
+    private void Scan_Click(object sender, EventArgs e)
     {
       if (_scanning)
       {
@@ -49,12 +49,12 @@ namespace MXTools
       Scan();
     }
     //--------------------------------------------------------------------------------------------
-    private void _OKButton_Click(object sender, EventArgs e)
+    private void OKButton_Click(object sender, EventArgs e)
     {
       DialogResult = DialogResult.OK;
     }
     //--------------------------------------------------------------------------------------------
-    private void _CancelButton_Click(object sender, EventArgs e)
+    private void CancelButton_Click(object sender, EventArgs e)
     {
       DialogResult = DialogResult.Cancel;
     }
@@ -68,19 +68,20 @@ namespace MXTools
       return 0;
     }
     //--------------------------------------------------------------------------------------------
-    private string GetDataFile()
+    private static string GetDataFile()
     {
-      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+      string exeDirectory = Path.GetDirectoryName(Environment.ProcessPath);
       return Path.Combine(exeDirectory, "hp.json");
     }
     //--------------------------------------------------------------------------------------------
     private void SaveData()
     {
       string file = GetDataFile();
-      var data = new Dictionary<string, string>();
-
-      data.Add("HP", _InputBox.Text);
-      data.Add("OFFSET", m_OffsetBox.Value.ToString());
+      var data = new Dictionary<string, string>
+      {
+        { "HP", _InputBox.Text },
+        { "OFFSET", m_OffsetBox.Value.ToString() }
+      };
 
       string json = JsonConvert.SerializeObject(data, Formatting.Indented);
       File.WriteAllText(file, json);
@@ -95,9 +96,9 @@ namespace MXTools
       {
         string json = File.ReadAllText(file);
         var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-        if (data.ContainsKey("HP"))
+        if (data.TryGetValue("HP", out string value))
         {
-          _InputBox.Text = data["HP"];
+          _InputBox.Text = value;
         }
         if (data.ContainsKey("OFFSET"))
         {
@@ -186,11 +187,11 @@ namespace MXTools
           return;
         }
 
-        CancellationTokenSource cts = new CancellationTokenSource();
-        EventHandler stopButtonClickHandler = (sender, e) =>
+        CancellationTokenSource cts = new();
+        void stopButtonClickHandler(object sender, EventArgs e)
         {
           cts.Cancel();
-        };
+        }
         _StopButton.Click += stopButtonClickHandler;
 
         Task.Run(() =>

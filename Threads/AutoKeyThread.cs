@@ -1,5 +1,4 @@
 ﻿using log4net;
-using MxTools;
 using MXTools.Helpers;
 using MXTools.Input;
 using System;
@@ -10,12 +9,16 @@ using System.Windows.Forms;
 
 namespace MXTools.Threads
 {
-  internal class AutoKeyThread
+  internal class AutoKeyThread(char key, QWMemThreadSettings settings, Action<int, int> display)
   {
     private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-    private readonly char _key;
-    private readonly QWMemThreadSettings _settings;
+    private readonly char _key = key;
+    private readonly Keys _keyCode = Win32.KeyCode(key);
+
+    private readonly QWMemThreadSettings _settings = settings;
+    private readonly SoundPlayer _player = new("alarm2.mp3", settings.WarnVolume);
+    private Action<int, int> _display = display;
 
     //current
     private int _curVal = 0;
@@ -28,24 +31,11 @@ namespace MXTools.Threads
     private Thread _thread;
     private Thread _keyThread;
     private Thread _warnThread;
-    private readonly ManualResetEvent _keyFlag = new ManualResetEvent(false);
+    private readonly ManualResetEvent _keyFlag = new(false);
 
     private bool _isRunning = false;
     private bool _full = false;
-    private readonly SoundPlayer _player;
-    private readonly Keys _keyCode;
 
-    private Action<int, int> _display;
-
-    //---------------------------------------------------------------------------------------
-    public AutoKeyThread(char key, QWMemThreadSettings settings, Action<int, int> display)
-    {
-      _key = key;
-      _keyCode = Win32.KeyCode(_key);
-      _settings = settings;
-      _player = new SoundPlayer("alarm2.mp3", _settings.WarnVolume);
-      _display = display;
-    }
     //---------------------------------------------------------------------------------------
     public Action<int, int> Dislplay
     {

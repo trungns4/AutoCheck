@@ -8,14 +8,13 @@ using System.Timers;
 
 namespace MXTools.Threads
 {
-
   internal class TimeWarning
   {
-    ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     private readonly Timer _timer;
-    private SoundPlayer _player;
-    private TimeWarningSettings _settings;
+    private readonly SoundPlayer _player;
+    private readonly TimeWarningSettings _settings;
     private DateTime _time;
     private Action<int> _update;
 

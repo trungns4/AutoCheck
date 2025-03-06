@@ -10,16 +10,16 @@ namespace MXTools.Helpers
 {
   internal class SoundPlayer : IDisposable
   {
-    private string _sound;
-    private WaveOutEvent _outputDevice;
-    private AudioFileReader _audioFile;
+    private readonly string _sound;
+    private readonly WaveOutEvent _outputDevice;
+    private readonly AudioFileReader _audioFile;
     private CancellationTokenSource _cts;
 
     //----------------------------------------------------------------
     public SoundPlayer(string sound, float volume)
     {
       _sound = sound;
-      string exeDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+      string exeDirectory = Path.GetDirectoryName(Environment.ProcessPath);
       string file = Path.Combine(exeDirectory, _sound);
       _outputDevice = new WaveOutEvent()
       {

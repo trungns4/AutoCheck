@@ -2,26 +2,29 @@
 using System.Collections.Generic;
 using System.Configuration;
 
-public sealed class GlobalSettings
+namespace MXTools
 {
-  private static readonly Lazy<GlobalSettings> _instance = new Lazy<GlobalSettings>(() => new GlobalSettings());
-
-  public static GlobalSettings Instance => _instance.Value;
-
-  private readonly Dictionary<string, string> _settingsCache;
-
-  private GlobalSettings()
+  public sealed class GlobalSettings
   {
-    _settingsCache = new Dictionary<string, string>();
+    private static readonly Lazy<GlobalSettings> _instance = new(() => new GlobalSettings());
 
-    foreach (string key in ConfigurationManager.AppSettings)
+    public static GlobalSettings Instance => _instance.Value;
+
+    private readonly Dictionary<string, string> _settingsCache;
+
+    private GlobalSettings()
     {
-      _settingsCache[key.ToUpper().Trim()] = ConfigurationManager.AppSettings[key];
-    }
-  }
+      _settingsCache = [];
 
-  public string GetConfigString(string name, string def = "")
-  {
-    return _settingsCache.TryGetValue(name.ToUpper().Trim(), out var value) ? value : def;
+      foreach (string key in ConfigurationManager.AppSettings)
+      {
+        _settingsCache[key.ToUpper().Trim()] = ConfigurationManager.AppSettings[key];
+      }
+    }
+
+    public string GetConfigString(string name, string def = "")
+    {
+      return _settingsCache.TryGetValue(name.ToUpper().Trim(), out var value) ? value : def;
+    }
   }
 }

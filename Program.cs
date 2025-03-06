@@ -13,15 +13,13 @@ namespace MXTools
 {
   internal static class Program
   {
-    static Mutex mutex = new Mutex(true, "__MXTOOL__");
+    private static readonly Mutex mutex = new(true, "__MXTOOL__");
 
     static bool IsRunningAsAdmin()
     {
-      using (var identity = WindowsIdentity.GetCurrent())
-      {
-        var principal = new WindowsPrincipal(identity);
-        return principal.IsInRole(WindowsBuiltInRole.Administrator);
-      }
+      using var identity = WindowsIdentity.GetCurrent();
+      var principal = new WindowsPrincipal(identity);
+      return principal.IsInRole(WindowsBuiltInRole.Administrator);
     }
 
     /// <summary>
@@ -51,7 +49,7 @@ namespace MXTools
       }
       else
       {
-        string exeName = System.IO.Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName);
+        string exeName = System.IO.Path.GetFileName(Environment.ProcessPath);
         IntPtr hWnd = Win32.FindWindowByExeName(exeName);
         if (hWnd != IntPtr.Zero)
         {

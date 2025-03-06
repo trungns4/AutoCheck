@@ -50,7 +50,7 @@
       _OKButton.TabIndex = 0;
       _OKButton.Text = "OK";
       _OKButton.UseVisualStyleBackColor = true;
-      _OKButton.Click += _OKButton_Click;
+      _OKButton.Click += OKButton_Click;
       // 
       // _CancelButton
       // 
@@ -61,7 +61,7 @@
       _CancelButton.TabIndex = 1;
       _CancelButton.Text = "Cancel";
       _CancelButton.UseVisualStyleBackColor = true;
-      _CancelButton.Click += _CancelButton_Click;
+      _CancelButton.Click += CancelButton_Click;
       // 
       // label1
       // 
@@ -101,7 +101,7 @@
       _ScanButton.TabIndex = 5;
       _ScanButton.Text = "Scan";
       _ScanButton.UseVisualStyleBackColor = true;
-      _ScanButton.Click += _Scan_Click;
+      _ScanButton.Click += Scan_Click;
       // 
       // _AdrBox
       // 

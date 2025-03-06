@@ -113,7 +113,7 @@
       m_ContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { m_StartMenu, toolStripSeparator3, m_ShowMenu, m_HideMenu, toolStripSeparator2, m_CloseMenu });
       m_ContextMenu.Name = "m_ContextMenu";
       m_ContextMenu.Size = new System.Drawing.Size(108, 104);
-      m_ContextMenu.Opened += m_ContextMenu_Opened;
+      m_ContextMenu.Opened += ContextMenu_Opened;
       // 
       // m_StartMenu
       // 
@@ -155,7 +155,7 @@
       m_NotifyIcon.Icon = (System.Drawing.Icon)resources.GetObject("m_NotifyIcon.Icon");
       m_NotifyIcon.Text = "MxTools";
       m_NotifyIcon.Visible = true;
-      m_NotifyIcon.Click += m_NotifyIcon_Click;
+      m_NotifyIcon.Click += NotifyIcon_Click;
       // 
       // m_CloseButton
       // 
@@ -166,7 +166,7 @@
       m_CloseButton.Size = new System.Drawing.Size(67, 31);
       m_CloseButton.TabIndex = 3;
       m_CloseButton.UseVisualStyleBackColor = true;
-      m_CloseButton.Click += m_CloseButton_Click;
+      m_CloseButton.Click += CloseButton_Click;
       // 
       // m_KeyCount
       // 
@@ -226,7 +226,7 @@
       _SettingsButton.Size = new System.Drawing.Size(67, 31);
       _SettingsButton.TabIndex = 9;
       _SettingsButton.UseVisualStyleBackColor = true;
-      _SettingsButton.Click += _SettingsButton_Click_1;
+      _SettingsButton.Click += SettingsButton_Click_1;
       // 
       // m_AutoMouse
       // 
@@ -240,7 +240,7 @@
       m_AutoMouse.TabIndex = 10;
       m_AutoMouse.Text = "Right Click (Ctrl-A)";
       m_AutoMouse.UseVisualStyleBackColor = true;
-      m_AutoMouse.CheckedChanged += m_AutoMouse_CheckedChanged;
+      m_AutoMouse.CheckedChanged += AutoMouse_CheckedChanged;
       // 
       // _WarnTime
       // 

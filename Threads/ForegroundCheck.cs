@@ -8,17 +8,17 @@ using static MXTools.Helpers.Win32;
 using static Vanara.PInvoke.User32;
 using static Vanara.PInvoke.Kernel32;
 
-namespace MxTools
+namespace MXTools.Threads
 {
   public class ForegroundWindowCheck
   {
-    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-    private static readonly Lazy<ForegroundWindowCheck> _instance = new Lazy<ForegroundWindowCheck>(() => new ForegroundWindowCheck());
+    private static readonly Lazy<ForegroundWindowCheck> _instance = new(() => new ForegroundWindowCheck());
     public static ForegroundWindowCheck Instance => _instance.Value;
 
-    public event Action<IntPtr, Rectangle> ForegroundWindowChanged;
-    private User32.WinEventProc _winEventDelegate;
+    public event Action<nint, Rectangle> ForegroundWindowChanged;
+    private readonly WinEventProc _winEventDelegate;
     private HWINEVENTHOOK _hookHandle;
     private Rectangle _currentRectangle;
     private uint _currentProcessId;
@@ -33,7 +33,7 @@ namespace MxTools
 
     public void Start()
     {
-      _hookHandle = User32.SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, HINSTANCE.NULL, _winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+      _hookHandle = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, HINSTANCE.NULL, _winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
       _log.Info("Monitoring foreground window started");
     }
 
@@ -41,7 +41,7 @@ namespace MxTools
     {
       if (!_hookHandle.IsNull)
       {
-        User32.UnhookWinEvent(_hookHandle);
+        UnhookWinEvent(_hookHandle);
         _hookHandle = default;
       }
       _log.Info("Monitoring foreground window stopped");
@@ -52,7 +52,7 @@ namespace MxTools
       if (_currentRectangle.IsEmpty)
       {
         HWND hwnd = GetForegroundWindow();
-        GetWindowRect(hwnd, out Vanara.PInvoke.RECT rect);
+        GetWindowRect(hwnd, out RECT rect);
         _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
       }
       return _currentRectangle;
@@ -70,12 +70,12 @@ namespace MxTools
       }
     }
 
-    public uint GetForegroundProcessId()
+    public static uint GetForegroundProcessId()
     {
       HWND hwnd = GetForegroundWindow();
       if (!hwnd.IsNull)
       {
-        User32.GetWindowThreadProcessId(hwnd, out uint processId);
+        _ = GetWindowThreadProcessId(hwnd, out uint processId);
         return processId;
       }
       return 0;
@@ -83,13 +83,13 @@ namespace MxTools
 
     private void WinEventProc(HWINEVENTHOOK hWinEventHook, uint eventType, HWND hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
     {
-      if (eventType == EVENT_SYSTEM_FOREGROUND && hwnd != IntPtr.Zero)
+      if (eventType == EVENT_SYSTEM_FOREGROUND && hwnd != nint.Zero)
       {
-        if (User32.GetWindowRect(hwnd, out var rect))
+        if (GetWindowRect(hwnd, out var rect))
         {
           //var oldId = _currentProcessId;
           _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-          User32.GetWindowThreadProcessId(hwnd, out _currentProcessId);
+          _ = GetWindowThreadProcessId(hwnd, out _currentProcessId);
           ForegroundWindowChanged?.Invoke((nint)hwnd, _currentRectangle);
 
           //if (_currentProcessId != oldId)
@@ -103,8 +103,8 @@ namespace MxTools
       HWND hwnd = GetForegroundWindow();
       if (hwnd.IsNull == false)
       {
-        User32.GetWindowThreadProcessId(hwnd, out _currentProcessId);
-        GetWindowRect(hwnd, out Vanara.PInvoke.RECT rect);
+        _ = GetWindowThreadProcessId(hwnd, out _currentProcessId);
+        GetWindowRect(hwnd, out RECT rect);
         _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
       }
     }

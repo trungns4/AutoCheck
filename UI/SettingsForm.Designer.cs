@@ -775,7 +775,7 @@
       m_DefaultButton.TabIndex = 1;
       m_DefaultButton.Text = "Default";
       m_DefaultButton.UseVisualStyleBackColor = true;
-      m_DefaultButton.Click += m_DefaultButton_Click;
+      m_DefaultButton.Click += DefaultButton_Click;
       // 
       // m_ReloadButton
       // 
@@ -786,7 +786,7 @@
       m_ReloadButton.TabIndex = 1;
       m_ReloadButton.Text = "Reload";
       m_ReloadButton.UseVisualStyleBackColor = true;
-      m_ReloadButton.Click += m_ReloadButton_Click;
+      m_ReloadButton.Click += ReloadButton_Click;
       // 
       // m_CancelButton
       // 
@@ -797,7 +797,7 @@
       m_CancelButton.TabIndex = 1;
       m_CancelButton.Text = "Cancel";
       m_CancelButton.UseVisualStyleBackColor = true;
-      m_CancelButton.Click += m_CancelButton_Click;
+      m_CancelButton.Click += CancelButton_Click;
       // 
       // m_OKButton
       // 
@@ -808,7 +808,7 @@
       m_OKButton.TabIndex = 1;
       m_OKButton.Text = "OK";
       m_OKButton.UseVisualStyleBackColor = true;
-      m_OKButton.Click += m_OKButton_Click;
+      m_OKButton.Click += OKButton_Click;
       // 
       // _SaveButton
       // 
@@ -819,7 +819,7 @@
       _SaveButton.TabIndex = 1;
       _SaveButton.Text = "Save";
       _SaveButton.UseVisualStyleBackColor = true;
-      _SaveButton.Click += _SaveButton_Click;
+      _SaveButton.Click += SaveButton_Click;
       // 
       // groupBox1
       // 

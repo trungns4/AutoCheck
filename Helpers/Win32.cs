@@ -119,7 +119,7 @@ namespace MXTools.Helpers
     public static nint FindWindowByExeName(string exeName)
     {
       nint foundWindow = nint.Zero;
-      uint currentProcessId = (uint)Process.GetCurrentProcess().Id;
+      uint currentProcessId = (uint)Environment.ProcessId;
 
       EnumWindows((hWnd, lParam) =>
       {

@@ -1,5 +1,4 @@
 ﻿using log4net;
-using MXTools.Archive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace MXTools.Input
 {
   class DriverKeyboard : IKeyboard
   {
-    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     private bool _error = true;
 
     public void KeyDown(byte key)
