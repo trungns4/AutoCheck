@@ -7,27 +7,22 @@ using System.Threading;
 
 namespace MXTools.Threads
 {
-  internal class AutoMouseThread
+  internal class AutoMouseThread(MouseThreadSettings settings)
   {
-    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-    private MouseThreadSettings _settings;
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     private Thread _thread;
     private bool _isRunning = false;
     private bool _up = false;
-
-    public AutoMouseThread(MouseThreadSettings settings)
-    {
-      _settings = settings;
-    }
 
     //---------------------------------------------------------------------------------------
     public bool Start()
     {
       _isRunning = true;
-      _thread = new Thread(Run);
-      _thread.IsBackground = true;
-      _thread.Priority = ThreadPriority.Normal;
+      _thread = new Thread(Run)
+      {
+        IsBackground = true,
+        Priority = ThreadPriority.Normal
+      };
       _thread.Start();
 
       _log.Info("Mouse click thread started");
@@ -47,23 +42,23 @@ namespace MXTools.Threads
     {
       while (_isRunning)
       {
-        if (_settings._auto == false)
+        if (settings.Auto == false)
         {
-          Thread.Sleep(_settings._threadDelay);
+          Thread.Sleep(settings.ThreadDelay);
           continue;
         }
 
         if (GlobalFlags.IsTargetWindowActive == false)
         {
           CheckToFireUp();
-          Thread.Sleep(_settings._threadDelay);
+          Thread.Sleep(settings.ThreadDelay);
           continue;
         }
 
         if (Win32.IsAltHolding())
         {
           CheckToFireUp();
-          Thread.Sleep(_settings._threadDelay);
+          Thread.Sleep(settings.ThreadDelay);
           continue;
         }
         else
@@ -74,16 +69,16 @@ namespace MXTools.Threads
           {
             InputSender.RightButtonDown();
             _up = false;
-            Thread.Sleep(_settings._clickDelay);
+            Thread.Sleep(settings.ClickDelay);
           }
           else
           {
             CheckToFireUp();
-            Thread.Sleep(_settings._threadDelay);
+            Thread.Sleep(settings.ThreadDelay);
           }
         }
 
-        Thread.Sleep(_settings._threadDelay);
+        Thread.Sleep(settings.ThreadDelay);
       }
     }
     //---------------------------------------------------------------------------------------

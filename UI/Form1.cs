@@ -175,8 +175,8 @@ namespace MXTools
 
           case System.Windows.Forms.Keys.A:
             {
-              _settings.M._auto = !_settings.M._auto;
-              BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M._auto));
+              _settings.M.Auto = !_settings.M.Auto;
+              BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M.Auto));
             }
             break;
 
@@ -289,12 +289,12 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnAutoWCheckedChanged(object sender, EventArgs e)
     {
-      _settings.W._auto = m_AutoW.Checked;
+      _settings.W.Auto = m_AutoW.Checked;
     }
     //----------------------------------------------------------------------------------
     private void OnAutoQCheckedChanged(object sender, EventArgs e)
     {
-      _settings.Q._auto = m_AutoQ.Checked;
+      _settings.Q.Auto = m_AutoQ.Checked;
     }
     //----------------------------------------------------------------------------------
     private bool Start()
@@ -443,13 +443,13 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void UpdateUIByData()
     {
-      m_AutoQ.Checked = _settings.Q._auto;
-      m_AutoW.Checked = _settings.W._auto;
-      m_QChk.Checked = _settings.QWE._q;
-      m_WChk.Checked = _settings.QWE._w;
-      m_EChk.Checked = _settings.QWE._e;
+      m_AutoQ.Checked = _settings.Q.Auto;
+      m_AutoW.Checked = _settings.W.Auto;
+      m_QChk.Checked = _settings.QWE.Q;
+      m_WChk.Checked = _settings.QWE.W;
+      m_EChk.Checked = _settings.QWE.E;
 
-      m_AutoMouse.Checked = _settings.M._auto;
+      m_AutoMouse.Checked = _settings.M.Auto;
     }
 
     //----------------------------------------------------------------------------------
@@ -482,17 +482,17 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnQChkChanged(object sender, EventArgs e)
     {
-      _settings.QWE._q = m_QChk.Checked;
+      _settings.QWE.Q = m_QChk.Checked;
     }
     //----------------------------------------------------------------------------------
     private void OnEChkChanged(object sender, EventArgs e)
     {
-      _settings.QWE._e = m_EChk.Checked;
+      _settings.QWE.E = m_EChk.Checked;
     }
     //----------------------------------------------------------------------------------
     private void OnWChkChanged(object sender, EventArgs e)
     {
-      _settings.QWE._w = m_WChk.Checked;
+      _settings.QWE.W = m_WChk.Checked;
     }
     //----------------------------------------------------------------------------------
     private void _SettingsButton_Click_1(object sender, EventArgs e)
@@ -509,7 +509,7 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void m_AutoMouse_CheckedChanged(object sender, EventArgs e)
     {
-      _settings.M._auto = m_AutoMouse.Checked;
+      _settings.M.Auto = m_AutoMouse.Checked;
     }
     //----------------------------------------------------------------------------------
     private void OnToogleMXClicked(object sender, EventArgs e)

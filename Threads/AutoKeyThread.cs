@@ -12,10 +12,10 @@ namespace MXTools.Threads
 {
   internal class AutoKeyThread
   {
-    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-    private char _key;
-    private QWMemThreadSettings _settings;
+    private readonly char _key;
+    private readonly QWMemThreadSettings _settings;
 
     //current
     private int _curVal = 0;
@@ -28,12 +28,12 @@ namespace MXTools.Threads
     private Thread _thread;
     private Thread _keyThread;
     private Thread _warnThread;
-    private ManualResetEvent _keyFlag = new ManualResetEvent(false);
+    private readonly ManualResetEvent _keyFlag = new ManualResetEvent(false);
 
     private bool _isRunning = false;
     private bool _full = false;
-    private SoundPlayer _player;
-    private Keys _keyCode;
+    private readonly SoundPlayer _player;
+    private readonly Keys _keyCode;
 
     private Action<int, int> _display;
 
@@ -43,7 +43,7 @@ namespace MXTools.Threads
       _key = key;
       _keyCode = Win32.KeyCode(_key);
       _settings = settings;
-      _player = new SoundPlayer("alarm2.mp3", _settings._warnVolume);
+      _player = new SoundPlayer("alarm2.mp3", _settings.WarnVolume);
       _display = display;
     }
     //---------------------------------------------------------------------------------------
@@ -64,9 +64,9 @@ namespace MXTools.Threads
       _curAdr = curAddr;
       _maxAdr = maxAddr;
 
-      if (_settings._warnScale != 0)
+      if (_settings.WarnScale != 0)
       {
-        _player.Volume = _settings._warnVolume;
+        _player.Volume = _settings.WarnVolume;
       }
       else
       {
@@ -77,32 +77,36 @@ namespace MXTools.Threads
       _maxVal = 0;
 
       _isRunning = true;
-      _thread = new Thread(RunMemoryCheck);
-      _thread.IsBackground = true;
-      _thread.Priority = ThreadPriority.Normal;
+      _thread = new Thread(RunMemoryCheck)
+      {
+        IsBackground = true
+      };
       _thread.Start();
 
-      _keyThread = new Thread(RunKeyCheck);
-      _keyThread.IsBackground = true;
-      _thread.Priority = ThreadPriority.Highest;
+      _keyThread = new Thread(RunKeyCheck)
+      {
+        IsBackground = true
+      };
       _keyThread.Start();
 
-      _warnThread = new Thread(RunWarnCheck);
-      _warnThread.IsBackground = true;
+      _warnThread = new Thread(RunWarnCheck)
+      {
+        IsBackground = true
+      };
       _warnThread.Start();
 
       _log.Info("Monitoring Thread started");
 
       _log.InfoFormat($"Key: {_key}");
-      _log.InfoFormat($"Key Up Delay: {_settings._keyUpDelay}");
-      _log.InfoFormat($"Key Down Delay: {_settings._keyDownDelay}");
-      _log.InfoFormat($"Key Thread Delay: {_settings._keyThreadDelay}");
-      _log.InfoFormat($"Mem Thread Delay: {_settings._memThreadDelay}");
-      _log.InfoFormat($"Warn Thread Delay: {_settings._warnThreadDelay}");
+      _log.InfoFormat($"Key Up Delay: {_settings.KeyUpDelay}");
+      _log.InfoFormat($"Key Down Delay: {_settings.KeyDownDelay}");
+      _log.InfoFormat($"Key Thread Delay: {_settings.KeyThreadDelay}");
+      _log.InfoFormat($"Mem Thread Delay: {_settings.MemThreadDelay}");
+      _log.InfoFormat($"Warn Thread Delay: {_settings.WarnThreadDelay}");
 
-      _log.InfoFormat($"Scale: {_settings._scale}");
-      _log.InfoFormat($"Warn Scale: {_settings._warnScale}");
-      _log.InfoFormat($"Warn Volume: {_settings._warnVolume:0.00}");
+      _log.InfoFormat($"Scale: {_settings.Scale}");
+      _log.InfoFormat($"Warn Scale: {_settings.WarnScale}");
+      _log.InfoFormat($"Warn Volume: {_settings.WarnVolume:0.00}");
 
       return true;
     }
@@ -148,14 +152,6 @@ namespace MXTools.Threads
       return _isRunning;
     }
     //---------------------------------------------------------------------------------------
-    public string Value
-    {
-      get
-      {
-        return string.Format("{0}", _curVal);
-      }
-    }
-    //---------------------------------------------------------------------------------------
     private void PlayAlarm(bool play)
     {
       if (play)
@@ -170,13 +166,13 @@ namespace MXTools.Threads
     //---------------------------------------------------------------------------------------
     private void CheckWarning()
     {
-      if (_settings._warnScale != 0)
+      if (_settings.WarnScale != 0)
       {
         double cv = _curVal;
         double mv = _maxVal;
 
         //warning
-        if (cv <= mv * _settings._warnScale)
+        if (cv <= mv * _settings.WarnScale)
         {
           if (cv != 0)
           {
@@ -196,7 +192,7 @@ namespace MXTools.Threads
       {
         try
         {
-          if (_curAdr >= 24 && _maxAdr >= 24 && _settings._auto)
+          if (_curAdr >= 24 && _maxAdr >= 24 && _settings.Auto)
           {
             _curVal = MxSharp.Instance.ReadMemory(_curAdr);
             _maxVal = MxSharp.Instance.ReadMemory(_maxAdr);
@@ -204,7 +200,7 @@ namespace MXTools.Threads
             double cv = _curVal;
             double mv = _maxVal;
 
-            if (cv <= mv * _settings._scale)
+            if (cv <= mv * _settings.Scale)
             {
               _full = false;
               _keyFlag.Set();
@@ -224,7 +220,7 @@ namespace MXTools.Threads
         }
         finally
         {
-          Thread.Sleep(_settings._memThreadDelay);
+          Thread.Sleep(_settings.MemThreadDelay);
         }
       }
     }
@@ -236,23 +232,23 @@ namespace MXTools.Threads
         _keyFlag.WaitOne();
         bool delay = true;
 
-        while (_settings._auto == true
-              && _settings._autoKey == true
+        while (_settings.Auto == true
+              && _settings.AutoKey == true
               && _isRunning == true
               && _full == false
               && GlobalFlags.IsTargetWindowActive == true)
         {
           KeyboardManager.Active.KeyDown((byte)_keyCode);
-          Thread.Sleep(_settings._keyUpDelay);
+          Thread.Sleep(_settings.KeyDownDelay);
 
           KeyboardManager.Active.KeyUp((byte)_keyCode);
-          Thread.Sleep(_settings._keyDownDelay);
+          Thread.Sleep(_settings.KeyUpDelay);
 
           delay = false;
         }
         if (delay == true)
         {
-          Thread.Sleep(_settings._keyThreadDelay);
+          Thread.Sleep(_settings.KeyThreadDelay);
         }
       }
     }
@@ -268,7 +264,7 @@ namespace MXTools.Threads
         }
         finally
         {
-          Thread.Sleep(_settings._warnThreadDelay);
+          Thread.Sleep(_settings.WarnThreadDelay);
         }
       }
     }

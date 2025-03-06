@@ -13,10 +13,10 @@ namespace MXTools.Threads
 {
   class GeneralThread
   {
-    private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     private Thread _thread;
     private bool _isRunning = false;
-    private int _delay = 1000;
+    private readonly int _delay = 1000;
 
     public GeneralThread()
     {
@@ -25,9 +25,11 @@ namespace MXTools.Threads
     public bool Start()
     {
       _isRunning = true;
-      _thread = new Thread(Run);
-      _thread.IsBackground = true;
-      _thread.Priority = ThreadPriority.Normal;
+      _thread = new Thread(Run)
+      {
+        IsBackground = true,
+        Priority = ThreadPriority.Normal
+      };
       _thread.Start();
 
       _log.Info("General thread started");

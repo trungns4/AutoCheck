@@ -26,6 +26,7 @@
     <Compile Remove="Driver\**" />
     <Compile Remove="Misc\**" />
     <Compile Remove="packages\**" />
+    <Compile Remove="QCheck\**" />
     <Compile Remove="x64\**" />
     <EmbeddedResource Remove="Adapter\**" />
     <EmbeddedResource Remove="Archives\**" />
@@ -34,6 +35,7 @@
     <EmbeddedResource Remove="Driver\**" />
     <EmbeddedResource Remove="Misc\**" />
     <EmbeddedResource Remove="packages\**" />
+    <EmbeddedResource Remove="QCheck\**" />
     <EmbeddedResource Remove="x64\**" />
     <None Remove="Adapter\**" />
     <None Remove="Archives\**" />
@@ -42,6 +44,7 @@
     <None Remove="Driver\**" />
     <None Remove="Misc\**" />
     <None Remove="packages\**" />
+    <None Remove="QCheck\**" />
     <None Remove="x64\**" />
   </ItemGroup>
 

@@ -26,28 +26,28 @@ namespace MXTools.Threads
       _timer = new Timer();
       _timer.Elapsed += OnTimerElapsed;
       _timer.AutoReset = true;
-      _timer.Interval = _settings._timerInterval;
+      _timer.Interval = _settings.TimerInterval;
 
       _time = DateTime.MinValue;
-      _player = new SoundPlayer("warning.mp3", _settings._volume);
+      _player = new SoundPlayer("warning.mp3", _settings.Volume);
     }
     //------------------------------------------------------------------------------
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)
     {
-      if (_time == DateTime.MinValue || _settings._auto == false)
+      if (_time == DateTime.MinValue || _settings.Auto == false)
       {
         return;
       }
 
       var elapsed = (DateTime.Now - _time).TotalMinutes;
-      var remain = _settings._interval - elapsed;
+      var remain = _settings.Interval - elapsed;
 
       if (remain >= 0 && _update != null)
       {
         _update((int)(remain * 60));
       }
 
-      if (_settings._dismiss.Any(x => Win32.IsKeyHolding(x)))
+      if (_settings.Dismiss.Any(x => Win32.IsKeyHolding(x)))
       {
         _time = DateTime.Now;
         if (_player.IsPlaying())
@@ -60,7 +60,7 @@ namespace MXTools.Threads
       if (remain <= 0)
       {
         _time = DateTime.Now;
-        Task.Run(() => _player.Play(TimeSpan.FromSeconds(_settings._duration)));
+        Task.Run(() => _player.Play(TimeSpan.FromSeconds(_settings.Duration)));
       }
     }
     //------------------------------------------------------------------------------

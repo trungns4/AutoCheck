@@ -73,109 +73,109 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void ShowData()
     {
-      m_QAuto.Checked = _settings.Q._auto;
-      m_QAutoKey.Checked = _settings.Q._autoKey;
-      m_QKeyUpDelay.Value = _settings.Q._keyUpDelay;
-      m_QKeyDownDelay.Value = _settings.Q._keyDownDelay;
-      m_QKeyThreadDelay.Value = _settings.Q._keyThreadDelay;
-      m_QMemThreadDelay.Value = _settings.Q._memThreadDelay;
-      m_QWarnThreadDelay.Value = _settings.Q._warnThreadDelay;
-      m_QScale.Value = (decimal)(_settings.Q._scale * 100);
-      m_QWarnScale.Value = (decimal)(_settings.Q._warnScale * 100);
-      m_QWarnVolume.Value = (decimal)(_settings.Q._warnVolume * 100);
+      m_QAuto.Checked = _settings.Q.Auto;
+      m_QAutoKey.Checked = _settings.Q.AutoKey;
+      m_QKeyUpDelay.Value = _settings.Q.KeyUpDelay;
+      m_QKeyDownDelay.Value = _settings.Q.KeyDownDelay;
+      m_QKeyThreadDelay.Value = _settings.Q.KeyThreadDelay;
+      m_QMemThreadDelay.Value = _settings.Q.MemThreadDelay;
+      m_QWarnThreadDelay.Value = _settings.Q.WarnThreadDelay;
+      m_QScale.Value = (decimal)(_settings.Q.Scale * 100);
+      m_QWarnScale.Value = (decimal)(_settings.Q.WarnScale * 100);
+      m_QWarnVolume.Value = (decimal)(_settings.Q.WarnVolume * 100);
 
-      m_WAuto.Checked = _settings.W._auto;
-      m_WAutoKey.Checked = _settings.W._autoKey;
-      m_WKeyUpDelay.Value = _settings.W._keyUpDelay;
-      m_WKeyDownDelay.Value = _settings.W._keyDownDelay;
-      m_WKeyThreadDelay.Value = _settings.W._keyThreadDelay;
-      m_WMemThreadDelay.Value = _settings.W._memThreadDelay;
-      m_WWarnThreadDelay.Value = _settings.W._warnThreadDelay;
-      m_WScale.Value = (decimal)(_settings.W._scale * 100);
-      m_WWarnScale.Value = (decimal)(_settings.W._warnScale * 100);
-      m_WWarnVolume.Value = (decimal)(_settings.W._warnVolume * 100);
+      m_WAuto.Checked = _settings.W.Auto;
+      m_WAutoKey.Checked = _settings.W.AutoKey;
+      m_WKeyUpDelay.Value = _settings.W.KeyUpDelay;
+      m_WKeyDownDelay.Value = _settings.W.KeyDownDelay;
+      m_WKeyThreadDelay.Value = _settings.W.KeyThreadDelay;
+      m_WMemThreadDelay.Value = _settings.W.MemThreadDelay;
+      m_WWarnThreadDelay.Value = _settings.W.WarnThreadDelay;
+      m_WScale.Value = (decimal)(_settings.W.Scale * 100);
+      m_WWarnScale.Value = (decimal)(_settings.W.WarnScale * 100);
+      m_WWarnVolume.Value = (decimal)(_settings.W.WarnVolume * 100);
 
-      _qweQKeyAuto.Checked = _settings.QWE._q;
-      _qweWKeyAuto.Checked = _settings.QWE._w;
-      _qweEKeyAuto.Checked = _settings.QWE._e;
+      _qweQKeyAuto.Checked = _settings.QWE.Q;
+      _qweWKeyAuto.Checked = _settings.QWE.W;
+      _qweEKeyAuto.Checked = _settings.QWE.E;
 
-      _qweQKeyUpDelay.Value = _settings.QWE._keyUpDelayQ;
-      _qweQKeyDownDelay.Value = _settings.QWE._keyDownDelayQ;
-      _qweQKeyThreadDelay.Value = _settings.QWE._threadDelayQ;
+      _qweQKeyUpDelay.Value = _settings.QWE.KeyUpDelayQ;
+      _qweQKeyDownDelay.Value = _settings.QWE.KeyDownDelayQ;
+      _qweQKeyThreadDelay.Value = _settings.QWE.ThreadDelayQ;
 
-      _qweWKeyUpDelay.Value = _settings.QWE._keyUpDelayW;
-      _qweWKeyDownDelay.Value = _settings.QWE._keyDownDelayW;
-      _qweWKeyThreadDelay.Value = _settings.QWE._threadDelayW;
+      _qweWKeyUpDelay.Value = _settings.QWE.KeyUpDelayW;
+      _qweWKeyDownDelay.Value = _settings.QWE.KeyDownDelayW;
+      _qweWKeyThreadDelay.Value = _settings.QWE.ThreadDelayW;
 
-      _qweEKeyUpDelay.Value = _settings.QWE._keyUpDelayE;
-      _qweEKeyDownDelay.Value = _settings.QWE._keyDownDelayE;
-      _qweEKeyThreadDelay.Value = _settings.QWE._threadDelayE;
+      _qweEKeyUpDelay.Value = _settings.QWE.KeyUpDelayE;
+      _qweEKeyDownDelay.Value = _settings.QWE.KeyDownDelayE;
+      _qweEKeyThreadDelay.Value = _settings.QWE.ThreadDelayE;
 
-      _MRClick.Checked = _settings.M._auto;
-      _MRThreadDelay.Value = _settings.M._threadDelay;
-      _MRClickDelay.Value = _settings.M._clickDelay;
+      _MRClick.Checked = _settings.M.Auto;
+      _MRThreadDelay.Value = _settings.M.ThreadDelay;
+      _MRClickDelay.Value = _settings.M.ClickDelay;
 
-      _WarnAuto.Checked = _settings.T._auto;
-      _WarnInterval.Value = (decimal)_settings.T._interval;
-      _WarnDuration.Value = (decimal)_settings.T._duration;
-      _WarnVolume.Value = (decimal)_settings.T._volume * 100;
-      _WarnTimer.Value = (decimal)_settings.T._timerInterval;
-      _WarnDismiss.Text = _settings.T._dismiss;
+      _WarnAuto.Checked = _settings.T.Auto;
+      _WarnInterval.Value = (decimal)_settings.T.Interval;
+      _WarnDuration.Value = (decimal)_settings.T.Duration;
+      _WarnVolume.Value = (decimal)_settings.T.Volume * 100;
+      _WarnTimer.Value = (decimal)_settings.T.TimerInterval;
+      _WarnDismiss.Text = _settings.T.Dismiss;
     }
     //----------------------------------------------------------------------------------
     private void UIToData()
     {
       // Save Q settings
-      _settings.Q._auto = m_QAuto.Checked;
-      _settings.Q._autoKey = m_QAutoKey.Checked;
-      _settings.Q._keyUpDelay = (int)m_QKeyUpDelay.Value;
-      _settings.Q._keyDownDelay = (int)m_QKeyDownDelay.Value;
-      _settings.Q._keyThreadDelay = (int)m_QKeyThreadDelay.Value;
-      _settings.Q._memThreadDelay = (int)m_QMemThreadDelay.Value;
-      _settings.Q._warnThreadDelay = (int)m_QWarnThreadDelay.Value;
-      _settings.Q._scale = (float)(m_QScale.Value / 100);
-      _settings.Q._warnScale = (float)(m_QWarnScale.Value / 100);
-      _settings.Q._warnVolume = (float)(m_QWarnVolume.Value / 100);
+      _settings.Q.Auto = m_QAuto.Checked;
+      _settings.Q.AutoKey = m_QAutoKey.Checked;
+      _settings.Q.KeyUpDelay = (int)m_QKeyUpDelay.Value;
+      _settings.Q.KeyDownDelay = (int)m_QKeyDownDelay.Value;
+      _settings.Q.KeyThreadDelay = (int)m_QKeyThreadDelay.Value;
+      _settings.Q.MemThreadDelay = (int)m_QMemThreadDelay.Value;
+      _settings.Q.WarnThreadDelay = (int)m_QWarnThreadDelay.Value;
+      _settings.Q.Scale = (float)(m_QScale.Value / 100);
+      _settings.Q.WarnScale = (float)(m_QWarnScale.Value / 100);
+      _settings.Q.WarnVolume = (float)(m_QWarnVolume.Value / 100);
 
       // Save W settings
-      _settings.W._auto = m_WAuto.Checked;
-      _settings.W._autoKey = m_WAutoKey.Checked;
-      _settings.W._keyUpDelay = (int)m_WKeyUpDelay.Value;
-      _settings.W._keyDownDelay = (int)m_WKeyDownDelay.Value;
-      _settings.W._keyThreadDelay = (int)m_WKeyThreadDelay.Value;
-      _settings.W._memThreadDelay = (int)m_WMemThreadDelay.Value;
-      _settings.W._warnThreadDelay = (int)m_WWarnThreadDelay.Value;
-      _settings.W._scale = (float)(m_WScale.Value / 100);
-      _settings.W._warnScale = (float)(m_WWarnScale.Value / 100);
-      _settings.W._warnVolume = (float)(m_WWarnVolume.Value / 100);
+      _settings.W.Auto = m_WAuto.Checked;
+      _settings.W.AutoKey = m_WAutoKey.Checked;
+      _settings.W.KeyUpDelay = (int)m_WKeyUpDelay.Value;
+      _settings.W.KeyDownDelay = (int)m_WKeyDownDelay.Value;
+      _settings.W.KeyThreadDelay = (int)m_WKeyThreadDelay.Value;
+      _settings.W.MemThreadDelay = (int)m_WMemThreadDelay.Value;
+      _settings.W.WarnThreadDelay = (int)m_WWarnThreadDelay.Value;
+      _settings.W.Scale = (float)(m_WScale.Value / 100);
+      _settings.W.WarnScale = (float)(m_WWarnScale.Value / 100);
+      _settings.W.WarnVolume = (float)(m_WWarnVolume.Value / 100);
 
       // Save QWE settings
-      _settings.QWE._q = _qweQKeyAuto.Checked;
-      _settings.QWE._w = _qweWKeyAuto.Checked;
-      _settings.QWE._e = _qweEKeyAuto.Checked;
+      _settings.QWE.Q = _qweQKeyAuto.Checked;
+      _settings.QWE.W = _qweWKeyAuto.Checked;
+      _settings.QWE.E = _qweEKeyAuto.Checked;
 
-      _settings.QWE._keyUpDelayQ = (int)_qweQKeyUpDelay.Value;
-      _settings.QWE._keyDownDelayQ = (int)_qweQKeyDownDelay.Value;
-      _settings.QWE._threadDelayQ = (int)_qweQKeyThreadDelay.Value;
+      _settings.QWE.KeyUpDelayQ = (int)_qweQKeyUpDelay.Value;
+      _settings.QWE.KeyDownDelayQ = (int)_qweQKeyDownDelay.Value;
+      _settings.QWE.ThreadDelayQ = (int)_qweQKeyThreadDelay.Value;
 
-      _settings.QWE._keyUpDelayW = (int)_qweWKeyUpDelay.Value;
-      _settings.QWE._keyDownDelayW = (int)_qweWKeyDownDelay.Value;
-      _settings.QWE._threadDelayW = (int)_qweWKeyThreadDelay.Value;
+      _settings.QWE.KeyUpDelayW = (int)_qweWKeyUpDelay.Value;
+      _settings.QWE.KeyDownDelayW = (int)_qweWKeyDownDelay.Value;
+      _settings.QWE.ThreadDelayW = (int)_qweWKeyThreadDelay.Value;
 
-      _settings.QWE._keyUpDelayE = (int)_qweEKeyUpDelay.Value;
-      _settings.QWE._keyDownDelayE = (int)_qweEKeyDownDelay.Value;
-      _settings.QWE._threadDelayE = (int)_qweEKeyThreadDelay.Value;
+      _settings.QWE.KeyUpDelayE = (int)_qweEKeyUpDelay.Value;
+      _settings.QWE.KeyDownDelayE = (int)_qweEKeyDownDelay.Value;
+      _settings.QWE.ThreadDelayE = (int)_qweEKeyThreadDelay.Value;
 
-      _settings.M._auto = _MRClick.Checked;
-      _settings.M._threadDelay = (int)_MRThreadDelay.Value;
-      _settings.M._clickDelay = (int)_MRClickDelay.Value;
+      _settings.M.Auto = _MRClick.Checked;
+      _settings.M.ThreadDelay = (int)_MRThreadDelay.Value;
+      _settings.M.ClickDelay = (int)_MRClickDelay.Value;
 
-      _settings.T._auto = _WarnAuto.Checked;
-      _settings.T._interval = (float)_WarnInterval.Value;
-      _settings.T._duration = (int)_WarnDuration.Value;
-      _settings.T._volume = (float)_WarnVolume.Value / 100;
-      _settings.T._timerInterval = (int)_WarnTimer.Value;
-      _settings.T._dismiss = _WarnDismiss.Text;
+      _settings.T.Auto = _WarnAuto.Checked;
+      _settings.T.Interval = (float)_WarnInterval.Value;
+      _settings.T.Duration = (int)_WarnDuration.Value;
+      _settings.T.Volume = (float)_WarnVolume.Value / 100;
+      _settings.T.TimerInterval = (int)_WarnTimer.Value;
+      _settings.T.Dismiss = _WarnDismiss.Text;
 
       _settings.SaveData();
 

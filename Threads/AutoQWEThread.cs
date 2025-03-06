@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace MXTools.Threads
 {
-  internal class AutoQWEThread
+  internal class AutoQWEThread(QWEThreadSettings settings, Action<long> display)
   {
-    ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     private Thread _qThread;
     private Thread _wThread;
@@ -18,14 +18,9 @@ namespace MXTools.Threads
 
     private bool _isRunning = false;
     private long _count = 0;
-    private QWEThreadSettings _settings;
-    private Action<long> _display;
+    private readonly QWEThreadSettings _settings = settings;
+    private Action<long> _display = display;
 
-    public AutoQWEThread(QWEThreadSettings settings, Action<long> display)
-    {
-      _display = display;
-      _settings = settings;
-    }
     //---------------------------------------------------------------------------------------
     public bool IsRunning()
     {
@@ -64,7 +59,7 @@ namespace MXTools.Threads
       _eThread.Start();
 
       _log.InfoFormat("Auto Key Threads started");
-      _log.InfoFormat($"Q: {_settings._q} W: {_settings._w} E: {_settings._e}");
+      _log.InfoFormat($"Q: {_settings.Q} W: {_settings.W} E: {_settings.E}");
 
       return true;
     }
@@ -120,36 +115,36 @@ namespace MXTools.Threads
       {
         if (GlobalFlags.IsTargetWindowActive == false)
         {
-          Thread.Sleep(Math.Min(_settings._threadDelayQ, Math.Min(_settings._threadDelayW, _settings._threadDelayE)));
+          Thread.Sleep(Math.Min(_settings.ThreadDelayQ, Math.Min(_settings.ThreadDelayW, _settings.ThreadDelayE)));
           continue;
         }
 
-        if (key == 'q' && _settings._q)
+        if (key == 'q' && _settings.Q)
         {
           KeyboardManager.Active.KeyDown((byte)Keys.Q);
-          Thread.Sleep(_settings._keyDownDelayQ);
+          Thread.Sleep(_settings.KeyDownDelayQ);
           KeyboardManager.Active.KeyUp((byte)Keys.Q);
-          UpdateUIAndSleep(_settings._keyUpDelayQ);
+          UpdateUIAndSleep(_settings.KeyUpDelayQ);
         }
-        else if (key == 'w' && _settings._w)
+        else if (key == 'w' && _settings.W)
         {
           KeyboardManager.Active.KeyDown((byte)Keys.W);
-          Thread.Sleep(_settings._keyDownDelayW);
+          Thread.Sleep(_settings.KeyDownDelayW);
           KeyboardManager.Active.KeyUp((byte)Keys.W);
-          UpdateUIAndSleep(_settings._keyUpDelayW);
+          UpdateUIAndSleep(_settings.KeyUpDelayW);
         }
-        else if (key == 'e' && _settings._e)
+        else if (key == 'e' && _settings.E)
         {
           KeyboardManager.Active.KeyDown((byte)Keys.E);
-          Thread.Sleep(_settings._keyDownDelayE);
+          Thread.Sleep(_settings.KeyDownDelayE);
           KeyboardManager.Active.KeyUp((byte)Keys.E);
-          UpdateUIAndSleep(_settings._keyUpDelayE);
+          UpdateUIAndSleep(_settings.KeyUpDelayE);
         }
 
-        if (_settings._q == false && _settings._w == false && _settings._e == false)
+        if (_settings.Q == false && _settings.W == false && _settings.E == false)
         {
           DisplayCountNumber();
-          Thread.Sleep(Math.Min(_settings._threadDelayQ, Math.Min(_settings._threadDelayW, _settings._threadDelayE)));
+          Thread.Sleep(Math.Min(_settings.ThreadDelayQ, Math.Min(_settings.ThreadDelayW, _settings.ThreadDelayE)));
         }
       }
     }
