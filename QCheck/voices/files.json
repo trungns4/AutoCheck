@@ -1,0 +1,47 @@
+[
+	{
+		"file": "01.team dung yen.mp3",
+		"text": "Team đứng yên",
+		"order": "1"
+	},
+	{
+		"file": "02.team lay buff dung yen.mp3",
+		"text": "Team lấy buff, đứng yên",
+		"order": "2"
+	},
+	{
+		"file": "04.dung yen.mp3",
+		"text": "Đứng yên",
+		"order": "4"
+	},
+	{
+		"file": "06.cho ty.mp3",
+		"text": "Chờ tý",
+		"order": "6"
+	},
+	{
+		"file": "09.dang chay.mp3",
+		"text": "Đang chạy",
+		"order": "9"
+	},
+	{
+		"file": "11.len luon.mp3",
+		"text": "Lên luôn",
+		"order": "11"
+	},
+	{
+		"file": "14.xin trieu tap.mp3",
+		"text": "Xin triệu tập",
+		"order": "14"
+	},
+	{
+		"file": "16. cho alex vao.mp3",
+		"text": "Chờ Alex vào",
+		"order": "16"
+	},
+	{
+		"file": "17.airport.mp3",
+		"text": "AIRPORT",
+		"order": "17"
+	}
+]

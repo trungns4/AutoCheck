@@ -87,13 +87,13 @@ namespace MxTools
       {
         if (User32.GetWindowRect(hwnd, out var rect))
         {
-          var oldId = _currentProcessId;
+          //var oldId = _currentProcessId;
           _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
           User32.GetWindowThreadProcessId(hwnd, out _currentProcessId);
           ForegroundWindowChanged?.Invoke((nint)hwnd, _currentRectangle);
 
-          if (_currentProcessId != oldId)
-            _log.Info($"Foreground changed to {_currentProcessId}");
+          //if (_currentProcessId != oldId)
+          //  _log.Info($"Foreground changed to {_currentProcessId}");
         }
       }
     }

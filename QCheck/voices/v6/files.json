@@ -1,0 +1,72 @@
+[
+	{
+		"file": "01.team dung yen.mp3",
+		"text": "Team đứng yên",
+		"order": "1"
+	},
+	{
+		"file": "02.team lay buff dung yen.mp3",
+		"text": "Team lấy buff, đứng yên",
+		"order": "2"
+	},
+	{
+		"file": "03.team len cuop.mp3",
+		"text": "Team lên cướp",
+		"order": "3"
+	},
+	{
+		"file": "04.dung yen.mp3",
+		"text": "Đứng yên",
+		"order": "4"
+	},
+	{
+		"file": "05.xong thi bao.mp3",
+		"text": "Xong thì báo",
+		"order": "5"
+	},
+	{
+		"file": "06.cho ty.mp3",
+		"text": "Chờ tý",
+		"order": "6"
+	},
+	{
+		"file": "07.cho ty dung yen di.mp3",
+		"text": "Chờ tý, đứng yên đi",
+		"order": "7"
+	},
+	{
+		"file": "08.chet roi.mp3",
+		"text": "Chết rồi",
+		"order": "8"
+	},
+	{
+		"file": "09.dang chay.mp3",
+		"text": "Đang chạy",
+		"order": "9"
+	},
+	{
+		"file": "10.dang tim boss.mp3",
+		"text": "Đang tìm boss",
+		"order": "10"
+	},
+	{
+		"file": "11.len luon.mp3",
+		"text": "Lên luôn",
+		"order": "11"
+	},
+	{
+		"file": "12.tu chay di.mp3",
+		"text": "Team tự chạy đi",
+		"order": "12"
+	},
+	{
+		"file": "13.xin len.mp3",
+		"text": "Xin lên",
+		"order": "13"
+	},
+	{
+		"file": "14.xin trieu tap.mp3",
+		"text": "Xin triệu tập",
+		"order": "14"
+	}
+]
