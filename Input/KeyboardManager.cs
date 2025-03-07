@@ -1,4 +1,5 @@
 ﻿using log4net;
+using MXTools.Input;
 using System;
 using System.Reflection;
 
@@ -16,6 +17,11 @@ namespace MXTools.Input
       {
         _keyboard = new WinKeyboard();
         _log.Info("Loaded Windows Keyboard");
+      }
+      else if(kbOpt == "kernel")
+      {
+        _keyboard = new KernelKeyboard();
+        _log.Info("Loaded MXTools Custom Driver");
       }
       else
       {

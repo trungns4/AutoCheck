@@ -3,7 +3,7 @@
 
 namespace MXTools
 {
-  int _find(int number, BYTE* data, size_t size, CancellationToken token)
+  static int _find(int number, BYTE* data, size_t size, CancellationToken token)
   {
     if (size < 28)
       return -1;

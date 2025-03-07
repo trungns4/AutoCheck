@@ -153,7 +153,7 @@
       // 
       m_NotifyIcon.ContextMenuStrip = m_ContextMenu;
       m_NotifyIcon.Icon = (System.Drawing.Icon)resources.GetObject("m_NotifyIcon.Icon");
-      m_NotifyIcon.Text = "MxTools";
+      m_NotifyIcon.Text = "MXTools";
       m_NotifyIcon.Visible = true;
       m_NotifyIcon.Click += NotifyIcon_Click;
       // 

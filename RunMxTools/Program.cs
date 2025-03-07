@@ -4,12 +4,15 @@ using System.IO;
 using System.Reflection;
 using System.Resources;
 using System.Security.Principal;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace RunMxTools
 {
   class Program
   {
+    private static readonly Mutex mutex = new Mutex(true, "__MXTOOLRUNNER__");
+
     static bool IsRunningAsAdmin()
     {
       var identity = WindowsIdentity.GetCurrent();
@@ -31,29 +34,32 @@ namespace RunMxTools
 
     static void StartKdu()
     {
-      if (IsRunningAsAdmin() == false)
+      if (mutex.WaitOne(TimeSpan.Zero, true))
       {
-        MessageBox.Show("Please Run As Administrator",
-            "Run", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        return;
-      }
+        if (IsRunningAsAdmin() == false)
+        {
+          MessageBox.Show("Please Run As Administrator",
+              "Run", MessageBoxButtons.OK, MessageBoxIcon.Error);
+          return;
+        }
 
-      ProcessStartInfo psi = new ProcessStartInfo
-      {
-        FileName = GetKDUPath(),
-        Arguments = "-prv 1 -pse \"" + GetAppPath() + "\"",
-        UseShellExecute = false,  // Run as a normal process
-        CreateNoWindow = true,    // Prevents a new window
-        WindowStyle = ProcessWindowStyle.Hidden // Fully hides it
-      };
+        ProcessStartInfo psi = new ProcessStartInfo
+        {
+          FileName = GetKDUPath(),
+          Arguments = "-prv 1 -pse \"" + GetAppPath() + "\"",
+          UseShellExecute = false,  // Run as a normal process
+          CreateNoWindow = true,    // Prevents a new window
+          WindowStyle = ProcessWindowStyle.Hidden // Fully hides it
+        };
 
-      try
-      {
-        Process.Start(psi);
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine("Error starting process: " + ex.Message);
+        try
+        {
+          Process.Start(psi);
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine("Error starting process: " + ex.Message);
+        }
       }
     }
 

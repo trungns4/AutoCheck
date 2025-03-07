@@ -9,13 +9,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>1.25</VersionPrefix>
-    <Time>$([System.DateTime]::Now.ToString("MMdd"))</Time>
-    <BuildNumber>$([System.DateTime]::Now.ToString("HHmm"))</BuildNumber>
-    <Version>$(VersionPrefix).$(Time).$(BuildNumber)</Version>
-    <AssemblyVersion>$(VersionPrefix).$(Time).$(BuildNumber)</AssemblyVersion>
-    <FileVersion>$(VersionPrefix).$(Time).$(BuildNumber)</FileVersion>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Version>
+      1.0
+      .$([System.Math]::Floor($([MSBuild]::Divide($([System.DateTimeOffset]::UtcNow.ToUnixTimeSeconds()), 86400))))
+      .$([MSBuild]::Divide($([MSBuild]::Modulo($([System.DateTimeOffset]::UtcNow.ToUnixTimeSeconds()), 86400)), 2))
+    </Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +21,7 @@
     <Compile Remove="Archives\**" />
     <Compile Remove="Archive\**" />
     <Compile Remove="Loader\**" />
+    <Compile Remove="MxDriver\**" />
     <Compile Remove="MxToolsPlus\**" />
     <Compile Remove="Driver\**" />
     <Compile Remove="Misc\**" />
@@ -34,6 +33,7 @@
     <EmbeddedResource Remove="Archives\**" />
     <EmbeddedResource Remove="Archive\**" />
     <EmbeddedResource Remove="Loader\**" />
+    <EmbeddedResource Remove="MxDriver\**" />
     <EmbeddedResource Remove="MxToolsPlus\**" />
     <EmbeddedResource Remove="Driver\**" />
     <EmbeddedResource Remove="Misc\**" />
@@ -45,6 +45,7 @@
     <None Remove="Archives\**" />
     <None Remove="Archive\**" />
     <None Remove="Loader\**" />
+    <None Remove="MxDriver\**" />
     <None Remove="MxToolsPlus\**" />
     <None Remove="Driver\**" />
     <None Remove="Misc\**" />
