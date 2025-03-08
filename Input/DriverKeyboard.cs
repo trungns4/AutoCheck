@@ -29,7 +29,7 @@ namespace MXTools.Input
     {
       try
       {
-        if (DriverInputSimulator.Error.Success == DriverInputSimulator.IbSendInit(DriverInputSimulator.SendType.Logitech, 0, 0))
+        if(DriverInputSimulator.Error.Success == DriverInputSimulator.IbSendInit(DriverInputSimulator.SendType.Logitech, 0, 0))
         {
           _error = false;
           _log.Info("Successfully loaded driver keyboard");
