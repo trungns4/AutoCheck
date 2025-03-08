@@ -56,6 +56,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Input\KernelKeyboard.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Sounds\alarm.mp3" />
     <None Remove="Sounds\alarm2.mp3" />
     <None Remove="Sounds\warning.mp3" />

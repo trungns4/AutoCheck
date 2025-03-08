@@ -13,15 +13,15 @@ namespace MXTools.Input
     static KeyboardManager()
     {
       string kbOpt = GlobalSettings.Instance.GetConfigString("keyboard", "win");
-      if (kbOpt == "win")
+      if (kbOpt == "win-si")
       {
-        _keyboard = new WinKeyboard();
-        _log.Info("Loaded Windows Keyboard");
+        _keyboard = new WinKeyboardSI();
+        _log.Info("Loaded Windows Keyboard (SendInput)");
       }
-      else if(kbOpt == "kernel")
+      else if (kbOpt == "win-ke" || kbOpt == "win")
       {
-        _keyboard = new KernelKeyboard();
-        _log.Info("Loaded MXTools Custom Driver");
+        _keyboard = new WinKeyboardKE();
+        _log.Info("Loaded Windows Keyboard (kbd_event)");
       }
       else
       {

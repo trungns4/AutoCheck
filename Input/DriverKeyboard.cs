@@ -16,23 +16,30 @@ namespace MXTools.Input
     public void KeyDown(byte key)
     {
       if (_error == false)
-        IbInputSimulator.IbSendKeybdDown((ushort)key);
+        DriverInputSimulator.IbSendKeybdDown((ushort)key);
     }
 
     public void KeyUp(byte key)
     {
       if (_error == false)
-        IbInputSimulator.IbSendKeybdUp((ushort)key);
+        DriverInputSimulator.IbSendKeybdUp((ushort)key);
     }
 
     public void Init()
     {
-      if (IbInputSimulator.Error.Success == IbInputSimulator.IbSendInit(IbInputSimulator.SendType.Logitech, 0, 0))
+      try
       {
-        _error = false;
-        _log.Info("Successfully loaded driver keyboard");
+        if (DriverInputSimulator.Error.Success == DriverInputSimulator.IbSendInit(DriverInputSimulator.SendType.Logitech, 0, 0))
+        {
+          _error = false;
+          _log.Info("Successfully loaded driver keyboard");
+        }
+        else
+        {
+          _log.Info("Fail to load driver keyboard");
+        }
       }
-      else
+      catch
       {
         _log.Info("Fail to load driver keyboard");
       }
@@ -40,7 +47,7 @@ namespace MXTools.Input
 
     public void Destroy()
     {
-      IbInputSimulator.IbSendDestroy();
+      DriverInputSimulator.IbSendDestroy();
     }
   }
 }

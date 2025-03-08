@@ -107,22 +107,20 @@ namespace MXTools.Threads
 
       if (_thread != null && _thread.IsAlive)
       {
-        _thread.Join();
+        _thread.Join(500);
         _thread = null;
       }
 
       //to stop the key thread
       _keyFlag.Set();
 
-      Thread.Sleep(10);
 
       if (_keyThread != null && _keyThread.IsAlive)
       {
-        _keyThread.Join();
+        _keyThread.Join(500);
         _keyThread = null;
       }
 
-      Thread.Sleep(10);
 
       if (_warnThread != null && _warnThread.IsAlive)
       {

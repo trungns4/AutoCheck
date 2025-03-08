@@ -6,30 +6,31 @@ using System.Threading.Tasks;
 
 namespace MXTools.Input
 {
-  class WinKeyboard : IKeyboard
+  class WinKeyboardSI : IKeyboard
   {
-    public WinKeyboard()
+    public void Destroy()
     {
-    }
-
-    public void KeyDown(byte key)
-    {
-      Keyboard.KeyDown(key);
-    }
-
-    public void KeyUp(byte key)
-    {
-      Keyboard.KeyUp(key);
     }
 
     public void Init()
     {
-
     }
 
+    public void KeyDown(byte key) => SendInputEx.SendKey(key, true);
+    public void KeyUp(byte key) => SendInputEx.SendKey(key, false);
+  }
+
+  class WinKeyboardKE : IKeyboard
+  {
     public void Destroy()
     {
-
     }
+
+    public void Init()
+    {
+    }
+
+    public void KeyDown(byte key) => KeybdEvent.KeyDown(key);
+    public void KeyUp(byte key) => KeybdEvent.KeyUp(key);
   }
 }

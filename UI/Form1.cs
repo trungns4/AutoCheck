@@ -36,10 +36,15 @@ namespace MXTools
     public Form1()
     {
       InitializeComponent();
-      Keyboard.Init();
-      InputSender.Init();
+
+      SendInputEx.Init();
+      KeybdEvent.Init();
+      MouseEvent.Init();
 
       KeyboardManager.Active.Init();
+      MouseManager.Active.Init();
+
+
 
       if (false == MxSharp.Instance.Attach(GlobalSettings.Instance.GetConfigString("app")))
       {

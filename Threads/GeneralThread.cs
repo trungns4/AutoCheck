@@ -38,15 +38,19 @@ namespace MXTools.Threads
     public void Stop()
     {
       _isRunning = false;
-      Thread.Sleep(100);
-      if (_thread != null && _thread.IsAlive)
+
+      if (_thread != null)
       {
-        _thread.Join();
+        if (!_thread.Join(500)) // Timeout after 500ms
+        {
+          _log.Warn("Thread did not terminate in time.");
+        }
         _thread = null;
       }
 
-      _log.DebugFormat("General Thread stopped");
+      _log.Debug("General Thread stopped");
     }
+
 
     public void Run()
     {
@@ -65,6 +69,9 @@ namespace MXTools.Threads
         if (GlobalFlags.IsTargetWindowActive == false)
         {
           ForegroundWindowCheck.Instance.ForceForegroundCheck();
+
+          GlobalFlags.IsTargetWindowActive =
+            (ForegroundWindowCheck.Instance.GetCurrentProcessId() == MxSharp.Instance.PID());
         }
 
         Thread.Sleep(_delay);

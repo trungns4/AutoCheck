@@ -1,11 +1,13 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace MXTools.Input
 {
-  public class Keyboard
+  public class KeybdEvent
   {
     private delegate void KeybdEventDelegate(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
     private static KeybdEventDelegate _originalKeybdEvent;
+    private static bool _isInitialized = false;
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern nint GetModuleHandle(string lpModuleName);
@@ -15,15 +17,18 @@ namespace MXTools.Input
 
     public static void Init()
     {
-      // Get the original keybd_event function address
+      if (_isInitialized) return;  // Prevent duplicate initialization
+
       nint hUser32 = GetModuleHandle("user32.dll");
       nint funcAddr = GetProcAddress(hUser32, "keybd_event");
 
       if (funcAddr != nint.Zero)
       {
         _originalKeybdEvent = Marshal.GetDelegateForFunctionPointer<KeybdEventDelegate>(funcAddr);
+        _isInitialized = true;  // Mark as initialized
       }
     }
+
 
     public static void KeyDown(byte key)
     {

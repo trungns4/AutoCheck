@@ -2,9 +2,9 @@
 {
   using System.Runtime.InteropServices;
 
-  public static class IbInputSimulator
+  public static class DriverInputSimulator
   {
-    private const string DllName = "IbInputSimulator.dll";
+    private const string DllName = "InputSimulator.dll";
 
     // Error Enum
     public enum Error : uint

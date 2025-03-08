@@ -33,7 +33,7 @@ namespace MXTools.Threads
       if (_up == false)
       {
         _up = true;
-        InputSender.RightButtonUp();
+        MouseManager.Active.RightButtonUp();
       }
     }
     //---------------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ namespace MXTools.Threads
           var rect = ForegroundWindowCheck.Instance.GetCurrentRectangle();
           if (rect.Contains(x, y))
           {
-            InputSender.RightButtonDown();
+            MouseManager.Active.RightButtonDown();
             _up = false;
             Thread.Sleep(settings.ClickDelay);
           }
@@ -93,7 +93,7 @@ namespace MXTools.Threads
         _thread = null;
       }
 
-      InputSender.RightButtonUp();
+      MouseManager.Active.RightButtonUp();
       _log.DebugFormat("Mouse Click Thread stopped");
     }
 

@@ -1,11 +1,13 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace MXTools.Input
 {
-  public class InputSender
+  public class SendInputEx
   {
     private delegate uint SendInputDelegate(uint nInputs, nint pInputs, int cbSize);
     private static SendInputDelegate _originalSendInput;
+    private static bool _isInitialized = false;
 
     [StructLayout(LayoutKind.Sequential)]
     private struct INPUT
@@ -59,13 +61,15 @@ namespace MXTools.Input
 
     public static void Init()
     {
-      // Get the original SendInput function address
+      if (_isInitialized) return;  // Prevent duplicate initialization
+
       nint hUser32 = GetModuleHandle("user32.dll");
       nint funcAddr = GetProcAddress(hUser32, "SendInput");
 
       if (funcAddr != nint.Zero)
       {
         _originalSendInput = Marshal.GetDelegateForFunctionPointer<SendInputDelegate>(funcAddr);
+        _isInitialized = true;  // Mark as initialized
       }
     }
 
@@ -81,12 +85,7 @@ namespace MXTools.Input
       inputs[0].u.ki.time = 0;
       inputs[0].u.ki.dwExtraInfo = nint.Zero;
 
-      nint pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
-      Marshal.StructureToPtr(inputs[0], pInputs, false);
-
-      _originalSendInput((uint)inputs.Length, pInputs, Marshal.SizeOf(typeof(INPUT)));
-
-      Marshal.FreeHGlobal(pInputs);
+      SendInputWrapper(inputs);
     }
 
     public static void RightButtonDown()
@@ -95,19 +94,9 @@ namespace MXTools.Input
 
       INPUT[] inputs = new INPUT[1];
       inputs[0].type = 0; // Mouse input
-      inputs[0].u.mi.dx = 0;
-      inputs[0].u.mi.dy = 0;
-      inputs[0].u.mi.mouseData = 0;
       inputs[0].u.mi.dwFlags = 0x0008; // MOUSEEVENTF_RIGHTDOWN
-      inputs[0].u.mi.time = 0;
-      inputs[0].u.mi.dwExtraInfo = nint.Zero;
 
-      nint pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
-      Marshal.StructureToPtr(inputs[0], pInputs, false);
-
-      _originalSendInput((uint)inputs.Length, pInputs, Marshal.SizeOf(typeof(INPUT)));
-
-      Marshal.FreeHGlobal(pInputs);
+      SendInputWrapper(inputs);
     }
 
     public static void RightButtonUp()
@@ -116,19 +105,23 @@ namespace MXTools.Input
 
       INPUT[] inputs = new INPUT[1];
       inputs[0].type = 0; // Mouse input
-      inputs[0].u.mi.dx = 0;
-      inputs[0].u.mi.dy = 0;
-      inputs[0].u.mi.mouseData = 0;
       inputs[0].u.mi.dwFlags = 0x0010; // MOUSEEVENTF_RIGHTUP
-      inputs[0].u.mi.time = 0;
-      inputs[0].u.mi.dwExtraInfo = nint.Zero;
 
+      SendInputWrapper(inputs);
+    }
+
+    private static void SendInputWrapper(INPUT[] inputs)
+    {
       nint pInputs = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(INPUT)) * inputs.Length);
-      Marshal.StructureToPtr(inputs[0], pInputs, false);
-
-      _originalSendInput((uint)inputs.Length, pInputs, Marshal.SizeOf(typeof(INPUT)));
-
-      Marshal.FreeHGlobal(pInputs);
+      try
+      {
+        Marshal.StructureToPtr(inputs[0], pInputs, false);
+        _originalSendInput((uint)inputs.Length, pInputs, Marshal.SizeOf(typeof(INPUT)));
+      }
+      finally
+      {
+        Marshal.FreeHGlobal(pInputs);
+      }
     }
   }
 }
