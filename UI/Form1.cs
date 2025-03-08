@@ -33,9 +33,13 @@ namespace MXTools
     private ThreadSettings _settings = new();
     private bool _enableStart = true;
 
-    public Form1()
+    private LicenseInfo _lic = null;
+
+    public Form1(LicenseInfo lic)
     {
       InitializeComponent();
+
+      _lic = lic;
 
       SendInputEx.Init();
       KeybdEvent.Init();
@@ -59,6 +63,7 @@ namespace MXTools
       {
         _log.Warn($"App is running. Attached to {MxSharp.Instance.PID()}");
       }
+
     }
     //----------------------------------------------------------------------------------
     protected override void WndProc(ref Message m)
@@ -93,7 +98,11 @@ namespace MXTools
         Align();
         LoadData();
 
-        this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version} © by Alex";
+        this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version}"
+        + " "
+        + Resources.Author
+        + "-"
+        + string.Format(Resources.LicenseTitle, _lic?.ExpiredDate.ToString("dd.MM.yy"));
 
         ForegroundWindowCheck.Instance.Start();
 
@@ -506,7 +515,7 @@ namespace MXTools
         LoadAddress();
         _settings.LoadData();
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         _settings = new ThreadSettings();
         MessageBox.Show("Load data failed", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);

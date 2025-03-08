@@ -20,6 +20,7 @@
     <Compile Remove="Adapter\**" />
     <Compile Remove="Archives\**" />
     <Compile Remove="Archive\**" />
+    <Compile Remove="LicenseMaker\**" />
     <Compile Remove="Loader\**" />
     <Compile Remove="MxDriver\**" />
     <Compile Remove="MxToolsPlus\**" />
@@ -32,6 +33,7 @@
     <EmbeddedResource Remove="Adapter\**" />
     <EmbeddedResource Remove="Archives\**" />
     <EmbeddedResource Remove="Archive\**" />
+    <EmbeddedResource Remove="LicenseMaker\**" />
     <EmbeddedResource Remove="Loader\**" />
     <EmbeddedResource Remove="MxDriver\**" />
     <EmbeddedResource Remove="MxToolsPlus\**" />
@@ -44,6 +46,7 @@
     <None Remove="Adapter\**" />
     <None Remove="Archives\**" />
     <None Remove="Archive\**" />
+    <None Remove="LicenseMaker\**" />
     <None Remove="Loader\**" />
     <None Remove="MxDriver\**" />
     <None Remove="MxToolsPlus\**" />
@@ -76,8 +79,8 @@
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.WinForms" Version="2.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Vanara.PInvoke.Kernel32" Version="4.0.6" />
-    <PackageReference Include="Vanara.PInvoke.User32" Version="4.0.6" />
+    <PackageReference Include="Vanara.PInvoke.Kernel32" Version="4.1.1" />
+    <PackageReference Include="Vanara.PInvoke.User32" Version="4.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -97,6 +100,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Update="Res.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Res.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -110,6 +118,10 @@
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Res.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Res.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -131,6 +143,6 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;$(ProjectDir)PostBuild.bat&quot; &quot;$(ProjectDir)&quot; &quot;$(TargetDir)&quot; $(Configuration)" />
+    <Exec Command="&quot;$(ProjectDir)PostBuild.bat&quot; $(ProjectDir) $(TargetDir) $(Configuration)" />
   </Target>
 </Project>

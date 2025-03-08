@@ -5,3 +5,5 @@ set xcp=xcopy /y
 
 %xcp% "%1\Simulator\%3\*.*" "%2"
 %xcp% "%1\Sounds\*.*" "%2"
+
+"%1LicenseMaker\bin\Release\net9.0-windows\LicenseMaker.exe" "%2license.lic"

@@ -70,6 +70,15 @@ namespace MXTools.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to © by Alex.
+        /// </summary>
+        internal static string Author {
+            get {
+                return ResourceManager.GetString("Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap close_16 {
@@ -106,6 +115,42 @@ namespace MXTools.Properties {
             get {
                 object obj = ResourceManager.GetObject("hide_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to license.lic.
+        /// </summary>
+        internal static string License {
+            get {
+                return ResourceManager.GetString("License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License To: {0} ; Created: {1} ; Created By: {2} ; Expire: {3};.
+        /// </summary>
+        internal static string LicenseLog {
+            get {
+                return ResourceManager.GetString("LicenseLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License file does not exist or the license has expired.
+        /// </summary>
+        internal static string LicenseMsg {
+            get {
+                return ResourceManager.GetString("LicenseMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License expires on {0}.
+        /// </summary>
+        internal static string LicenseTitle {
+            get {
+                return ResourceManager.GetString("LicenseTitle", resourceCulture);
             }
         }
         
