@@ -41,10 +41,15 @@ namespace MXTools
       KeybdEvent.Init();
       MouseEvent.Init();
 
-      KeyboardManager.Active.Init();
-      MouseManager.Active.Init();
+      if (KeyboardManager.Active.Init() == false)
+      {
+        MessageBox.Show("Loading keyboard fails", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
 
-
+      if (MouseManager.Active.Init() == false)
+      {
+        MessageBox.Show("Loading mouse fails.", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
 
       if (false == MxSharp.Instance.Attach(GlobalSettings.Instance.GetConfigString("app")))
       {

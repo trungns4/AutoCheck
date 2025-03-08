@@ -10,7 +10,7 @@ namespace MXTools.Input
   {
     void RightButtonDown();
     void RightButtonUp();
-    public void Init();
+    public bool Init();
     public void Destroy();
   }
 }

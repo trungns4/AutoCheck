@@ -25,7 +25,7 @@ namespace MXTools.Input
         DriverInputSimulator.IbSendKeybdUp((ushort)key);
     }
 
-    public void Init()
+    public bool Init()
     {
       try
       {
@@ -33,15 +33,19 @@ namespace MXTools.Input
         {
           _error = false;
           _log.Info("Successfully loaded driver keyboard");
+          return true;
         }
         else
         {
           _log.Info("Fail to load driver keyboard");
+          return false;
         }
       }
       catch
       {
         _log.Info("Fail to load driver keyboard");
+        _error = true;
+        return false;
       }
     }
 

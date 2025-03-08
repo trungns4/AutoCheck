@@ -12,9 +12,8 @@ namespace MXTools.Input
     {
     }
 
-    public void Init()
-    {
-    }
+    public bool Init() => true;
+
 
     public void KeyDown(byte key) => SendInputEx.SendKey(key, true);
     public void KeyUp(byte key) => SendInputEx.SendKey(key, false);
@@ -26,9 +25,7 @@ namespace MXTools.Input
     {
     }
 
-    public void Init()
-    {
-    }
+    public bool Init() => true;
 
     public void KeyDown(byte key) => KeybdEvent.KeyDown(key);
     public void KeyUp(byte key) => KeybdEvent.KeyUp(key);

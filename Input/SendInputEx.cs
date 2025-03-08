@@ -61,7 +61,7 @@ namespace MXTools.Input
 
     public static void Init()
     {
-      if (_isInitialized) return;  // Prevent duplicate initialization
+      if (_isInitialized) return;
 
       nint hUser32 = GetModuleHandle("user32.dll");
       nint funcAddr = GetProcAddress(hUser32, "SendInput");
@@ -69,7 +69,7 @@ namespace MXTools.Input
       if (funcAddr != nint.Zero)
       {
         _originalSendInput = Marshal.GetDelegateForFunctionPointer<SendInputDelegate>(funcAddr);
-        _isInitialized = true;  // Mark as initialized
+        _isInitialized = true; 
       }
     }
 

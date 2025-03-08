@@ -12,7 +12,7 @@ namespace MXTools.Input
 
     public void KeyUp(byte key);
 
-    public void Init();
+    public bool Init();
 
     public void Destroy();
   }
