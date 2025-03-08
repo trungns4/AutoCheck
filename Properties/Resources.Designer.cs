@@ -61,6 +61,15 @@ namespace MXTools.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application started.
+        /// </summary>
+        internal static string AppStart {
+            get {
+                return ResourceManager.GetString("AppStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MXTools.
         /// </summary>
         internal static string AppTitle {
@@ -119,11 +128,30 @@ namespace MXTools.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap info_16 {
+            get {
+                object obj = ResourceManager.GetObject("info_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to license.lic.
         /// </summary>
         internal static string License {
             get {
                 return ResourceManager.GetString("License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License is invalid or expired.
+        /// </summary>
+        internal static string LicenseExpired {
+            get {
+                return ResourceManager.GetString("LicenseExpired", resourceCulture);
             }
         }
         
@@ -137,11 +165,11 @@ namespace MXTools.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License file does not exist or the license has expired.
+        ///   Looks up a localized string similar to License file not found.
         /// </summary>
-        internal static string LicenseMsg {
+        internal static string LicenseNotFound {
             get {
-                return ResourceManager.GetString("LicenseMsg", resourceCulture);
+                return ResourceManager.GetString("LicenseNotFound", resourceCulture);
             }
         }
         

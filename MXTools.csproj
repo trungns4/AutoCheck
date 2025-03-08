@@ -143,6 +143,6 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="&quot;$(ProjectDir)PostBuild.bat&quot; $(ProjectDir) $(TargetDir) $(Configuration)" />
+    <Exec Command="&quot;$(ProjectDir)PostBuild.bat&quot; &quot;$(ProjectDir)&quot; &quot;$(TargetDir)&quot; &quot;$(Configuration)&quot; &quot;$(Platform)&quot;" />
   </Target>
 </Project>

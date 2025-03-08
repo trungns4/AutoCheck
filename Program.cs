@@ -1,6 +1,7 @@
 ﻿using log4net;
 using log4net.Config;
 using MXTools.Helpers;
+using MXTools.License;
 using MXTools.Properties;
 using System;
 using System.Diagnostics;
@@ -38,38 +39,36 @@ namespace MXTools
           return;
         }
 
-        LicenseInfo li;
-        try
-        {
-          LicenseReader lr = new LicenseReader(Res.public_key);
-          li = lr.ReadLicense(Path.Combine(Path.GetDirectoryName(Environment.ProcessPath), Resources.License));
-        }
-        catch
-        {
-          li = null;
-        }
+
         // Initialize log4net from App.config
         XmlConfigurator.Configure();
 
         ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        log.Info("Application started");
+        log.Info(Resources.AppStart);
 
-        if (li == null || li.ExpiredDate < DateTime.Today)
+        long ticks = 0;
+        if (AppLicense.Instance.ReadLicense(ref ticks) == false)
         {
-          MessageBox.Show(Resources.LicenseMsg,
-             Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          MessageBox.Show(Resources.LicenseExpired,
+              Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-          log.Fatal(Resources.LicenseMsg);
+          log.Fatal(Resources.LicenseExpired);
           return;
         }
-        else
+
+        var date = new DateTime(ticks);
+        if (date < DateTime.Now)
         {
-          log.InfoFormat(Resources.LicenseLog, li.User, li.Created, li.CreatedBy, li.ExpiredDate);
+          MessageBox.Show(Resources.LicenseExpired,
+                Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+          log.Fatal(Resources.LicenseExpired);
+          return;
         }
 
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new Form1(li));
+        Application.Run(new Form1());
       }
       else
       {

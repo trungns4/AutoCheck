@@ -16,7 +16,7 @@ namespace MXTools
         User = _UserBox.Text,
         Created = DateTime.Now,
         CreatedBy = "MXTools",
-        ExpiredDate = _ExpireBox.Value
+        ExpireDate = _ExpireBox.Value
       };
 
       SaveFileDialog saveFileDialog = new SaveFileDialog

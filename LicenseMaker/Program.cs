@@ -37,12 +37,14 @@ namespace MXTools
         User = "dev",
         Created = DateTime.Now,
         CreatedBy = "MXTools",
-        ExpiredDate = DateTime.Now.AddDays(10)
+        ExpireDate = DateTime.Now.AddDays(10),
+        Note = "For development only. Contact hmh3ba@gmail.com for more information."
       };
 
 
       LicenseMaker maker = new LicenseMaker(Resources.private_key);
       maker.CreateLicense(lic, args[0]);
+      Console.WriteLine(@"Create license file {args[0]}");
     }
   }
 }

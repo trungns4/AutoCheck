@@ -54,6 +54,7 @@
       _ManaBar = new System.Windows.Forms.ProgressBar();
       _ToggleMXButton = new System.Windows.Forms.Button();
       _MinimizeButton = new System.Windows.Forms.Button();
+      _InfoButton = new System.Windows.Forms.Button();
       m_ContextMenu.SuspendLayout();
       SuspendLayout();
       // 
@@ -289,11 +290,22 @@
       _MinimizeButton.UseVisualStyleBackColor = true;
       _MinimizeButton.Click += OnMinimizeClicked;
       // 
+      // _InfoButton
+      // 
+      _InfoButton.Image = Properties.Resources.info_16;
+      _InfoButton.Location = new System.Drawing.Point(670, 8);
+      _InfoButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+      _InfoButton.Name = "_InfoButton";
+      _InfoButton.Size = new System.Drawing.Size(67, 31);
+      _InfoButton.TabIndex = 9;
+      _InfoButton.UseVisualStyleBackColor = true;
+      _InfoButton.Click += OnInfolicked;
+      // 
       // Form1
       // 
       AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
       AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      ClientSize = new System.Drawing.Size(669, 80);
+      ClientSize = new System.Drawing.Size(745, 80);
       Controls.Add(_ManaBar);
       Controls.Add(_HPBar);
       Controls.Add(m_KeyCount);
@@ -304,6 +316,7 @@
       Controls.Add(m_QChk);
       Controls.Add(_WarnTime);
       Controls.Add(m_AutoMouse);
+      Controls.Add(_InfoButton);
       Controls.Add(_MinimizeButton);
       Controls.Add(_ToggleMXButton);
       Controls.Add(_SettingsButton);
@@ -354,6 +367,7 @@
     private System.Windows.Forms.ProgressBar _ManaBar;
     private System.Windows.Forms.Button _ToggleMXButton;
     private System.Windows.Forms.Button _MinimizeButton;
+    private System.Windows.Forms.Button _InfoButton;
   }
 }
 

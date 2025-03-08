@@ -5,24 +5,23 @@ namespace MXTools
 {
   public class LicenseInfo
   {
-    [JsonProperty("user")]
     public string User { get; set; }
 
-    [JsonProperty("expiredDate")]
-    public DateTime ExpiredDate { get; set; }
+    public DateTime ExpireDate { get; set; }
 
-    [JsonProperty("created")]
     public DateTime Created { get; set; }
 
-    [JsonProperty("createdBy")]
     public string CreatedBy { get; set; }
+
+    public string Note { get; set; }
 
     public LicenseInfo()
     {
       User = "";
-      ExpiredDate = DateTime.MinValue;
+      ExpireDate = DateTime.MinValue;
       Created = DateTime.MinValue;
       CreatedBy = "";
+      Note = "";
     }
   }
 }

@@ -4,6 +4,7 @@ using MXTools.Helpers;
 using MXTools.Input;
 using MXTools.Properties;
 using MXTools.Threads;
+using MXTools.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,13 +34,9 @@ namespace MXTools
     private ThreadSettings _settings = new();
     private bool _enableStart = true;
 
-    private LicenseInfo _lic = null;
-
-    public Form1(LicenseInfo lic)
+    public Form1()
     {
       InitializeComponent();
-
-      _lic = lic;
 
       SendInputEx.Init();
       KeybdEvent.Init();
@@ -98,11 +95,7 @@ namespace MXTools
         Align();
         LoadData();
 
-        this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version}"
-        + " "
-        + Resources.Author
-        + "-"
-        + string.Format(Resources.LicenseTitle, _lic?.ExpiredDate.ToString("dd.MM.yy"));
+        this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version} {Resources.Author}";
 
         ForegroundWindowCheck.Instance.Start();
 
@@ -370,6 +363,7 @@ namespace MXTools
 
         m_StartMenu.Text = "Stop";
         _SettingsButton.Enabled = false;
+        _InfoButton.Enabled = false;
 
         Thread.Sleep(50);
         _enableStart = true;
@@ -392,6 +386,7 @@ namespace MXTools
 
       m_StartMenu.Text = "Start";
       _SettingsButton.Enabled = true;
+      _InfoButton.Enabled = true;
 
       return true;
     }
@@ -615,6 +610,14 @@ namespace MXTools
     private void UpdateToogleButton(IntPtr handle)
     {
       _ToggleMXButton.Image = WindowManipulate.IsShowing(handle) ? Resources.hide_16 : Resources.window_16;
+    }
+    //----------------------------------------------------------------------------------
+    private void OnInfolicked(object sender, EventArgs e)
+    {
+      _enableStart = false;
+      LicenseForm f = new LicenseForm();
+      f.ShowDialog();
+      _enableStart = true;
     }
   }
 }

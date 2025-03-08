@@ -49,6 +49,5 @@ namespace MXTools
       }
       return sb.ToString().TrimEnd(); // Remove trailing newline
     }
-
   }
 }
