@@ -51,88 +51,105 @@ namespace MXTools.Threads
     //---------------------------------------------------------------------------------------
     public bool Start(ulong curAddr, ulong maxAddr)
     {
-      _curAdr = curAddr;
-      _maxAdr = maxAddr;
-
-      if (_settings.WarnScale != 0)
+      try
       {
-        _player.Volume = _settings.WarnVolume;
+        _curAdr = curAddr;
+        _maxAdr = maxAddr;
+
+        if (_settings.WarnScale != 0)
+        {
+          _player.Volume = _settings.WarnVolume;
+        }
+        else
+        {
+          _player.Volume = 0;
+        }
+
+        _curVal = 0;
+        _maxVal = 0;
+
+        _isRunning = true;
+        _thread = new Thread(RunMemoryCheck)
+        {
+          IsBackground = true
+        };
+        _thread.Start();
+
+        _keyThread = new Thread(RunKeyCheck)
+        {
+          IsBackground = true
+        };
+        _keyThread.Start();
+
+        _warnThread = new Thread(RunWarnCheck)
+        {
+          IsBackground = true
+        };
+        _warnThread.Start();
+
+        _log.Info("Monitoring thread started");
+
+        return true;
       }
-      else
+      catch (Exception ex)
       {
-        _player.Volume = 0;
+        _log.Fatal("Could not start the monitoring thread");
+        _log.Fatal($"Exception: {ex.Message}");
+        return false;
       }
-
-      _curVal = 0;
-      _maxVal = 0;
-
-      _isRunning = true;
-      _thread = new Thread(RunMemoryCheck)
-      {
-        IsBackground = true
-      };
-      _thread.Start();
-
-      _keyThread = new Thread(RunKeyCheck)
-      {
-        IsBackground = true
-      };
-      _keyThread.Start();
-
-      _warnThread = new Thread(RunWarnCheck)
-      {
-        IsBackground = true
-      };
-      _warnThread.Start();
-
-      _log.Info("Monitoring Thread started");
-
-      _log.InfoFormat($"Key: {_key}");
-      _log.InfoFormat($"Key Up Delay: {_settings.KeyUpDelay}");
-      _log.InfoFormat($"Key Down Delay: {_settings.KeyDownDelay}");
-      _log.InfoFormat($"Key Thread Delay: {_settings.KeyThreadDelay}");
-      _log.InfoFormat($"Mem Thread Delay: {_settings.MemThreadDelay}");
-      _log.InfoFormat($"Warn Thread Delay: {_settings.WarnThreadDelay}");
-
-      _log.InfoFormat($"Scale: {_settings.Scale}");
-      _log.InfoFormat($"Warn Scale: {_settings.WarnScale}");
-      _log.InfoFormat($"Warn Volume: {_settings.WarnVolume:0.00}");
-
-      return true;
     }
     //---------------------------------------------------------------------------------------
     public bool Stop()
     {
-      _isRunning = false;
-
-      if (_thread != null && _thread.IsAlive)
+      try
       {
-        _thread.Join(500);
-        _thread = null;
+        _isRunning = false;
+
+        if (_thread != null && _thread.IsAlive)
+        {
+          if (_thread.Join(GlobalSettings.Instance.ThreadJoinWaitingTime) == false)
+          {
+            _log.Warn("Memory thread did not terminate in time.");
+          }
+          _thread = null;
+        }
+
+        //to stop the key thread
+        _keyFlag.Set();
+
+
+        if (_keyThread != null && _keyThread.IsAlive)
+        {
+          if (_keyThread.Join(GlobalSettings.Instance.ThreadJoinWaitingTime) == false)
+          {
+            _log.Warn("Key thread did not terminate in time.");
+          }
+
+          _keyThread = null;
+        }
+
+
+        if (_warnThread != null && _warnThread.IsAlive)
+        {
+          if (_warnThread.Join(GlobalSettings.Instance.ThreadJoinWaitingTime) == false)
+          {
+            _log.Warn("Warning thread did not terminate in time.");
+          }
+          _warnThread = null;
+        }
+
+        _player.Stop();
+
+        _log.Info($"Thread {_key} stopped");
+
+        return true;
       }
-
-      //to stop the key thread
-      _keyFlag.Set();
-
-
-      if (_keyThread != null && _keyThread.IsAlive)
+      catch (Exception ex)
       {
-        _keyThread.Join(500);
-        _keyThread = null;
+        _log.Fatal("Could not stop the monitoring thread");
+        _log.Fatal($"Exception: {ex.Message}");
+        return false;
       }
-
-
-      if (_warnThread != null && _warnThread.IsAlive)
-      {
-        _warnThread.Join();
-        _warnThread = null;
-      }
-
-      _player.Stop();
-
-      _log.Info($"Thread {_key} stopped");
-
-      return true;
     }
     //---------------------------------------------------------------------------------------
     public bool IsRunning()
@@ -142,13 +159,21 @@ namespace MXTools.Threads
     //---------------------------------------------------------------------------------------
     private void PlayAlarm(bool play)
     {
-      if (play)
+      try
       {
-        Task.Run(() => _player.Play(TimeSpan.FromSeconds(10000)));
+        if (play)
+        {
+          Task.Run(() => _player.Play(TimeSpan.FromSeconds(10000)));
+        }
+        else
+        {
+          _player.Stop();
+        }
       }
-      else
+      catch (Exception ex)
       {
-        _player.Stop();
+        _log.Fatal("Could play alarm");
+        _log.Fatal($"Exception: {ex.Message}");
       }
     }
     //---------------------------------------------------------------------------------------
@@ -200,11 +225,13 @@ namespace MXTools.Threads
             }
           }
         }
-        catch
+        catch (Exception ex)
         {
           _curVal = 0;
           _maxVal = 0;
           DisplayValues(0, 0);
+          _log.Fatal("An error occured in the monitoring thread");
+          _log.Fatal($"Exception: {ex.Message}");
         }
         finally
         {
@@ -217,26 +244,34 @@ namespace MXTools.Threads
     {
       while (_isRunning)
       {
-        _keyFlag.WaitOne();
-        bool delay = true;
-
-        while (_settings.Auto == true
-              && _settings.AutoKey == true
-              && _isRunning == true
-              && _full == false
-              && GlobalFlags.IsTargetWindowActive == true)
+        try
         {
-          KeyboardManager.Active.KeyDown((byte)_keyCode);
-          Thread.Sleep(_settings.KeyDownDelay);
+          _keyFlag.WaitOne();
+          bool delay = true;
 
-          KeyboardManager.Active.KeyUp((byte)_keyCode);
-          Thread.Sleep(_settings.KeyUpDelay);
+          while (_settings.Auto == true
+                && _settings.AutoKey == true
+                && _isRunning == true
+                && _full == false
+                && GlobalFlags.IsTargetWindowActive == true)
+          {
+            KeyboardManager.Active.KeyDown((byte)_keyCode);
+            Thread.Sleep(_settings.KeyDownDelay);
 
-          delay = false;
+            KeyboardManager.Active.KeyUp((byte)_keyCode);
+            Thread.Sleep(_settings.KeyUpDelay);
+
+            delay = false;
+          }
+          if (delay == true)
+          {
+            Thread.Sleep(_settings.KeyThreadDelay);
+          }
         }
-        if (delay == true)
+        catch (Exception ex)
         {
-          Thread.Sleep(_settings.KeyThreadDelay);
+          _log.Fatal("An error occurred in the monitoring thread");
+          _log.Fatal($"Exception: {ex.Message}");
         }
       }
     }
@@ -250,27 +285,39 @@ namespace MXTools.Threads
           CheckWarning();
           DisplayValues(_curVal, _maxVal);
         }
-        finally
+        catch (Exception ex)
         {
-          Thread.Sleep(_settings.WarnThreadDelay);
+          _log.Fatal("An error occurred in the monitoring thread");
+          _log.Fatal($"Exception: {ex.Message}");
         }
+
+        Thread.Sleep(_settings.WarnThreadDelay);
       }
     }
     //---------------------------------------------------------------------------------------
     private void DisplayValues(int current, int max)
     {
-      if (_display != null)
+      try
       {
-        if (current < 0)
+        if (_display != null)
         {
-          current = 0;
+          if (current < 0)
+          {
+            current = 0;
+          }
+
+          if (max < 0)
+          {
+            max = 0;
+          }
+          Task.Run(() => _display(current, max));
         }
 
-        if (max < 0)
-        {
-          max = 0;
-        }
-        Task.Run(() => _display(current, max));
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal("An error occurred in the monitoring thread");
+        _log.Fatal($"Exception: {ex.Message}");
       }
     }
   }

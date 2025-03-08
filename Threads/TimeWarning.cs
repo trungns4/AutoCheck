@@ -20,72 +20,102 @@ namespace MXTools.Threads
 
     public TimeWarning(TimeWarningSettings setting)
     {
-      _settings = setting;
+      try
+      {
+        _settings = setting ?? throw new ArgumentNullException(nameof(setting), "TimeWarningSettings cannot be null.");
 
-      _timer = new Timer();
-      _timer.Elapsed += OnTimerElapsed;
-      _timer.AutoReset = true;
-      _timer.Interval = _settings.TimerInterval;
+        _timer = new Timer
+        {
+          AutoReset = true,
+          Interval = _settings.TimerInterval
+        };
+        _timer.Elapsed += OnTimerElapsed;
 
-      _time = DateTime.MinValue;
-      _player = new SoundPlayer("warning.mp3", _settings.Volume);
+        _time = DateTime.MinValue;
+        _player = new SoundPlayer("warning.mp3", _settings.Volume);
+
+        _log.Info("TimeWarning initialized successfully.");
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"Failed to initialize TimeWarning: {ex.Message}");
+        throw;
+      }
     }
-    //------------------------------------------------------------------------------
+
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)
     {
-      if (_time == DateTime.MinValue || _settings.Auto == false)
+      try
       {
-        return;
-      }
-
-      var elapsed = (DateTime.Now - _time).TotalMinutes;
-      var remain = _settings.Interval - elapsed;
-
-      if (remain >= 0 && _update != null)
-      {
-        _update((int)(remain * 60));
-      }
-
-      if (_settings.Dismiss.Any(x => Win32.IsKeyHolding(x)))
-      {
-        _time = DateTime.Now;
-        if (_player.IsPlaying())
+        if (_time == DateTime.MinValue || !_settings.Auto)
         {
-          _player.Stop();
+          return;
         }
-        return;
-      }
 
-      if (remain <= 0)
+        var elapsed = (DateTime.Now - _time).TotalMinutes;
+        var remain = _settings.Interval - elapsed;
+
+        _update?.Invoke((int)(remain * 60));
+
+        if (_settings.Dismiss.Any(x => Win32.IsKeyHolding(x)))
+        {
+          _time = DateTime.Now;
+          if (_player.IsPlaying())
+          {
+            _player.Stop();
+          }
+          return;
+        }
+
+        if (remain <= 0)
+        {
+          _time = DateTime.Now;
+          Task.Run(() => _player.Play(TimeSpan.FromSeconds(_settings.Duration)));
+        }
+      }
+      catch (Exception ex)
       {
-        _time = DateTime.Now;
-        Task.Run(() => _player.Play(TimeSpan.FromSeconds(_settings.Duration)));
+        _log.Error($"Error in OnTimerElapsed: {ex.Message}");
       }
     }
-    //------------------------------------------------------------------------------
+
     public void Start()
     {
-      _time = DateTime.Now;
-      _timer.Start();
-      _log.InfoFormat("Warning Timer Started");
+      try
+      {
+        _time = DateTime.Now;
+        _timer.Start();
+        _log.Info("Warning Timer Started.");
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"Failed to start TimeWarning: {ex.Message}");
+      }
     }
-    //------------------------------------------------------------------------------
+
     public void Stop()
     {
-      _timer.Stop();
-      _player.Stop();
-      _log.InfoFormat("Warning Timer Stopped");
+      try
+      {
+        _timer.Stop();
+        _player.Stop();
+        _log.Info("Warning Timer Stopped.");
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"Failed to stop TimeWarning: {ex.Message}");
+      }
     }
-    //------------------------------------------------------------------------------
+
     public bool IsRunning()
     {
       return _timer.Enabled;
     }
-    //------------------------------------------------------------------------------
+
     public Action<int> Update
     {
-      get { return _update; }
-      set { _update = value; }
+      get => _update;
+      set => _update = value;
     }
   }
 }

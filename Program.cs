@@ -41,7 +41,7 @@ namespace MXTools
         XmlConfigurator.Configure();
 
         ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        log.Debug("Application started");
+        log.Info("Application started");
 
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);

@@ -1,6 +1,7 @@
 ﻿using log4net;
 using MXTools.Helpers;
 using MXTools.Input;
+using System;
 using System.Reflection;
 using System.Threading;
 
@@ -16,24 +17,39 @@ namespace MXTools.Threads
     //---------------------------------------------------------------------------------------
     public bool Start()
     {
-      _isRunning = true;
-      _thread = new Thread(Run)
+      try
       {
-        IsBackground = true,
-        Priority = ThreadPriority.Normal
-      };
-      _thread.Start();
+        _isRunning = true;
+        _thread = new Thread(Run)
+        {
+          IsBackground = true,
+          Priority = ThreadPriority.Normal
+        };
+        _thread.Start();
 
-      _log.Info("Mouse click thread started");
-      return true;
+        _log.Info("Mouse click thread started");
+        return true;
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while starting the AutoMouseThread: {ex.Message}");
+        return false;
+      }
     }
     //---------------------------------------------------------------------------------------
     private void CheckToFireUp()
     {
-      if (_up == false)
+      try
       {
-        _up = true;
-        MouseManager.Active.RightButtonUp();
+        if (_up == false)
+        {
+          _up = true;
+          MouseManager.Active.RightButtonUp();
+        }
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in CheckToFireUp: {ex.Message}");
       }
     }
     //---------------------------------------------------------------------------------------
@@ -41,66 +57,88 @@ namespace MXTools.Threads
     {
       while (_isRunning)
       {
-        if (settings.Auto == false)
+        try
         {
-          Thread.Sleep(settings.ThreadDelay);
-          continue;
-        }
-
-        if (GlobalFlags.IsTargetWindowActive == false)
-        {
-          CheckToFireUp();
-          Thread.Sleep(settings.ThreadDelay);
-          continue;
-        }
-
-        if (Win32.IsAltHolding())
-        {
-          CheckToFireUp();
-          Thread.Sleep(settings.ThreadDelay);
-          continue;
-        }
-        else
-        {
-          Win32.GetMousePos(out int x, out int y);
-          var rect = ForegroundWindowCheck.Instance.GetCurrentRectangle();
-          if (rect.Contains(x, y))
+          if (settings.Auto == false)
           {
-            MouseManager.Active.RightButtonDown();
-            _up = false;
-            Thread.Sleep(settings.ClickDelay);
+            Thread.Sleep(settings.ThreadDelay);
+            continue;
           }
-          else
+
+          if (GlobalFlags.IsTargetWindowActive == false)
           {
             CheckToFireUp();
             Thread.Sleep(settings.ThreadDelay);
+            continue;
           }
-        }
 
-        Thread.Sleep(settings.ThreadDelay);
+          if (Win32.IsAltHolding())
+          {
+            CheckToFireUp();
+            Thread.Sleep(settings.ThreadDelay);
+            continue;
+          }
+          else
+          {
+            Win32.GetMousePos(out int x, out int y);
+            var rect = ForegroundWindowCheck.Instance.GetCurrentRectangle();
+            if (rect.Contains(x, y))
+            {
+              MouseManager.Active.RightButtonDown();
+              _up = false;
+              Thread.Sleep(settings.ClickDelay);
+            }
+            else
+            {
+              CheckToFireUp();
+              Thread.Sleep(settings.ThreadDelay);
+            }
+          }
+
+          Thread.Sleep(settings.ThreadDelay);
+        }
+        catch (Exception ex)
+        {
+          _log.Fatal($"An error occurred in the Run method: {ex.Message}");
+        }
       }
     }
     //---------------------------------------------------------------------------------------
     public void Stop()
     {
-      _isRunning = false;
-
-      Thread.Sleep(200);
-
-      if (_thread != null && _thread.IsAlive)
+      try
       {
-        _thread.Join();
-        _thread = null;
+        _isRunning = false;
+
+        if (_thread != null && _thread.IsAlive)
+        {
+          if (_thread.Join(GlobalSettings.Instance.ThreadJoinWaitingTime) == false)
+          {
+            _log.Warn("Mouse click thread did not terminate in time.");
+          }
+          _thread = null;
+        }
+
+        MouseManager.Active.RightButtonUp();
+        _log.Info("Mouse click thread stopped");
       }
-
-      MouseManager.Active.RightButtonUp();
-      _log.DebugFormat("Mouse Click Thread stopped");
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while stopping the AutoMouseThread: {ex.Message}");
+      }
     }
-
     //---------------------------------------------------------------------------------------
     public bool IsRunning()
     {
-      return _isRunning;
+      try
+      {
+        return _isRunning;
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in IsRunning: {ex.Message}");
+        return false;
+      }
     }
   }
 }

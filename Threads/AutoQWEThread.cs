@@ -10,7 +10,7 @@ namespace MXTools.Threads
 {
   internal class AutoQWEThread(QWEThreadSettings settings, Action<long> display)
   {
-    readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
     private Thread _qThread;
     private Thread _wThread;
@@ -24,128 +24,185 @@ namespace MXTools.Threads
     //---------------------------------------------------------------------------------------
     public bool IsRunning()
     {
-      return _isRunning;
+      try
+      {
+        return _isRunning;
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in IsRunning: {ex.Message}");
+        return false;
+      }
     }
     //---------------------------------------------------------------------------------------
-    public Action<long> Dislplay
+    public Action<long> Display
     {
       get
       {
-        return _display;
+        try
+        {
+          return _display;
+        }
+        catch (Exception ex)
+        {
+          _log.Fatal($"An error occurred in Display getter: {ex.Message}");
+          return _ => { };
+        }
       }
       set
       {
-        _display = value;
+        try
+        {
+          _display = value;
+        }
+        catch (Exception ex)
+        {
+          _log.Fatal($"An error occurred in Display setter: {ex.Message}");
+        }
       }
     }
     //---------------------------------------------------------------------------------------
     public bool Start()
     {
-      _isRunning = true;
-      _qThread = new Thread(() => Run('q'));
-      _qThread.IsBackground = true;
-      _qThread.Priority = ThreadPriority.Normal;
-      _count = 0;
-      _qThread.Start();
+      try
+      {
+        _isRunning = true;
+        _qThread = new Thread(() => Run('q')) { IsBackground = true, Priority = ThreadPriority.Normal };
+        _wThread = new Thread(() => Run('w')) { IsBackground = true, Priority = ThreadPriority.Normal };
+        _eThread = new Thread(() => Run('e')) { IsBackground = true, Priority = ThreadPriority.Normal };
 
-      _wThread = new Thread(() => Run('w'));
-      _wThread.IsBackground = true;
-      _wThread.Priority = ThreadPriority.Normal;
-      _wThread.Start();
+        _count = 0;
+        _qThread.Start();
+        _wThread.Start();
+        _eThread.Start();
 
-      _eThread = new Thread(() => Run('e'));
-      _eThread.IsBackground = true;
-      _eThread.Priority = ThreadPriority.Normal;
-      _eThread.Start();
+        _log.Info("Auto Key Threads started");
+        _log.Info($"Q: {_settings.Q} W: {_settings.W} E: {_settings.E}");
 
-      _log.InfoFormat("Auto Key Threads started");
-      _log.InfoFormat($"Q: {_settings.Q} W: {_settings.W} E: {_settings.E}");
-
-      return true;
+        return true;
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while starting AutoQWEThread: {ex.Message}");
+        return false;
+      }
     }
     //---------------------------------------------------------------------------------------
     public void Stop()
     {
-      _isRunning = false;
-      Thread.Sleep(100);
-      _count = 0;
-
-      if (_qThread != null && _qThread.IsAlive)
+      try
       {
-        _qThread.Join();
-        _qThread = null;
-      }
+        _isRunning = false;
+        Thread.Sleep(100);
+        _count = 0;
 
-      if (_wThread != null && _wThread.IsAlive)
+        StopThread(ref _qThread, "Q");
+        StopThread(ref _wThread, "W");
+        StopThread(ref _eThread, "E");
+
+        _log.Info("Auto Key Threads stopped");
+      }
+      catch (Exception ex)
       {
-        _wThread.Join();
-        _wThread = null;
+        _log.Fatal($"An error occurred while stopping AutoQWEThread: {ex.Message}");
       }
-
-      if (_eThread != null && _eThread.IsAlive)
+    }
+    //---------------------------------------------------------------------------------------
+    private void StopThread(ref Thread thread, string name)
+    {
+      try
       {
-        _eThread.Join();
-        _eThread = null;
+        if (thread != null && thread.IsAlive)
+        {
+          if (!thread.Join(GlobalSettings.Instance.ThreadJoinWaitingTime))
+          {
+            _log.Warn($"{name} thread did not terminate in time.");
+          }
+          thread = null;
+        }
       }
-
-      _log.DebugFormat("Auto Key Threads stopped");
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while stopping {name} thread: {ex.Message}");
+      }
     }
     //---------------------------------------------------------------------------------------
     private void DisplayCountNumber()
     {
-      if (_display != null)
+      try
       {
-        Task.Run(() =>
-        {
-          _display(_count);
-        });
+        _display?.Invoke(_count);
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in DisplayCountNumber: {ex.Message}");
       }
     }
     //---------------------------------------------------------------------------------------
     private void UpdateUIAndSleep(int sleep)
     {
-      Interlocked.Increment(ref _count);
-      DisplayCountNumber();
-      Thread.Sleep(sleep);
+      try
+      {
+        Interlocked.Increment(ref _count);
+        DisplayCountNumber();
+        Thread.Sleep(sleep);
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in UpdateUIAndSleep: {ex.Message}");
+      }
     }
     //---------------------------------------------------------------------------------------
-    public void Run(char key)
+    private void Run(char key)
     {
-      while (_isRunning)
+      try
       {
-        if (GlobalFlags.IsTargetWindowActive == false)
+        while (_isRunning)
         {
-          Thread.Sleep(Math.Min(_settings.ThreadDelayQ, Math.Min(_settings.ThreadDelayW, _settings.ThreadDelayE)));
-          continue;
-        }
+          if (!GlobalFlags.IsTargetWindowActive)
+          {
+            Thread.Sleep(Math.Min(_settings.ThreadDelayQ, Math.Min(_settings.ThreadDelayW, _settings.ThreadDelayE)));
+            continue;
+          }
 
-        if (key == 'q' && _settings.Q)
-        {
-          KeyboardManager.Active.KeyDown((byte)Keys.Q);
-          Thread.Sleep(_settings.KeyDownDelayQ);
-          KeyboardManager.Active.KeyUp((byte)Keys.Q);
-          UpdateUIAndSleep(_settings.KeyUpDelayQ);
-        }
-        else if (key == 'w' && _settings.W)
-        {
-          KeyboardManager.Active.KeyDown((byte)Keys.W);
-          Thread.Sleep(_settings.KeyDownDelayW);
-          KeyboardManager.Active.KeyUp((byte)Keys.W);
-          UpdateUIAndSleep(_settings.KeyUpDelayW);
-        }
-        else if (key == 'e' && _settings.E)
-        {
-          KeyboardManager.Active.KeyDown((byte)Keys.E);
-          Thread.Sleep(_settings.KeyDownDelayE);
-          KeyboardManager.Active.KeyUp((byte)Keys.E);
-          UpdateUIAndSleep(_settings.KeyUpDelayE);
-        }
+          switch (key)
+          {
+            case 'q' when _settings.Q:
+              PressKey(Keys.Q, _settings.KeyDownDelayQ, _settings.KeyUpDelayQ);
+              break;
+            case 'w' when _settings.W:
+              PressKey(Keys.W, _settings.KeyDownDelayW, _settings.KeyUpDelayW);
+              break;
+            case 'e' when _settings.E:
+              PressKey(Keys.E, _settings.KeyDownDelayE, _settings.KeyUpDelayE);
+              break;
+          }
 
-        if (_settings.Q == false && _settings.W == false && _settings.E == false)
-        {
-          DisplayCountNumber();
-          Thread.Sleep(Math.Min(_settings.ThreadDelayQ, Math.Min(_settings.ThreadDelayW, _settings.ThreadDelayE)));
+          if (!_settings.Q && !_settings.W && !_settings.E)
+          {
+            DisplayCountNumber();
+            Thread.Sleep(Math.Min(_settings.ThreadDelayQ, Math.Min(_settings.ThreadDelayW, _settings.ThreadDelayE)));
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in the Run method ({key}): {ex.Message}");
+      }
+    }
+    //---------------------------------------------------------------------------------------
+    private void PressKey(Keys key, int downDelay, int upDelay)
+    {
+      try
+      {
+        KeyboardManager.Active.KeyDown((byte)key);
+        Thread.Sleep(downDelay);
+        KeyboardManager.Active.KeyUp((byte)key);
+        UpdateUIAndSleep(upDelay);
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while pressing {key}: {ex.Message}");
       }
     }
   }

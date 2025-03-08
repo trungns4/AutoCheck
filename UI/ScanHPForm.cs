@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Microsoft.VisualBasic.Logging;
 using MXTools.Helpers;
 using MXTools.Properties;
 using Newtonsoft.Json;
@@ -15,6 +16,8 @@ namespace MXTools
 {
   public partial class ScanHPForm : Form
   {
+    private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
     private bool _scanning = false;
     public ScanHPForm()
     {
@@ -76,87 +79,122 @@ namespace MXTools
     //--------------------------------------------------------------------------------------------
     private void SaveData()
     {
-      string file = GetDataFile();
-      var data = new Dictionary<string, string>
+      try
       {
-        { "HP", _InputBox.Text },
-        { "OFFSET", m_OffsetBox.Value.ToString() }
-      };
+        string file = GetDataFile();
+        var data = new Dictionary<string, string>
+        {
+          { "HP", _InputBox.Text },
+          { "OFFSET", m_OffsetBox.Value.ToString() }
+        };
 
-      string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-      File.WriteAllText(file, json);
+        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        File.WriteAllText(file, json);
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when saving settings {ex.Message}");
+      }
     }
     //--------------------------------------------------------------------------------------------
     private void LoadData()
     {
-      var offset = 1;
-      _InputBox.Text = "";
-      string file = GetDataFile();
-      if (File.Exists(file) == true)
+      try
       {
-        string json = File.ReadAllText(file);
-        var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-        if (data.TryGetValue("HP", out string value))
+        var offset = 1;
+        _InputBox.Text = "";
+        string file = GetDataFile();
+        if (File.Exists(file) == true)
         {
-          _InputBox.Text = value;
-        }
-        if (data.ContainsKey("OFFSET"))
-        {
-          if (int.TryParse(data["OFFSET"], out int number))
+          string json = File.ReadAllText(file);
+          var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+          if (data.TryGetValue("HP", out string value))
           {
-            offset = Utils.Clamp<int>(number, 0, 99);
+            _InputBox.Text = value;
+          }
+          if (data.ContainsKey("OFFSET"))
+          {
+            if (int.TryParse(data["OFFSET"], out int number))
+            {
+              offset = Utils.Clamp<int>(number, 0, 99);
+            }
           }
         }
+        m_OffsetBox.Value = Utils.Clamp<decimal>(offset, 0, 99);
       }
-      m_OffsetBox.Value = Utils.Clamp<decimal>(offset, 0, 99);
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when loading data {ex.Message}");
+      }
     }
     //--------------------------------------------------------------------------------------------
     private void OnStart(double total)
     {
-      var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
-      foreach (var item in buttons)
+      try
       {
-        item.Enabled = false;
+        var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
+        foreach (var item in buttons)
+        {
+          item.Enabled = false;
+        }
+
+        _StopButton.Enabled = true;
+
+        _ProgBar.Visible = true;
+        _ProgBar.Minimum = 0;
+        _ProgBar.Maximum = (int)(total);
       }
-
-      _StopButton.Enabled = true;
-
-      _ProgBar.Visible = true;
-      _ProgBar.Minimum = 0;
-      _ProgBar.Maximum = (int)(total);
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when start scanning {ex.Message}");
+      }
     }
     //--------------------------------------------------------------------------------------------
     private void OnProgress(double progress)
     {
-      int val = Math.Min((int)progress, _ProgBar.Maximum);
-      if (val != _ProgBar.Value)
+      try
       {
-        _ProgBar.Value = val;
+        int val = Math.Min((int)progress, _ProgBar.Maximum);
+        if (val != _ProgBar.Value)
+        {
+          _ProgBar.Value = val;
+        }
+        _AdrBox.Text = $"{_ProgBar.Value}%";
       }
-      _AdrBox.Text = $"{_ProgBar.Value}%";
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when scanning {ex.Message}");
+      }
     }
     //--------------------------------------------------------------------------------------------
     private void OnDone(ulong adr, int ofs, EventHandler handler)
     {
-      if (adr > 0 & ofs >= 0)
+      try
       {
-        _AdrBox.Text = adr.ToString("X");
-        m_OffsetBox.Text = ofs.ToString();
-      }
-      else
-      {
-        _AdrBox.Text = "Not found";
-      }
-      _ProgBar.Visible = false;
+        if (adr > 0 & ofs >= 0)
+        {
+          _AdrBox.Text = adr.ToString("X");
+          m_OffsetBox.Text = ofs.ToString();
+        }
+        else
+        {
+          _AdrBox.Text = "Not found";
+        }
+        _ProgBar.Visible = false;
 
-      var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
-      foreach (var item in buttons)
-      {
-        item.Enabled = true;
+        var buttons = new Button[] { _OKButton, _CancelButton, _ScanButton };
+        foreach (var item in buttons)
+        {
+          item.Enabled = true;
+        }
+        _StopButton.Enabled = false;
+        _StopButton.Click -= handler;
+        _scanning = false;
       }
-      _StopButton.Enabled = false;
-      _StopButton.Click -= handler;
-      _scanning = false;
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when scanning {ex.Message}");
+      }
     }
     //--------------------------------------------------------------------------------------------
     private void Scan()
@@ -213,8 +251,9 @@ namespace MXTools
           cts.Token);
         });
       }
-      finally
+      catch(Exception ex)
       {
+        _log.Fatal($"An error occurred when scanning memory {ex.Message}");
       }
     }
     //--------------------------------------------------------------------------------------------

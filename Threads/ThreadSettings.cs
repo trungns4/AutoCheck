@@ -35,8 +35,8 @@ namespace MXTools.Threads
 
     public QWMemThreadSettings()
     {
-      Auto = true;
-      AutoKey = true;
+      Auto = false;
+      AutoKey = false;
       KeyUpDelay = 32;
       KeyDownDelay = 32;
       KeyThreadDelay = 32;
@@ -66,8 +66,8 @@ namespace MXTools.Threads
     public QWEThreadSettings()
     {
       Q = true;
-      W = false;
-      E = false;
+      W = true;
+      E = true;
 
       KeyUpDelayQ = 32;
       KeyDownDelayQ = 32;
@@ -94,7 +94,7 @@ namespace MXTools.Threads
 
     public TimeWarningSettings()
     {
-      Auto = true;
+      Auto = false;
 
       //in minutes
       Interval = 3.0f;

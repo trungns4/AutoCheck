@@ -1,12 +1,8 @@
 ﻿using log4net;
 using MXTools.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace MXTools.Threads
 {
@@ -23,57 +19,76 @@ namespace MXTools.Threads
 
     public bool Start()
     {
-      _isRunning = true;
-      _thread = new Thread(Run)
+      try
       {
-        IsBackground = true,
-        Priority = ThreadPriority.Normal
-      };
-      _thread.Start();
+        _isRunning = true;
+        _thread = new Thread(Run)
+        {
+          IsBackground = true,
+          Priority = ThreadPriority.Normal
+        };
+        _thread.Start();
 
-      _log.Info("General thread started");
-      return true;
+        _log.Info("General thread started");
+        return true;
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while starting GeneralThread: {ex.Message}");
+        return false;
+      }
     }
 
     public void Stop()
     {
-      _isRunning = false;
-
-      if (_thread != null)
+      try
       {
-        if (!_thread.Join(500)) // Timeout after 500ms
-        {
-          _log.Warn("Thread did not terminate in time.");
-        }
-        _thread = null;
-      }
+        _isRunning = false;
 
-      _log.Debug("General Thread stopped");
+        if (_thread != null)
+        {
+          if (!_thread.Join(GlobalSettings.Instance.ThreadJoinWaitingTime))
+          {
+            _log.Warn("General thread did not terminate in time.");
+          }
+          _thread = null;
+        }
+
+        _log.Info("General thread stopped");
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while stopping GeneralThread: {ex.Message}");
+      }
     }
 
-
-    public void Run()
+    private void Run()
     {
       while (_isRunning)
       {
-        if (MxSharp.Instance.EnsureAttached() == false)
+        try
         {
-          _log.Info("App is not running");
-          Thread.Sleep(_delay);
-          continue;
-        }
-
-        GlobalFlags.IsTargetWindowActive =
-          (ForegroundWindowCheck.Instance.GetCurrentProcessId() == MxSharp.Instance.PID());
-
-        if (GlobalFlags.IsTargetWindowActive == false)
-        {
-          ForegroundWindowCheck.Instance.ForceForegroundCheck();
+          if (!MxSharp.Instance.EnsureAttached())
+          {
+            _log.Info("App is not running");
+            Thread.Sleep(_delay);
+            continue;
+          }
 
           GlobalFlags.IsTargetWindowActive =
-            (ForegroundWindowCheck.Instance.GetCurrentProcessId() == MxSharp.Instance.PID());
-        }
+              (ForegroundWindowCheck.Instance.GetCurrentProcessId() == MxSharp.Instance.PID());
 
+          if (!GlobalFlags.IsTargetWindowActive)
+          {
+            ForegroundWindowCheck.Instance.ForceForegroundCheck();
+            GlobalFlags.IsTargetWindowActive =
+                (ForegroundWindowCheck.Instance.GetCurrentProcessId() == MxSharp.Instance.PID());
+          }
+        }
+        catch (Exception ex)
+        {
+          _log.Fatal($"An error occurred in GeneralThread Run method: {ex.Message}");
+        }
         Thread.Sleep(_delay);
       }
     }

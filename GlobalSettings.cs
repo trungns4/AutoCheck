@@ -10,6 +10,10 @@ public sealed class GlobalSettings
 
   private readonly Dictionary<string, string> _settingsCache;
 
+  private readonly int _threadJoinWaitingTime;
+
+  public int ThreadJoinWaitingTime => _threadJoinWaitingTime;
+
   private GlobalSettings()
   {
     _settingsCache = new Dictionary<string, string>();
@@ -18,10 +22,19 @@ public sealed class GlobalSettings
     {
       _settingsCache[key.ToUpper().Trim()] = ConfigurationManager.AppSettings[key];
     }
+
+    _threadJoinWaitingTime = GetConfigInt("thread-join", 500);
   }
 
   public string GetConfigString(string name, string def = "")
   {
     return _settingsCache.TryGetValue(name.ToUpper().Trim(), out var value) ? value : def;
+  }
+
+  public int GetConfigInt(string name, int def = 0)
+  {
+    return _settingsCache.TryGetValue(name.ToUpper().Trim(), out var value) && int.TryParse(value, out var result)
+        ? result
+        : def;
   }
 }

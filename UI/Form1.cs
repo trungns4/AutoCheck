@@ -88,80 +88,94 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnFormLoad(object sender, EventArgs e)
     {
-      Align();
-      LoadData();
-
-      this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version} © by Alex";
-
-      ForegroundWindowCheck.Instance.Start();
-
-      _threadQ = new AutoKeyThread('q', _settings.Q, (cur, max) =>
+      try
       {
-        BeginInvoke(() =>
+        Align();
+        LoadData();
+
+        this.Text = $"{Resources.AppTitle} {this.GetType().Assembly.GetName().Version} © by Alex";
+
+        ForegroundWindowCheck.Instance.Start();
+
+        _threadQ = new AutoKeyThread('q', _settings.Q, (cur, max) =>
         {
-          if (max >= 0 && cur >= 0 && _HPBar.Maximum != max || _HPBar.Value != cur)
+          BeginInvoke(() =>
           {
-            _HPBar.Maximum = max;
-            _HPBar.Value = Math.Min(cur, max);
-          }
+            if (max >= 0 && cur >= 0 && _HPBar.Maximum != max || _HPBar.Value != cur)
+            {
+              _HPBar.Maximum = max;
+              _HPBar.Value = Math.Min(cur, max);
+            }
+          });
         });
-      });
-      _threadW = new AutoKeyThread('w', _settings.W, (cur, max) =>
-      {
-        BeginInvoke(() =>
+        _threadW = new AutoKeyThread('w', _settings.W, (cur, max) =>
         {
-          if (max >= 0 && cur >= 0 && _ManaBar.Maximum != max || _ManaBar.Value != cur)
+          BeginInvoke(() =>
           {
-            _ManaBar.Maximum = max;
-            _ManaBar.Value = Math.Min(cur, max);
-          }
+            if (max >= 0 && cur >= 0 && _ManaBar.Maximum != max || _ManaBar.Value != cur)
+            {
+              _ManaBar.Maximum = max;
+              _ManaBar.Value = Math.Min(cur, max);
+            }
+          });
         });
-      });
 
-      _qweThread = new AutoQWEThread(_settings.QWE, (count) =>
-      {
-        BeginInvoke(() => m_KeyCount.Text = count.ToString());
-      });
-
-      _mThread = new AutoMouseThread(_settings.M);
-      _timerWarning = new TimeWarning(_settings.T)
-      {
-        Update = (rmain) =>
+        _qweThread = new AutoQWEThread(_settings.QWE, (count) =>
         {
-          var ts = TimeSpan.FromSeconds(rmain);
-          BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
+          BeginInvoke(() => m_KeyCount.Text = count.ToString());
+        });
+
+        _mThread = new AutoMouseThread(_settings.M);
+        _timerWarning = new TimeWarning(_settings.T)
+        {
+          Update = (rmain) =>
+          {
+            var ts = TimeSpan.FromSeconds(rmain);
+            BeginInvoke(new Action(() => { _WarnTime.Text = $"{ts.Minutes:D1}:{ts.Seconds:D2}"; }));
+          }
+        };
+
+        _gnThread = new GeneralThread();
+
+        UpdateUIByData();
+
+        m_GlobalHook = Hook.GlobalEvents();
+        m_GlobalHook.KeyUp += OnKeyUp;
+        m_GlobalHook.KeyDown += OnKeyDown;
+        m_GlobalHook.MouseClick += OnMouseClick;
+
+        m_NotifyIcon.Visible = true;
+        m_ShowMenu.Visible = !this.Visible;
+        m_HideMenu.Visible = this.Visible;
+
+        m_CloseMenu.Click += OnCloseMenu_Click;
+        m_HideMenu.Click += OnHideMenu_Click;
+        m_ShowMenu.Click += OnShowMenu_Click;
+        m_StartMenu.Click += OnStartMenuClick;
+
+        if (MxSharp.Instance.EnsureAttached())
+        {
+          UpdateToogleButton(Win32.GetMainWindowHandle((int)MxSharp.Instance.PID()));
         }
-      };
-
-      _gnThread = new GeneralThread();
-
-      UpdateUIByData();
-
-      m_GlobalHook = Hook.GlobalEvents();
-      m_GlobalHook.KeyUp += OnKeyUp;
-      m_GlobalHook.KeyDown += OnKeyDown;
-      m_GlobalHook.MouseClick += OnMouseClick;
-
-      m_NotifyIcon.Visible = true;
-      m_ShowMenu.Visible = !this.Visible;
-      m_HideMenu.Visible = this.Visible;
-
-      m_CloseMenu.Click += OnCloseMenu_Click;
-      m_HideMenu.Click += OnHideMenu_Click;
-      m_ShowMenu.Click += OnShowMenu_Click;
-      m_StartMenu.Click += OnStartMenuClick;
-
-      if (MxSharp.Instance.EnsureAttached())
+      }
+      catch (Exception ex)
       {
-        UpdateToogleButton(Win32.GetMainWindowHandle((int)MxSharp.Instance.PID()));
+        _log.Fatal($"An error occurred when loading: {ex.Message}");
       }
     }
     //----------------------------------------------------------------------------------
     private void OnMouseClick(object sender, MouseEventArgs e)
     {
-      if (e.Button == MouseButtons.XButton1 || e.Button == MouseButtons.XButton2)
+      try
       {
-        ToggleStartStop();
+        if (e.Button == MouseButtons.XButton1 || e.Button == MouseButtons.XButton2)
+        {
+          ToggleStartStop();
+        }
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when handling X button click {ex.Message}");
       }
     }
     //----------------------------------------------------------------------------------
@@ -175,67 +189,81 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-      if (e.Control)
+      try
       {
-        switch (e.KeyCode)
+        if (e.Control)
         {
-          case System.Windows.Forms.Keys.D0:
-            ToggleStartStop();
-            break;
+          switch (e.KeyCode)
+          {
+            case System.Windows.Forms.Keys.D0:
+              ToggleStartStop();
+              break;
 
-          case System.Windows.Forms.Keys.A:
-            {
-              _settings.M.Auto = !_settings.M.Auto;
-              BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M.Auto));
-            }
-            break;
-
-          case System.Windows.Forms.Keys.Divide:
-          case System.Windows.Forms.Keys.Multiply:
-            {
-              if (MxSharp.Instance.EnsureAttached())
+            case System.Windows.Forms.Keys.A:
               {
-                var handle = Win32.GetMainWindowHandle((int)MxSharp.Instance.PID());
-                WindowManipulate.ShowWindow(handle);
-                UpdateToogleButton(handle);
+                _settings.M.Auto = !_settings.M.Auto;
+                BeginInvoke((System.Windows.Forms.MethodInvoker)(() => m_AutoMouse.Checked = _settings.M.Auto));
               }
-            }
-            break;
+              break;
 
-          case System.Windows.Forms.Keys.Oem3:
-            {
-              if (MxSharp.Instance.EnsureAttached())
+            case System.Windows.Forms.Keys.Divide:
+            case System.Windows.Forms.Keys.Multiply:
               {
-                var handle = Win32.GetMainWindowHandle((int)MxSharp.Instance.PID());
-                if (handle != nint.Zero)
+                if (MxSharp.Instance.EnsureAttached())
                 {
-                  WindowManipulate.HideWindow(handle);
+                  var handle = Win32.GetMainWindowHandle((int)MxSharp.Instance.PID());
+                  WindowManipulate.ShowWindow(handle);
                   UpdateToogleButton(handle);
                 }
               }
-            }
-            break;
+              break;
 
-          case System.Windows.Forms.Keys.Oemcomma:
-            {
-              ShowMe(false);
-            }
-            break;
+            case System.Windows.Forms.Keys.Oem3:
+              {
+                if (MxSharp.Instance.EnsureAttached())
+                {
+                  var handle = Win32.GetMainWindowHandle((int)MxSharp.Instance.PID());
+                  if (handle != nint.Zero)
+                  {
+                    WindowManipulate.HideWindow(handle);
+                    UpdateToogleButton(handle);
+                  }
+                }
+              }
+              break;
 
-          case System.Windows.Forms.Keys.OemPeriod:
-            {
-              ShowMe(true);
-              Align();
-              Win32.SetForegroundWindow(Handle);
-            }
-            break;
+            case System.Windows.Forms.Keys.Oemcomma:
+              {
+                ShowMe(false);
+              }
+              break;
+
+            case System.Windows.Forms.Keys.OemPeriod:
+              {
+                ShowMe(true);
+                Align();
+                Win32.SetForegroundWindow(Handle);
+              }
+              break;
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when handling key down event: {ex.Message}");
       }
     }
     //----------------------------------------------------------------------------------
     private void OnStartMenuClick(object sender, EventArgs e)
     {
-      ToggleStartStop();
+      try
+      {
+        ToggleStartStop();
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when handling start menu click: {ex.Message}");
+      }
     }
     //----------------------------------------------------------------------------------
     private void OnShowMenu_Click(object sender, EventArgs e)
@@ -270,19 +298,26 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void OnFormClosed(object sender, FormClosedEventArgs e)
     {
-      m_GlobalHook.KeyUp -= OnKeyUp;
-      m_GlobalHook.KeyDown -= OnKeyDown;
-      m_GlobalHook.MouseClick -= OnMouseClick;
-      m_GlobalHook.Dispose();
+      try
+      {
+        m_GlobalHook.KeyUp -= OnKeyUp;
+        m_GlobalHook.KeyDown -= OnKeyDown;
+        m_GlobalHook.MouseClick -= OnMouseClick;
+        m_GlobalHook.Dispose();
 
-      SaveData();
-      Stop();
+        SaveData();
+        Stop();
 
-      m_NotifyIcon.Visible = false;
-      m_NotifyIcon.Dispose();
+        m_NotifyIcon.Visible = false;
+        m_NotifyIcon.Dispose();
 
-      ForegroundWindowCheck.Instance.Stop();
-      KeyboardManager.Active.Destroy();
+        ForegroundWindowCheck.Instance.Stop();
+        KeyboardManager.Active.Destroy();
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred after the main form closed {ex.Message}");
+      }
     }
     //----------------------------------------------------------------------------------
     private void OnScanClicked(object sender, EventArgs e)
@@ -309,28 +344,36 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private bool Start()
     {
-      _enableStart = false;
-      if (MxSharp.Instance.EnsureAttached() == false)
+      try
       {
-        MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        _enableStart = false;
+        if (MxSharp.Instance.EnsureAttached() == false)
+        {
+          MessageBox.Show("The process is not running", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+          _enableStart = true;
+          return false;
+        }
+
+        _log.Info($"Starting with PID {MxSharp.Instance.PID()}");
+
+        m_StartButton.Image = Resources.stop_16;
+        m_ScanButton.Enabled = false;
+
+        m_StartMenu.Text = "Stop";
+        _SettingsButton.Enabled = false;
+
+        Thread.Sleep(50);
         _enableStart = true;
+
+        Win32.CloseApps();
+        ForegroundWindowCheck.Instance.ForceForegroundCheck();
+        return true;
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when starting: {ex.Message}");
         return false;
       }
-
-      _log.Info($"Starting with PID {MxSharp.Instance.PID()}");
-
-      m_StartButton.Image = Resources.stop_16;
-      m_ScanButton.Enabled = false;
-
-      m_StartMenu.Text = "Stop";
-      _SettingsButton.Enabled = false;
-
-      Thread.Sleep(50);
-      _enableStart = true;
-
-      Win32.CloseApps();
-      ForegroundWindowCheck.Instance.ForceForegroundCheck();
-      return true;
     }
     //----------------------------------------------------------------------------------
     private bool Stop()
@@ -383,6 +426,10 @@ namespace MXTools
           }
         }
       }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when toggle start/stop: {ex.Message}");
+      }
       finally
       {
         _starting = false;
@@ -404,13 +451,20 @@ namespace MXTools
     //----------------------------------------------------------------------------------
     private void SaveAddress()
     {
-      string file = GetAddressFile();
-      var data = new Dictionary<string, ulong>
+      try
+      {
+        string file = GetAddressFile();
+        var data = new Dictionary<string, ulong>
       {
         { "addr", _addr }
       };
-      string json = JsonConvert.SerializeObject(data, Formatting.Indented);
-      File.WriteAllText(file, json);
+        string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+        File.WriteAllText(file, json);
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when saving address: {ex.Message}");
+      }
     }
     //----------------------------------------------------------------------------------
     private void LoadAddress()
@@ -425,16 +479,24 @@ namespace MXTools
           _addr = data["addr"];
         }
       }
-      catch
+      catch (Exception ex)
       {
         _addr = 0;
+        _log.Fatal($"An error occurred when loading data: {ex.Message}");
       }
     }
     //----------------------------------------------------------------------------------
     private void SaveData()
     {
-      _settings.SaveData();
-      SaveAddress();
+      try
+      {
+        _settings.SaveData();
+        SaveAddress();
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred when saving data: {ex.Message}");
+      }
     }
     //----------------------------------------------------------------------------------
     private void LoadData()
@@ -444,10 +506,11 @@ namespace MXTools
         LoadAddress();
         _settings.LoadData();
       }
-      catch
+      catch(Exception ex)
       {
         _settings = new ThreadSettings();
         MessageBox.Show("Load data failed", Resources.MsgBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        _log.Fatal($"An error occurred when loading data: {ex.Message}");
       }
     }
     //----------------------------------------------------------------------------------

@@ -1,12 +1,11 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Reflection;
-using System.Text;
 using Vanara.PInvoke;
 using static MXTools.Helpers.Win32;
 using static Vanara.PInvoke.User32;
 using static Vanara.PInvoke.Kernel32;
+using log4net;
 
 namespace MXTools.Threads
 {
@@ -28,84 +27,137 @@ namespace MXTools.Threads
 
     private ForegroundWindowCheck()
     {
-      _winEventDelegate = WinEventProc;
+      try
+      {
+        _winEventDelegate = WinEventProc;
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while initializing ForegroundWindowCheck: {ex.Message}");
+      }
     }
 
     public void Start()
     {
-      _hookHandle = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, HINSTANCE.NULL, _winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
-      _log.Info("Monitoring foreground window started");
+      try
+      {
+        _hookHandle = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, HINSTANCE.NULL, _winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+        _log.Info("Monitoring foreground window started");
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while starting ForegroundWindowCheck: {ex.Message}");
+      }
     }
 
     public void Stop()
     {
-      if (!_hookHandle.IsNull)
+      try
       {
-        UnhookWinEvent(_hookHandle);
-        _hookHandle = default;
+        if (!_hookHandle.IsNull)
+        {
+          UnhookWinEvent(_hookHandle);
+          _hookHandle = default;
+        }
+        _log.Info("Monitoring foreground window stopped");
       }
-      _log.Info("Monitoring foreground window stopped");
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred while stopping ForegroundWindowCheck: {ex.Message}");
+      }
     }
 
     public Rectangle GetCurrentRectangle()
     {
-      if (_currentRectangle.IsEmpty)
+      try
       {
-        HWND hwnd = GetForegroundWindow();
-        GetWindowRect(hwnd, out RECT rect);
-        _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        if (_currentRectangle.IsEmpty)
+        {
+          HWND hwnd = GetForegroundWindow();
+          if (!hwnd.IsNull && GetWindowRect(hwnd, out RECT rect))
+          {
+            _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+          }
+        }
+        return _currentRectangle;
       }
-      return _currentRectangle;
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in GetCurrentRectangle: {ex.Message}");
+        return Rectangle.Empty;
+      }
     }
 
     public uint GetCurrentProcessId()
     {
-      if (_currentProcessId == 0)
+      try
       {
-        return GetForegroundProcessId();
+        return _currentProcessId == 0 ? GetForegroundProcessId() : _currentProcessId;
       }
-      else
+      catch (Exception ex)
       {
-        return _currentProcessId;
+        _log.Fatal($"An error occurred in GetCurrentProcessId: {ex.Message}");
+        return 0;
       }
     }
 
     public static uint GetForegroundProcessId()
     {
-      HWND hwnd = GetForegroundWindow();
-      if (!hwnd.IsNull)
+      try
       {
-        _ = GetWindowThreadProcessId(hwnd, out uint processId);
-        return processId;
+        HWND hwnd = GetForegroundWindow();
+        if (!hwnd.IsNull)
+        {
+          _ = GetWindowThreadProcessId(hwnd, out uint processId);
+          return processId;
+        }
+        return 0;
       }
-      return 0;
+      catch (Exception ex)
+      {
+        LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType)
+            .Fatal($"An error occurred in GetForegroundProcessId: {ex.Message}");
+        return 0;
+      }
     }
 
     private void WinEventProc(HWINEVENTHOOK hWinEventHook, uint eventType, HWND hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
     {
-      if (eventType == EVENT_SYSTEM_FOREGROUND && hwnd != nint.Zero)
+      try
       {
-        if (GetWindowRect(hwnd, out var rect))
+        if (eventType == EVENT_SYSTEM_FOREGROUND && hwnd != nint.Zero)
         {
-          //var oldId = _currentProcessId;
-          _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-          _ = GetWindowThreadProcessId(hwnd, out _currentProcessId);
-          ForegroundWindowChanged?.Invoke((nint)hwnd, _currentRectangle);
-
-          //if (_currentProcessId != oldId)
-          //  _log.Info($"Foreground changed to {_currentProcessId}");
+          if (GetWindowRect(hwnd, out var rect))
+          {
+            _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+            _ = GetWindowThreadProcessId(hwnd, out _currentProcessId);
+            ForegroundWindowChanged?.Invoke((nint)hwnd, _currentRectangle);
+          }
         }
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in WinEventProc: {ex.Message}");
       }
     }
 
     public void ForceForegroundCheck()
     {
-      HWND hwnd = GetForegroundWindow();
-      if (hwnd.IsNull == false)
+      try
       {
-        _ = GetWindowThreadProcessId(hwnd, out _currentProcessId);
-        GetWindowRect(hwnd, out RECT rect);
-        _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        HWND hwnd = GetForegroundWindow();
+        if (!hwnd.IsNull)
+        {
+          _ = GetWindowThreadProcessId(hwnd, out _currentProcessId);
+          if (GetWindowRect(hwnd, out RECT rect))
+          {
+            _currentRectangle = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        _log.Fatal($"An error occurred in ForceForegroundCheck: {ex.Message}");
       }
     }
   }
